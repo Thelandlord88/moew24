@@ -1,0 +1,12 @@
+# Prevent line ending issues - Upstream solution for "Script Extension Inconsistency" failure class
+*.sh text eol=lf
+*.mjs text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.astro text eol=lf
+*.css text eol=lf
+
+# Ensure shell scripts are always Unix format
+*.sh diff=bash

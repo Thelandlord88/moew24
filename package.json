@@ -1,0 +1,35 @@
+{
+  "name": "onendone-unified",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20 <21"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "SITE_URL=${SITE_URL} astro build",
+    "preview": "astro preview",
+    "geo:doctor:strict": "node scripts/geo/doctor.mjs",
+    "seo:report": "node scripts/seo/report.mjs",
+    "guard:all": "node scripts/guards/all.mjs",
+    "prebuild": "npm run geo:doctor:strict",
+    "postbuild": "npm run seo:report && npm run guard:all",
+    "test:smoke": "playwright test -c playwright.config.ts",
+    "geo:doctor": "node scripts/transparent-suite.v2.mjs geo:doctor",
+    "geo:build": "node scripts/transparent-suite.v2.mjs geo:build",
+    "geo:guard": "node scripts/transparent-suite.v2.mjs geo:guard",
+    "geo:smoke": "node scripts/transparent-suite.v2.mjs geo:smoke",
+    "geo:all": "node scripts/transparent-suite.v2.mjs geo:all --strict",
+    "vis:ci": "node scripts/transparent-suite.v2.mjs vis:ci --strict"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.12",
+    "@tailwindcss/vite": "^4.1.0",
+    "astro": "^5.13.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.2",
+    "jsdom": "^24.1.0",
+    "typescript": "^5.6.2"
+  }
+}
