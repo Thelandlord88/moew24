@@ -1,0 +1,106 @@
+
+== Environment snapshot ==
+PWD: /workspaces/moew24
+Date UTC: Thu Sep 11 07:52:12 UTC 2025
+Node: v22.17.0
+npm:  9.8.1
+pnpm: 10.13.1
+yarn: 1.22.22
+git:  git version 2.50.1
+
+== CRLF → LF audit ==
+LF normalized: astro.config.mjs
+
+== Shebang (+x) audit in scripts/ ==
+chmod +x: scripts/seo/report-hardcoded-seo.mjs
+chmod +x: scripts/seo/report.mjs
+chmod +x: scripts/implement-visibility-pack.sh
+chmod +x: scripts/seed-smoke-from-coverage.mjs
+chmod +x: scripts/guards/no-hidden-keywords.mjs
+chmod +x: scripts/guards/similarity.mjs
+chmod +x: scripts/guards/no-ua-dom.mjs
+chmod +x: scripts/guards/all.mjs
+chmod +x: scripts/guards/anchors.mjs
+chmod +x: scripts/invariants/no-hidden-keywords.mjs
+chmod +x: scripts/invariants/similarity-check.mjs
+chmod +x: scripts/invariants/sitemap-check.mjs
+chmod +x: scripts/invariants/schema-lockstep.mjs
+chmod +x: scripts/invariants/anchor-linter.mjs
+chmod +x: scripts/invariants/no-ua-dom.mjs
+chmod +x: scripts/astro-adapter-fix.sh
+chmod +x: scripts/geo/geo-doctor.mjs
+chmod +x: scripts/geo/doctor.mjs
+chmod +x: scripts/transparent-suite.mjs
+chmod +x: scripts/implement-lift-pack.sh
+
+== Git LF policy (.gitattributes) ==
+Wrote /workspaces/moew24/.gitattributes → '* text=auto eol=lf'
+git config core.autocrlf=false
+
+== Package manager hygiene (npm-first) ==
+Removed pnpm/yarn lockfiles if present.
+Removed node_modules; running npm ci…
+
+added 791 packages, and audited 793 packages in 10s
+
+254 packages are looking for funding
+  run `npm fund` for details
+
+1 critical severity vulnerability
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+onendone-unified@ /workspaces/moew24
+├── @astrojs/netlify@6.5.10
+├── @astrojs/rss@4.0.12
+├── @emnapi/runtime@1.5.0 extraneous
+├── @playwright/test@1.55.0
+├── @tailwindcss/postcss@4.1.13
+├── @tailwindcss/vite@4.1.13
+├── @types/node@20.19.13
+├── astro@5.13.7
+├── happy-dom@14.12.3
+├── jsdom@24.1.3
+├── postcss@8.5.6
+├── tailwindcss@4.1.13
+├── typescript@5.9.2
+└── zod@3.25.76
+
+
+== Tailwind v4 / PostCSS double-processing audit ==
+tailwindcss version: 4.1.13
+postcss config files: postcss.config.cjs
+@tailwindcss/vite present: 0
+
+== Build + Local Trace ==
+Local trace captured: /workspaces/moew24/.debug-exit1/fix-20250911-075212/local-trace.err
++ 'use strict'
+/workspaces/moew24/node_modules/.bin/astro: line 2: use strict: command not found
+Warnings extracted → /workspaces/moew24/.debug-exit1/fix-20250911-075212/warnings.txt (top 50 below)
+
+== Output verification (dist/, Netlify SSR) ==
+dist/ exists:
+total 36
+drwxrwxrwx+  6 codespace codespace 4096 Sep 11 07:50 .
+drwxrwxrwx+ 18 codespace root      4096 Sep 11 07:52 ..
+drwxrwxrwx+  2 codespace codespace 4096 Sep 11 07:50 _astro
+-rw-rw-rw-   1 codespace codespace  175 Sep 11 07:50 _headers
+drwxrwxrwx+  3 codespace codespace 4096 Sep 11 07:50 blog
+-rw-rw-rw-   1 codespace codespace  213 Sep 11 07:50 rss.xml
+drwxrwxrwx+  5 codespace codespace 4096 Sep 11 07:50 services
+-rw-rw-rw-   1 codespace codespace  987 Sep 11 07:50 sitemap.xml
+drwxrwxrwx+  6 codespace codespace 4096 Sep 11 07:50 suburbs
+.netlify/build missing (adapter may be absent or SSG-only build).
+
+== Summary ==
+Log:        /workspaces/moew24/.debug-exit1/fix-20250911-075212/troubleshoot.log
+Trace:      /workspaces/moew24/.debug-exit1/fix-20250911-075212/local-trace.err
+Warnings:   /workspaces/moew24/.debug-exit1/fix-20250911-075212/warnings.txt
+Actions:
+ - CRLF→LF normalization applied
+ - Shebang exec bits (+x) applied in scripts/
+ - .gitattributes set to enforce LF; core.autocrlf=false
+ - npm prune + npm ci executed; removed other lockfiles
+ - Build ran with bash -x; warnings extracted

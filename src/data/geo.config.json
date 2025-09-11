@@ -1,0 +1,8 @@
+{
+  "nearby": { "limit": 6 },
+  "adjacencyBoost": 24,
+  "clusterBoost": 200,
+  "biasKm": 12,
+  "crossClusterPenalty": 200,
+  "regions": ["brisbane", "ipswich", "logan"]
+}

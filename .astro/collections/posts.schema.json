@@ -1,0 +1,96 @@
+{
+  "$ref": "#/definitions/posts",
+  "definitions": {
+    "posts": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 4
+        },
+        "description": {
+          "type": "string",
+          "minLength": 10
+        },
+        "publishDate": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "checklists",
+              "guides",
+              "tips",
+              "how-to",
+              "case-studies",
+              "client-stories",
+              "bond-back",
+              "end-of-lease",
+              "inspections",
+              "agent-requirements",
+              "pricing",
+              "diy-vs-pro",
+              "appliance-cleaning",
+              "room-by-room",
+              "real-estate"
+            ]
+          },
+          "minItems": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "bond-cleaning",
+              "real-estate",
+              "inspection",
+              "checklist",
+              "steam-cleaning",
+              "carpet-cleaning",
+              "stain-removal",
+              "success-stories",
+              "testimonials",
+              "eco-friendly",
+              "end-of-lease",
+              "agent-requirements",
+              "pricing",
+              "diy-vs-pro"
+            ]
+          },
+          "default": []
+        },
+        "region": {
+          "type": "string",
+          "enum": [
+            "brisbane",
+            "ipswich",
+            "logan"
+          ]
+        },
+        "author": {
+          "type": "string",
+          "default": "One N Done Bond Clean"
+        },
+        "draft": {
+          "type": "boolean",
+          "default": false
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "publishDate",
+        "categories",
+        "region"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

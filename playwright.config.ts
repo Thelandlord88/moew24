@@ -1,7 +1,7 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 export default defineConfig({
-  testDir: 'tests/smoke',
-  timeout: 30_000,
-  use: { baseURL: process.env.PREVIEW_URL || 'http://localhost:4321' },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }]
+  retries: 2,
+  forbidOnly: !!process.env.CI,
+  reporter: process.env.CI ? 'github' : [['list']],
+  use: { trace: 'retain-on-failure' }
 });

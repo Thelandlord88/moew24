@@ -1,0 +1,13 @@
+{
+  "name": "One N Done Bond Clean",
+  "url": "https://onendonebondclean.com.au",
+  "telephone": "+61 7 3000 0000",
+  "email": "quotes@onendone.com.au",
+  "address": {
+    "streetAddress": "123 Clean Street",
+    "addressLocality": "Brisbane",
+    "addressRegion": "QLD",
+    "postalCode": "4000",
+    "addressCountry": "AU"
+  }
+}

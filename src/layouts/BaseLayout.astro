@@ -1,26 +1,43 @@
 ---
-import { sanitizeJsonLd } from "../lib/seo/jsonld";
-const { title = "One N Done", description = "Bond cleaning you can trust", jsonld = [], class: klass = "" } = Astro.props;
-const site = Astro.site?.toString() || "https://example.com";
+import "@/styles/global.css";
+interface Props { title: string; description?: string; canonical?: string; }
+const { title, description = "", canonical = "/" } = Astro.props;
+const site = Astro.site?.toString().replace(/\/$/, "") || "";
+const canonicalAbs = canonical.startsWith('http') ? canonical : `${site}${canonical}`;
+const businessMods = import.meta.glob('/src/data/business.json', { eager: true, import: 'default' }) as Record<string, any>;
+const business = Object.values(businessMods)[0] ?? null;
+const businessLD = business ? {
+  "@context":"https://schema.org","@type":"LocalBusiness","@id":`${site}#business`,
+  name: business.name, url: business.url || site, telephone: business.telephone, email: business.email,
+  address: business.address && {"@type":"PostalAddress", ...business.address}
+} : null;
+function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c").replace(/-->/g,"\\u002d\\u002d>"); }
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en-AU">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    <link rel="canonical" href={Astro.url.href} />
-    <meta name="description" content={description} />
-    <style is:global>
-      :root { --gap-outer: 24px; --gap-card: 16px; --gap-list: 12px; }
-    </style>
-    {jsonld.map((entry) => (
-      <script type="application/ld+json" set:html={sanitizeJsonLd(entry)} />
-    ))}
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonicalAbs} />
+    <meta name="theme-color" content="#0a2a58" />
+    {businessLD && <script type="application/ld+json" set:html={safeJsonLd(businessLD)} />}
   </head>
-  <body class={`min-h-screen antialiased bg-white text-slate-900 ${klass}`}>
-    <main class="mx-auto max-w-6xl px-[var(--gap-outer)]">
-      <slot />
-    </main>
+  <body class="min-h-screen bg-white text-slate-900">
+    <header class="border-b">
+      <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <a href="/" class="font-extrabold tracking-tight" style="color:var(--brand)">One N Done</a>
+        <ul class="flex gap-4 text-sm">
+          <li><a class="hover:underline" href="/blog/">Blog</a></li>
+          <li><a class="hover:underline" href="/suburbs/">Suburbs</a></li>
+          <li><a class="hover:underline" href="/services/">Services</a></li>
+          <li><a class="hover:underline" href="/quote/">Quote</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="max-w-6xl mx-auto px-4 py-8"><slot /></main>
+    <footer class="border-t"><div class="max-w-6xl mx-auto px-4 py-6 text-sm text-slate-600">
+      © {new Date().getFullYear()} One N Done Bond Clean
+    </div></footer>
   </body>
 </html>

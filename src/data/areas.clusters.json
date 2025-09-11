@@ -1,0 +1,12 @@
+{
+  "clusters": [
+    {
+      "slug": "ipswich",
+      "name": "Ipswich",
+      "suburbs": [
+        { "slug": "springfield-lakes", "name": "Springfield Lakes", "lat": -27.656, "lng": 152.916 },
+        { "slug": "brookwater", "name": "Brookwater", "lat": -27.64, "lng": 152.92 }
+      ]
+    }
+  ]
+}

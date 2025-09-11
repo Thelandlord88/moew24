@@ -1,0 +1,4 @@
+@import "tailwindcss";
+:root { --brand: #0a2a58; }
+html { scroll-behavior: smooth; }
+a { text-underline-offset: 2px; }

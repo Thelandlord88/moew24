@@ -1,14 +1,19 @@
 ---
-import { listNearby } from "../lib/geo/helpers";
-const { suburbSlug } = Astro.props;
-const nearby = listNearby(suburbSlug);
+import { findNearbySuburbs } from '@/lib/geo/proximity';
+import { findSuburbBySlug } from '@/lib/suburbs';
+interface Props { suburbSlug: string; title?: string; limit?: number; }
+const { suburbSlug, title = 'Nearby suburbs we cover', limit = 6 } = Astro.props as Props;
+const src = findSuburbBySlug(suburbSlug);
+const items = findNearbySuburbs(suburbSlug, { limit }).map((s, i) => ({ ...s, position: i+1, href: `/suburbs/${s.slug}/` }));
+const ld = { "@context":"https://schema.org","@type":"ItemList", itemListElement: items.map(it => ({"@type":"ListItem", position: it.position, url: it.href, name: `Bond cleaning in ${it.name}`})) };
+function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c"); }
 ---
-<section class="mt-8">
-  <h2 class="text-lg font-semibold mb-3">Nearby suburbs</h2>
-  <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-    {nearby.map(n => (
-      <li><a class="block rounded border px-3 py-2 hover:shadow-sm"
-             href={`/suburbs/${n.slug}/`}>{n.name}</a></li>
-    ))}
+{items.length > 0 && (
+<section aria-labelledby="nearby-heading" class="mt-8" data-invariant="nearby">
+  <h2 id="nearby-heading" class="text-xl font-semibold">{title}</h2>
+  <ul class="mt-3 grid gap-2 sm:grid-cols-2" data-role="nearby-ui">
+    {items.map(it => (<li><a href={it.href} class="underline hover:no-underline" data-href={it.href}>{it.name}</a></li>))}
   </ul>
+  <script type="application/ld+json" set:html={safeJsonLd(ld)} data-role="nearby-ld" />
 </section>
+)}

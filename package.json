@@ -3,24 +3,42 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=20 <21"
+    "node": "22.17.0"
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "SITE_URL=${SITE_URL} astro build",
+    "build": "astro build",
     "preview": "astro preview",
-    "geo:doctor:strict": "node scripts/geo/doctor.mjs",
-    "seo:report": "node scripts/seo/report.mjs",
-    "guard:all": "node scripts/guards/all.mjs",
+    "geo:doctor:strict": "node scripts/geo/geo-doctor.mjs --strict",
+    "seo:report": "node scripts/seo/report-hardcoded-seo.mjs",
+    "guard:all": "npm run geo:doctor:strict && npm run build && npm run seo:report && npm run inv:anchors && npm run inv:lockstep && npm run inv:no-ua && npm run inv:no-hidden && npm run inv:sitemap && npm run inv:similar",
     "prebuild": "npm run geo:doctor:strict",
     "postbuild": "npm run seo:report && npm run guard:all",
     "test:smoke": "playwright test -c playwright.config.ts",
-    "geo:doctor": "node scripts/transparent-suite.v2.mjs geo:doctor",
+    "geo:doctor": "node scripts/visibility/geo-doctor.mjs",
     "geo:build": "node scripts/transparent-suite.v2.mjs geo:build",
     "geo:guard": "node scripts/transparent-suite.v2.mjs geo:guard",
     "geo:smoke": "node scripts/transparent-suite.v2.mjs geo:smoke",
     "geo:all": "node scripts/transparent-suite.v2.mjs geo:all --strict",
-    "vis:ci": "node scripts/transparent-suite.v2.mjs vis:ci --strict"
+    "vis:ci": "npm run geo:doctor && npm run vis:prebuild:strict && npm run build && npm run vis:postbuild:strict && npm run seo:snapshot",
+    "content:check": "astro check --content",
+    "inv:anchors": "node scripts/invariants/anchor-linter.mjs",
+    "inv:lockstep": "node scripts/invariants/schema-lockstep.mjs",
+    "inv:no-ua": "node scripts/invariants/no-ua-dom.mjs",
+    "inv:no-hidden": "node scripts/invariants/no-hidden-keywords.mjs",
+    "inv:sitemap": "node scripts/invariants/sitemap-check.mjs",
+    "inv:similar": "node scripts/invariants/similarity-check.mjs",
+    "test:geo": "playwright test src/tests/geo.smoke.spec.ts",
+    "vis:prebuild": "node scripts/visibility/run-all.mjs --mode=prebuild",
+    "vis:prebuild:strict": "node scripts/visibility/run-all.mjs --mode=prebuild --strict",
+    "vis:postbuild": "node scripts/visibility/run-all.mjs --mode=postbuild",
+    "vis:postbuild:strict": "node scripts/visibility/run-all.mjs --mode=postbuild --strict",
+    "seo:snapshot": "node scripts/seo/seo-report.mjs",
+    "panic": "node scripts/visibility/panic.mjs",
+    "test:ux": "playwright test tests/ux.spec.ts",
+    "test:seo": "playwright test tests/seo-smoke.spec.ts",
+    "ethics:syndication": "node scripts/visibility/syndication-briefs.mjs",
+    "ethics:404-reclaim": "node scripts/visibility/internal-404-report.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.12",
@@ -28,8 +46,18 @@
     "astro": "^5.13.4"
   },
   "devDependencies": {
-    "@playwright/test": "^1.47.2",
+    "@astrojs/netlify": "^6.5.10",
+    "@babel/parser": "^7.28.4",
+    "@babel/traverse": "^7.28.4",
+    "@playwright/test": "^1.55.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^20.14.0",
+    "fast-xml-parser": "^5.2.5",
+    "happy-dom": "^14.12.3",
     "jsdom": "^24.1.0",
-    "typescript": "^5.6.2"
+    "postcss": "^8.4.39",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.2",
+    "zod": "^3.25.76"
   }
 }

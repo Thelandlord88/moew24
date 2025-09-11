@@ -1,20 +1,18 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
-const posts = await getCollection("blog");
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getAllPosts, paginate } from "@/lib/blog";
+const posts = await getAllPosts();
+const pager = paginate(posts, 12)(1);
+const canonical = "/blog/";
 ---
-<BaseLayout title="Blog" jsonld={[{
-  "@context": "https://schema.org",
-  "@type": "Blog",
-  "name": "Blog",
-  "url": Astro.url.href
-}]}> 
-  <h1 class="text-3xl font-bold pt-8">Latest articles</h1>
-  <ul class="mt-6 grid md:grid-cols-2 gap-6">
-    {posts.slice(0,12).map(p => (
-      <li class="rounded border p-4">
-        <a href={`/blog/${p.slug}/`} class="text-lg font-semibold">{p.data.title}</a>
-        <p class="text-sm text-slate-700 mt-1">{p.data.description}</p>
+<BaseLayout title="Blog | One N Done" description="Guides, checklists and tips for end-of-lease and spring cleaning." canonical={canonical}>
+  <h1 class="text-3xl font-extrabold mb-4">Blog</h1>
+  <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {pager.items.map(({ slug, data }) => (
+      <li class="border rounded-lg p-4 hover:shadow-sm transition">
+        <a class="text-lg font-semibold hover:text-sky-700" href={`/blog/${slug}/`}>{data.title}</a>
+        <p class="text-sm text-slate-600 mt-1">{data.description}</p>
+        <p class="mt-2 text-xs text-slate-500">{new Date(data.publishDate).toLocaleDateString('en-AU')}</p>
       </li>
     ))}
   </ul>

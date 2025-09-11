@@ -1,0 +1,36 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', p => !p.data.draft);
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = post ? await post.render() : { Content: null };
+if (!post) { Astro.response.status = 404; }
+const title = post ? `${post.data.title} | Blog` : 'Not found';
+const canonical = post ? `/blog/${post.slug}/` : '/blog/';
+function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c"); }
+const articleLD = post && {
+  "@context":"https://schema.org","@type":"Article",
+  headline: post.data.title, datePublished: post.data.publishDate,
+  author: { "@type":"Organization", name: post.data.author }
+};
+---
+<BaseLayout title={title} description={post?.data.description} canonical={canonical}>
+  {post ? (
+    <>
+      <h1 class="text-3xl md:text-4xl font-extrabold mb-3">{post.data.title}</h1>
+      <p class="text-slate-600 mb-6">{post.data.description}</p>
+      <article class="prose max-w-none">
+        {Content && <Content />}
+      </article>
+      <script type="application/ld+json" set:html={safeJsonLd(articleLD)} />
+    </>
+  ) : <p>Not found.</p>}
+</BaseLayout>

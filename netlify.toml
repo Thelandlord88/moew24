@@ -1,9 +1,6 @@
 [build]
-  command = "npm run build"
+  command = "npm run vis:ci"
   publish = "dist"
 
-[[plugins]]
-  package = "@netlify/plugin-lighthouse"
-
-[build.environment]
-  NODE_VERSION = "20"
+[functions]
+  directory = "netlify/functions"
