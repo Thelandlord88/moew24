@@ -1,0 +1,787 @@
+{
+  "meta": {
+    "repoRoot": "/workspaces/moew24",
+    "rgAvailable": false,
+    "generatedAt": "2025-09-11T08:19:12.387Z"
+  },
+  "detectors": {
+    "redirects_aliases": {
+      "description": "Legacy redirects/aliases (cluster paths, middleware, _redirects, alias expanders)",
+      "total": 42,
+      "sample": [
+        {
+          "file": "astro-adapter-fix.sh",
+          "line": 25,
+          "match": "[[ -f src/middleware.ts || -f src/middleware.js ]] && has_ssr=1"
+        },
+        {
+          "file": "astro-adapter-fix.sh",
+          "line": 117,
+          "match": "# if (!fs.existsSync('src/middleware.ts') && !fs.existsSync('src/middleware.js')) {"
+        },
+        {
+          "file": "astro-adapter-fix.sh",
+          "line": 135,
+          "match": "grep -Ei 'adapter|SSR|prerender|middleware|astro' -n .debug-exit1/run-*/command.log 2>/dev/null || true"
+        },
+        {
+          "file": "astro.config.mjs",
+          "line": 8,
+          "match": "resolve: { alias: { '@': '/src' } },"
+        },
+        {
+          "file": "bootstrap.sh",
+          "line": 86,
+          "match": "resolve: { alias: { '@': '/src' } },"
+        },
+        {
+          "file": "bootstrap.sh",
+          "line": 859,
+          "match": "[[redirects]]"
+        },
+        {
+          "file": "install-script.sh",
+          "line": 176,
+          "match": "<body class={`min-h-screen antialiased bg-white text-slate-900 ${klass}`}>"
+        },
+        {
+          "file": "install-script.sh",
+          "line": 302,
+          "match": "if (!s) return Astro.redirect(\"/404\");"
+        },
+        {
+          "file": "install-script.sh",
+          "line": 345,
+          "match": "if (!s || !sv) return Astro.redirect(\"/404\");"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 102,
+          "match": "\"@astrojs/underscore-redirects\": \"1.0.0\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 240,
+          "match": "\"node_modules/@astrojs/underscore-redirects\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 242,
+          "match": "\"resolved\": \"https://registry.npmjs.org/@astrojs/underscore-redirects/-/underscore-redirects-1.0.0.tgz\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 1587,
+          "match": "\"@netlify/redirect-parser\": \"^15.0.2\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 1629,
+          "match": "\"@netlify/redirects\": \"3.0.12\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 1791,
+          "match": "\"node_modules/@netlify/redirect-parser\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 1793,
+          "match": "\"resolved\": \"https://registry.npmjs.org/@netlify/redirect-parser/-/redirect-parser-15.0.3.tgz\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 1806,
+          "match": "\"node_modules/@netlify/redirects\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 1808,
+          "match": "\"resolved\": \"https://registry.npmjs.org/@netlify/redirects/-/redirects-3.0.12.tgz\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 1813,
+          "match": "\"@netlify/redirect-parser\": \"^15.0.3\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 1816,
+          "match": "\"netlify-redirector\": \"^0.5.0\""
+        },
+        {
+          "file": "package-lock.json",
+          "line": 8316,
+          "match": "\"node_modules/netlify-redirector\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 8318,
+          "match": "\"resolved\": \"https://registry.npmjs.org/netlify-redirector/-/netlify-redirector-0.5.0.tgz\","
+        },
+        {
+          "file": "script5.txt",
+          "line": 194,
+          "match": "<body class={`min-h-screen antialiased bg-white text-slate-900 ${klass}`}>"
+        },
+        {
+          "file": "script5.txt",
+          "line": 320,
+          "match": "if (!s) return Astro.redirect(\"/404\");"
+        },
+        {
+          "file": "script5.txt",
+          "line": 363,
+          "match": "if (!s || !sv) return Astro.redirect(\"/404\");"
+        },
+        {
+          "file": "scripts/astro-adapter-fix.sh",
+          "line": 25,
+          "match": "[[ -f src/middleware.ts || -f src/middleware.js ]] && has_ssr=1"
+        },
+        {
+          "file": "scripts/astro-adapter-fix.sh",
+          "line": 117,
+          "match": "# if (!fs.existsSync('src/middleware.ts') && !fs.existsSync('src/middleware.js')) {"
+        },
+        {
+          "file": "scripts/astro-adapter-fix.sh",
+          "line": 135,
+          "match": "grep -Ei 'adapter|SSR|prerender|middleware|astro' -n .debug-exit1/run-*/command.log 2>/dev/null || true"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 4,
+          "match": "* - Scans for redirects/aliases, duplicate URL truths, Tailwind/PostCSS pileups,"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 86,
+          "match": "key: \"redirects_aliases\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 87,
+          "match": "description: \"Legacy redirects/aliases (cluster paths, middleware, _redirects, alias expanders)\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 89,
+          "match": "'(\"redirect\"|\"_redirects\"|addRedirect|middleware|alias|/blog/(ipswich|brisbane|logan)/)',"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 95,
+          "match": "fallback: { regex: /(redirect|_redirects|addRedirect|middleware|alias|\\/blog\\/(ipswich|brisbane|logan)\\/)/i },"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 178,
+          "match": "if (kind === \"redirects_aliases\") {"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 180,
+          "match": "box: \"Legacy redirects/aliases likely protecting old URL decisions\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 181,
+          "match": "closet: \"Single URL truth via route helpers + curated, evidence-backed redirects\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 182,
+          "match": "ablation: \"Delete redirects: internal nav fine; only external legacy links may 404\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 185,
+          "match": "description: \"Remove non-evidenced redirects; keep only entries with inbound traffic in last_90_days\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 186,
+          "match": "deletions: [\"public/_redirects (non-evidenced lines)\", \"scripts/*alias*.mjs\"],"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 260,
+          "match": "if ([\"redirects_aliases\", \"duplicate_url_truths\", \"tailwind_postcss_pileup\"].includes(det.key) && hits.length) {"
+        },
+        {
+          "file": "src/pages/services/[service]/[suburb]/index.astro",
+          "line": 20,
+          "match": "if (!s || !sv) return Astro.redirect(\"/404\");"
+        },
+        {
+          "file": "src/pages/suburbs/[suburb]/index.astro",
+          "line": 14,
+          "match": "if (!s) return Astro.redirect(\"/404\");"
+        }
+      ]
+    },
+    "duplicate_url_truths": {
+      "description": "Literal '/blog/' links outside the route builder",
+      "total": 9,
+      "sample": [
+        {
+          "file": "src/layouts/BaseLayout.astro",
+          "line": 31,
+          "match": "<li><a class=\"hover:underline\" href=\"/blog/\">Blog</a></li>"
+        },
+        {
+          "file": "src/pages/blog/[slug].astro",
+          "line": 17,
+          "match": "const canonical = post ? `/blog/${post.slug}/` : '/blog/';"
+        },
+        {
+          "file": "src/pages/blog/index.astro",
+          "line": 6,
+          "match": "const canonical = \"/blog/\";"
+        },
+        {
+          "file": "src/pages/blog/index.astro",
+          "line": 13,
+          "match": "<a class=\"text-lg font-semibold hover:text-sky-700\" href={`/blog/${slug}/`}>{data.title}</a>"
+        },
+        {
+          "file": "src/pages/blog/rss.xml.ts",
+          "line": 11,
+          "match": "link: `/blog/${p.slug}/`,"
+        },
+        {
+          "file": "src/pages/rss.xml.ts",
+          "line": 11,
+          "match": "items: posts.map(p => ({ title: p.data.title, pubDate: p.data.pubDate, link: `/blog/${p.slug}/` })),"
+        },
+        {
+          "file": "src/pages/services/[service]/[suburb].astro",
+          "line": 67,
+          "match": "<li><a class=\"px-3 py-1 rounded-full border hover:bg-slate-50\" href=\"/blog/\">Local guides</a></li>"
+        },
+        {
+          "file": "src/pages/sitemap.xml.ts",
+          "line": 6,
+          "match": "'/', '/blog/', '/blog/rss.xml', '/suburbs/', '/services/'"
+        },
+        {
+          "file": "src/pages/suburbs/[suburb].astro",
+          "line": 54,
+          "match": "<a href={`/blog/${p.slug}/`} class=\"text-lg font-semibold hover:text-sky-700\">{p.data.title}</a>"
+        }
+      ]
+    },
+    "tailwind_postcss_pileup": {
+      "description": "Redundant PostCSS plugins with Tailwind v4 (@tailwindcss/postcss should be the only one)",
+      "total": 1,
+      "sample": [
+        {
+          "file": "postcss.config.cjs",
+          "line": 1,
+          "match": "module.exports = { plugins: [require('@tailwindcss/postcss')] };"
+        }
+      ]
+    },
+    "multi_config_sprawl": {
+      "description": "Multiple configs for same concern (eslint/prettier/stylelint/husky/lint-staged/commitlint)",
+      "total": 30,
+      "sample": [
+        {
+          "file": "package-lock.json",
+          "line": 3100,
+          "match": "\"node_modules/@typescript-eslint/project-service\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3102,
+          "match": "\"resolved\": \"https://registry.npmjs.org/@typescript-eslint/project-service/-/project-service-8.43.0.tgz\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3106,
+          "match": "\"@typescript-eslint/tsconfig-utils\": \"^8.43.0\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3107,
+          "match": "\"@typescript-eslint/types\": \"^8.43.0\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3115,
+          "match": "\"url\": \"https://opencollective.com/typescript-eslint\""
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3121,
+          "match": "\"node_modules/@typescript-eslint/tsconfig-utils\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3123,
+          "match": "\"resolved\": \"https://registry.npmjs.org/@typescript-eslint/tsconfig-utils/-/tsconfig-utils-8.43.0.tgz\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3131,
+          "match": "\"url\": \"https://opencollective.com/typescript-eslint\""
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3137,
+          "match": "\"node_modules/@typescript-eslint/types\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3139,
+          "match": "\"resolved\": \"https://registry.npmjs.org/@typescript-eslint/types/-/types-8.43.0.tgz\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3147,
+          "match": "\"url\": \"https://opencollective.com/typescript-eslint\""
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3150,
+          "match": "\"node_modules/@typescript-eslint/typescript-estree\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3152,
+          "match": "\"resolved\": \"https://registry.npmjs.org/@typescript-eslint/typescript-estree/-/typescript-estree-8.43.0.tgz\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3156,
+          "match": "\"@typescript-eslint/project-service\": \"8.43.0\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3157,
+          "match": "\"@typescript-eslint/tsconfig-utils\": \"8.43.0\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3158,
+          "match": "\"@typescript-eslint/types\": \"8.43.0\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3159,
+          "match": "\"@typescript-eslint/visitor-keys\": \"8.43.0\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3172,
+          "match": "\"url\": \"https://opencollective.com/typescript-eslint\""
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3178,
+          "match": "\"node_modules/@typescript-eslint/visitor-keys\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3180,
+          "match": "\"resolved\": \"https://registry.npmjs.org/@typescript-eslint/visitor-keys/-/visitor-keys-8.43.0.tgz\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3184,
+          "match": "\"@typescript-eslint/types\": \"8.43.0\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3185,
+          "match": "\"eslint-visitor-keys\": \"^4.2.1\""
+        },
+        {
+          "file": "package-lock.json",
+          "line": 3192,
+          "match": "\"url\": \"https://opencollective.com/typescript-eslint\""
+        },
+        {
+          "file": "package-lock.json",
+          "line": 4920,
+          "match": "\"@typescript-eslint/typescript-estree\": \"^8.23.0\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 5330,
+          "match": "\"node_modules/eslint-visitor-keys\": {"
+        },
+        {
+          "file": "package-lock.json",
+          "line": 5332,
+          "match": "\"resolved\": \"https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-4.2.1.tgz\","
+        },
+        {
+          "file": "package-lock.json",
+          "line": 5339,
+          "match": "\"url\": \"https://opencollective.com/eslint\""
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 113,
+          "match": "description: \"Multiple configs for same concern (eslint/prettier/stylelint/husky/lint-staged/commitlint)\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 114,
+          "match": "rg: [\"(eslint|prettier|stylelint|husky|lint-staged|commitlint)\", \"--glob\", \"!node_modules\"],"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 115,
+          "match": "fallback: { regex: /(eslint|prettier|stylelint|husky|lint-staged|commitlint)/i },"
+        }
+      ]
+    },
+    "todo_hack_debt": {
+      "description": "TODO/FIXME/TEMP/HACK/WORKAROUND/HOTFIX/DEBT markers",
+      "total": 5,
+      "sample": [
+        {
+          "file": "bootstrap.sh",
+          "line": 960,
+          "match": "# ========== 19) README + OWNER TODO =========="
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 5,
+          "match": "*   multi-config sprawl, TODO/HACK landmines, legacy closet leaks, and feature flags."
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 119,
+          "match": "description: \"TODO/FIXME/TEMP/HACK/WORKAROUND/HOTFIX/DEBT markers\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 120,
+          "match": "rg: [\"(TODO|FIXME|TEMP|HACK|WORKAROUND|HOTFIX|DEBT)\", \"--glob\", \"!dist\", \"--glob\", \"!node_modules\"],"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 121,
+          "match": "fallback: { regex: /(TODO|FIXME|TEMP|HACK|WORKAROUND|HOTFIX|DEBT)/ },"
+        }
+      ]
+    },
+    "legacy_closet_leaks": {
+      "description": "References to /legacy or /_attic in production code",
+      "total": 0,
+      "sample": []
+    },
+    "feature_flags": {
+      "description": "ENABLE_/DISABLE_/FEATURE_/FLAG style gates masking design debt",
+      "total": 0,
+      "sample": []
+    },
+    "sitemap_rss_mentions": {
+      "description": "Sitemap/RSS plumbing (for parity checks later)",
+      "total": 17,
+      "sample": [
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 136,
+          "match": "key: \"sitemap_rss_mentions\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 137,
+          "match": "description: \"Sitemap/RSS plumbing (for parity checks later)\","
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 138,
+          "match": "rg: [\"(sitemap|rss|feed|/sitemap.xml|/rss.xml)\", \"src\", \"pages\", \"scripts\", \"tools\"],"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 139,
+          "match": "fallback: { regex: /(sitemap|rss|feed|\\/sitemap\\.xml|\\/rss\\.xml)/i, pathsOnly: [\"src\", \"pages\", \"scripts\", \"tools\"] },"
+        },
+        {
+          "file": "scripts/audit-protective-complexity.mjs",
+          "line": 189,
+          "match": "policy_invariant: \"CI: forbid literal '/blog/' outside routes module; sitemap-only canonicals\","
+        },
+        {
+          "file": "scripts/invariants/sitemap-check.mjs",
+          "line": 3,
+          "match": "const DIST='dist'; if(!fs.existsSync(DIST)) { console.log('[inv:sitemap] dist/ missing'); process.exit(0); }"
+        },
+        {
+          "file": "scripts/invariants/sitemap-check.mjs",
+          "line": 4,
+          "match": "const sm = path.join(DIST,'sitemap.xml'); if(!fs.existsSync(sm)) { console.log('[inv:sitemap] sitemap.xml missing (page-based sitemap)'); process.exit(0); }"
+        },
+        {
+          "file": "scripts/invariants/sitemap-check.mjs",
+          "line": 10,
+          "match": "if(!fs.existsSync(f)) { console.error(`[inv:sitemap] ${u}: not found in dist`); issues++; continue; }"
+        },
+        {
+          "file": "scripts/invariants/sitemap-check.mjs",
+          "line": 12,
+          "match": "const can=doc.querySelector('link[rel=\"canonical\"]')?.getAttribute('href')||''; if(can!==u) { console.error(`[inv:sitemap] ${u}: canonical mismatch (${can})`); issues++; }"
+        },
+        {
+          "file": "scripts/invariants/sitemap-check.mjs",
+          "line": 13,
+          "match": "const anchors=[...doc.querySelectorAll('a[href]')].map(a=>a.getAttribute('href')); if(anchors.length===0) { console.error(`[inv:sitemap] ${u}: page not in internal link graph (no anchors)`); issues++; }"
+        },
+        {
+          "file": "scripts/invariants/sitemap-check.mjs",
+          "line": 15,
+          "match": "if(issues) process.exit(1); console.log('[inv:sitemap] OK');"
+        },
+        {
+          "file": "src/pages/blog/rss.xml.ts",
+          "line": 1,
+          "match": "import rss from '@astrojs/rss';"
+        },
+        {
+          "file": "src/pages/blog/rss.xml.ts",
+          "line": 6,
+          "match": "return rss({"
+        },
+        {
+          "file": "src/pages/rss.xml.ts",
+          "line": 2,
+          "match": "import rss from '@astrojs/rss';"
+        },
+        {
+          "file": "src/pages/rss.xml.ts",
+          "line": 7,
+          "match": "return rss({"
+        },
+        {
+          "file": "src/pages/sitemap.xml.ts",
+          "line": 6,
+          "match": "'/', '/blog/', '/blog/rss.xml', '/suburbs/', '/services/'"
+        },
+        {
+          "file": "src/pages/sitemap.xml.ts",
+          "line": 12,
+          "match": "const body = `<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\\n` +"
+        }
+      ]
+    },
+    "jsonld_schema": {
+      "description": "JSON-LD schema mentions (for snapshot stability)",
+      "total": 15,
+      "sample": [
+        {
+          "file": "src/components/NearbySuburbs.astro",
+          "line": 8,
+          "match": "const ld = { \"@context\":\"https://schema.org\",\"@type\":\"ItemList\", itemListElement: items.map(it => ({\"@type\":\"ListItem\", position: it.position, url: it.href, name: `Bond cleaning in ${it.name}`})) };"
+        },
+        {
+          "file": "src/content/config.ts",
+          "line": 19,
+          "match": "schema: z.object({"
+        },
+        {
+          "file": "src/layouts/BaseLayout.astro",
+          "line": 10,
+          "match": "\"@context\":\"https://schema.org\",\"@type\":\"LocalBusiness\",\"@id\":`${site}#business`,"
+        },
+        {
+          "file": "src/pages/blog/[slug].astro",
+          "line": 20,
+          "match": "\"@context\":\"https://schema.org\",\"@type\":\"Article\","
+        },
+        {
+          "file": "src/pages/services/[service]/[suburb]/index.astro",
+          "line": 24,
+          "match": "\"@context\": \"https://schema.org\","
+        },
+        {
+          "file": "src/pages/services/[service]/[suburb]/index.astro",
+          "line": 28,
+          "match": "\"provider\": { \"@type\": \"LocalBusiness\", \"name\": \"One N Done Bond Clean\" },"
+        },
+        {
+          "file": "src/pages/services/[service]/[suburb].astro",
+          "line": 26,
+          "match": "\"@context\":\"https://schema.org\",\"@type\":\"Service\",\"@id\":`${site}${canonical}#service`,"
+        },
+        {
+          "file": "src/pages/services/[service]/[suburb].astro",
+          "line": 29,
+          "match": "provider: { \"@type\":\"LocalBusiness\", \"@id\": `${site}#business` },"
+        },
+        {
+          "file": "src/pages/services/[service]/[suburb].astro",
+          "line": 30,
+          "match": "offers: { \"@type\":\"Offer\", priceCurrency:\"AUD\", availability:\"https://schema.org/InStock\", url: `${site}${canonical}` }"
+        },
+        {
+          "file": "src/pages/sitemap.xml.ts",
+          "line": 12,
+          "match": "const body = `<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\\n` +"
+        },
+        {
+          "file": "src/pages/suburbs/[suburb]/index.astro",
+          "line": 17,
+          "match": "\"@context\": \"https://schema.org\","
+        },
+        {
+          "file": "src/pages/suburbs/[suburb]/index.astro",
+          "line": 21,
+          "match": "\"provider\": { \"@type\": \"LocalBusiness\", \"name\": \"One N Done Bond Clean\" },"
+        },
+        {
+          "file": "src/pages/suburbs/[suburb].astro",
+          "line": 25,
+          "match": "\"@context\": \"https://schema.org\",\"@type\": \"Service\","
+        },
+        {
+          "file": "src/pages/suburbs/[suburb].astro",
+          "line": 28,
+          "match": "provider: { \"@type\": \"LocalBusiness\", \"@id\": (Astro.site?.toString().replace(/\\/$/, '') || '') + \"#business\" }"
+        },
+        {
+          "file": "src/tests/geo.smoke.spec.ts",
+          "line": 11,
+          "match": "test(`json-ld present ${p}`, async ({ page }) => {"
+        }
+      ]
+    }
+  },
+  "coach_stubs": [
+    {
+      "box": "Legacy redirects/aliases likely protecting old URL decisions",
+      "closet": "Single URL truth via route helpers + curated, evidence-backed redirects",
+      "ablation": "Delete redirects: internal nav fine; only external legacy links may 404",
+      "upstream_candidates": [
+        "Early cluster paths",
+        "No single source of truth for URLs"
+      ],
+      "chosen_change": {
+        "description": "Remove non-evidenced redirects; keep only entries with inbound traffic in last_90_days",
+        "deletions": [
+          "public/_redirects (non-evidenced lines)",
+          "scripts/*alias*.mjs"
+        ],
+        "single_source_of_truth": "src/lib/routes/blog.ts"
+      },
+      "policy_invariant": "",
+      "sibling_sweep": {
+        "pattern": "/blog/(ipswich|brisbane|logan)/",
+        "hits": [
+          "astro-adapter-fix.sh:25",
+          "astro-adapter-fix.sh:117",
+          "astro-adapter-fix.sh:135",
+          "astro.config.mjs:8",
+          "bootstrap.sh:86",
+          "bootstrap.sh:859",
+          "install-script.sh:176",
+          "install-script.sh:302",
+          "install-script.sh:345",
+          "package-lock.json:102",
+          "package-lock.json:240",
+          "package-lock.json:242",
+          "package-lock.json:1587",
+          "package-lock.json:1629",
+          "package-lock.json:1791",
+          "package-lock.json:1793",
+          "package-lock.json:1806",
+          "package-lock.json:1808",
+          "package-lock.json:1813",
+          "package-lock.json:1816",
+          "package-lock.json:8316",
+          "package-lock.json:8318",
+          "script5.txt:194",
+          "script5.txt:320",
+          "script5.txt:363",
+          "scripts/astro-adapter-fix.sh:25",
+          "scripts/astro-adapter-fix.sh:117",
+          "scripts/astro-adapter-fix.sh:135",
+          "scripts/audit-protective-complexity.mjs:4",
+          "scripts/audit-protective-complexity.mjs:86",
+          "scripts/audit-protective-complexity.mjs:87",
+          "scripts/audit-protective-complexity.mjs:89",
+          "scripts/audit-protective-complexity.mjs:95",
+          "scripts/audit-protective-complexity.mjs:178",
+          "scripts/audit-protective-complexity.mjs:180",
+          "scripts/audit-protective-complexity.mjs:181",
+          "scripts/audit-protective-complexity.mjs:182",
+          "scripts/audit-protective-complexity.mjs:185",
+          "scripts/audit-protective-complexity.mjs:186",
+          "scripts/audit-protective-complexity.mjs:260",
+          "src/pages/services/[service]/[suburb]/index.astro:20",
+          "src/pages/suburbs/[suburb]/index.astro:14"
+        ],
+        "actions": []
+      },
+      "evidence_window": "last_90_days",
+      "rollback_plan": "Revert the PR; keep removed lines archived under docs/ops/."
+    },
+    {
+      "box": "Literal '/blog/' scattered across code vs centralized route builder",
+      "closet": "src/lib/routes/blog.ts (one URL truth)",
+      "ablation": "Remove literals: all links flow through helpers; drift ends",
+      "upstream_candidates": [
+        "Ad-hoc links before routes module"
+      ],
+      "chosen_change": {
+        "description": "Replace literals with helpers; add CI grep guard",
+        "deletions": [
+          "Hard-coded '/blog/' in components/pages"
+        ],
+        "single_source_of_truth": "src/lib/routes/blog.ts"
+      },
+      "policy_invariant": "",
+      "sibling_sweep": {
+        "pattern": "/blog/",
+        "hits": [
+          "src/layouts/BaseLayout.astro:31",
+          "src/pages/blog/[slug].astro:17",
+          "src/pages/blog/index.astro:6",
+          "src/pages/blog/index.astro:13",
+          "src/pages/blog/rss.xml.ts:11",
+          "src/pages/rss.xml.ts:11",
+          "src/pages/services/[service]/[suburb].astro:67",
+          "src/pages/sitemap.xml.ts:6",
+          "src/pages/suburbs/[suburb].astro:54"
+        ],
+        "actions": []
+      },
+      "evidence_window": "last_90_days",
+      "rollback_plan": "Revert the PR; keep removed lines archived under docs/ops/."
+    },
+    {
+      "box": "Redundant PostCSS plugins with Tailwind v4 causing syntax flakiness",
+      "closet": "Single Tailwind v4 pipeline via @tailwindcss/postcss",
+      "ablation": "Drop extra plugins: styles still compile, fewer errors",
+      "upstream_candidates": [
+        "Historical PostCSS config",
+        "Mixed guidance during upgrade"
+      ],
+      "chosen_change": {
+        "description": "Use only @tailwindcss/postcss; remove nesting/autoprefixer; fix content globs",
+        "deletions": [
+          "postcss-nesting",
+          "autoprefixer",
+          "stray plugin configs"
+        ],
+        "single_source_of_truth": "postcss.config.cjs"
+      },
+      "policy_invariant": "",
+      "sibling_sweep": {
+        "pattern": "postcss-(nest|preset)|autoprefixer",
+        "hits": [
+          "postcss.config.cjs:1"
+        ],
+        "actions": []
+      },
+      "evidence_window": "last_90_days",
+      "rollback_plan": "Revert the PR; keep removed lines archived under docs/ops/."
+    }
+  ]
+}
