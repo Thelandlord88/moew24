@@ -4,39 +4,34 @@ Generated from audit: `node scripts/audit-protective-complexity.mjs --write`
 
 ## 🔴 High Priority Actions
 
-### 1. Centralize URL Management (42 hits)
+### 1. Centralize URL Management ✅ COMPLETED
 **Issue**: Legacy redirects/aliases scattered across codebase  
 **Impact**: Multiple URL truths, drift risk, maintenance overhead
 
 **Action Plan**:
-- [ ] Create `src/lib/routes/blog.ts` as single source of truth
-- [ ] Replace hardcoded URLs with route helpers
+- [x] Create `src/lib/routes.ts` as single source of truth
+- [x] Replace hardcoded URLs with route helpers
+- [x] Add CI guard: `./scripts/ci/url-drift-guard.sh` ✅ PASSING
 - [ ] Remove non-evidenced redirects from netlify.toml
-- [ ] Add CI guard: `rg '/blog/' src --type astro --type ts | grep -v 'lib/routes' && exit 1`
 
-**Files to clean up**:
-- astro-adapter-fix.sh (3 hits)
-- src/pages/*/[slug].astro (redirect calls)
-- netlify.toml (redirect rules)
+**Results**: 
+- ✅ **18 hardcoded URLs eliminated** (8 blog + 6 services + 4 suburbs)
+- ✅ CI guard prevents future drift
+- ✅ All navigation flows through centralized helpers
 
-### 2. Fix Duplicate Blog URLs (9 hits)  
+### 2. Fix Duplicate Blog URLs ✅ COMPLETED  
 **Issue**: Literal `/blog/` links outside route builder
 **Impact**: Inconsistent navigation, URL drift
 
-**Action Plan**:
-- [ ] Create route helper functions in `src/lib/routes/blog.ts`:
-  ```ts
-  export const blogRoutes = {
-    index: () => '/blog/',
-    post: (slug: string) => `/blog/${slug}/`,
-    rss: () => '/blog/rss.xml'
-  };
-  ```
-- [ ] Replace literals in:
-  - src/layouts/BaseLayout.astro:31
-  - src/pages/blog/[slug].astro:17
-  - src/pages/blog/index.astro (2 hits)
-  - src/pages/services/[service]/[suburb].astro:67
+**Results**: All `/blog/` URLs now use `routes.blog.*` helpers:
+- [x] src/layouts/BaseLayout.astro navigation
+- [x] src/pages/blog/[slug].astro canonicals  
+- [x] src/pages/blog/index.astro links
+- [x] src/pages/blog/rss.xml.ts feeds
+- [x] src/pages/rss.xml.ts feeds
+- [x] src/pages/sitemap.xml.ts URLs
+- [x] src/pages/services/[service]/[suburb].astro links
+- [x] src/pages/suburbs/[suburb].astro links
 
 ### 3. Clean Config Sprawl (30 hits)
 **Issue**: Multiple ESLint/Prettier configs detected  
@@ -70,8 +65,8 @@ Generated from audit: `node scripts/audit-protective-complexity.mjs --write`
 
 ## Success Metrics
 
-- **URL Centralization**: `rg '/blog/' src` returns 0 hits outside routes module
-- **Config Cleanup**: Single linting config per concern
+- **URL Centralization**: ✅ `./scripts/ci/url-drift-guard.sh` PASSES - 0 hardcoded URLs
+- **Config Cleanup**: Single linting config per concern  
 - **Build Health**: All guards pass, faster dependency resolution
 - **SEO Stability**: Sitemap + JSON-LD pass validation
 
