@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css";
+import { routes } from "@/lib/routes";
 interface Props { title: string; description?: string; canonical?: string; }
 const { title, description = "", canonical = "/" } = Astro.props;
 const site = Astro.site?.toString().replace(/\/$/, "") || "";
@@ -26,12 +27,12 @@ function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c").rep
   <body class="min-h-screen bg-white text-slate-900">
     <header class="border-b">
       <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <a href="/" class="font-extrabold tracking-tight" style="color:var(--brand)">One N Done</a>
+        <a href={routes.site.home()} class="font-extrabold tracking-tight" style="color:var(--brand)">One N Done</a>
         <ul class="flex gap-4 text-sm">
-          <li><a class="hover:underline" href="/blog/">Blog</a></li>
-          <li><a class="hover:underline" href="/suburbs/">Suburbs</a></li>
-          <li><a class="hover:underline" href="/services/">Services</a></li>
-          <li><a class="hover:underline" href="/quote/">Quote</a></li>
+          <li><a class="hover:underline" href={routes.blog.index()}>Blog</a></li>
+          <li><a class="hover:underline" href={routes.suburbs.index()}>Suburbs</a></li>
+          <li><a class="hover:underline" href={routes.services.index()}>Services</a></li>
+          <li><a class="hover:underline" href={routes.site.quote()}>Quote</a></li>
         </ul>
       </nav>
     </header>
