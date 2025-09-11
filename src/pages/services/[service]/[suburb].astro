@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { findService, otherServices, type ServiceId } from '@/lib/services';
 import { findSuburbBySlug, getAllSuburbs } from '@/lib/suburbs';
+import { routes } from '@/lib/routes';
 import NearbySuburbs from '@/components/NearbySuburbs.astro';
 
 export const prerender = true;
@@ -18,7 +19,7 @@ export async function getStaticPaths() {
 const { service: serviceSlug = '', suburb: suburbSlug = '' } = Astro.params;
 const svc = findService(serviceSlug); const sub = findSuburbBySlug(suburbSlug);
 const ok = Boolean(svc && sub);
-const canonical = ok ? `/services/${svc!.slug}/${sub!.slug}/` : '/services/';
+const canonical = ok ? routes.services.serviceSuburb(svc!.slug, sub!.slug) : routes.services.index();
 const site = Astro.site?.toString().replace(/\/$/, '') || '';
 let title = 'Not found', description = 'Page not found.';
 if (ok) { title = `${svc!.title} in ${sub!.name} | One N Done Bond Clean`; description = `${svc!.description} — Servicing ${sub!.name} and nearby areas.`; }
@@ -61,10 +62,10 @@ function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c"); }
         <h2 class="text-xl font-semibold mb-3">More in {sub!.name}</h2>
         <ul class="flex flex-wrap gap-3 text-sm">
           {otherServices(svc!.slug).map(o => (
-            <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={`/services/${o.slug}/${sub!.slug}/`}>{o.title}</a></li>
+            <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={routes.services.serviceSuburb(o.slug, sub!.slug)}>{o.title}</a></li>
           ))}
-          <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={`/suburbs/${sub!.slug}/`}>Suburb page</a></li>
-          <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href="/blog/">Local guides</a></li>
+          <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={routes.suburbs.suburb(sub!.slug)}>Suburb page</a></li>
+          <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={routes.blog.index()}>Local guides</a></li>
         </ul>
       </section>
 
@@ -76,7 +77,7 @@ function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c"); }
       {Astro.response.status = 404}
       <h1 class="text-3xl font-extrabold mb-2">Page not found</h1>
       <p class="text-slate-700 mb-6">We couldn't find that service/suburb combination.</p>
-      <a class="underline" href="/services/">Browse services</a>
+      <a class="underline" href={routes.services.index()}>Browse services</a>
     </>
   )}
 </BaseLayout>

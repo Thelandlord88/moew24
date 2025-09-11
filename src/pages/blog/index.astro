@@ -1,16 +1,17 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getAllPosts, paginate } from "@/lib/blog";
+import { routes } from "@/lib/routes";
 const posts = await getAllPosts();
 const pager = paginate(posts, 12)(1);
-const canonical = "/blog/";
+const canonical = routes.blog.index();
 ---
 <BaseLayout title="Blog | One N Done" description="Guides, checklists and tips for end-of-lease and spring cleaning." canonical={canonical}>
   <h1 class="text-3xl font-extrabold mb-4">Blog</h1>
   <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
     {pager.items.map(({ slug, data }) => (
       <li class="border rounded-lg p-4 hover:shadow-sm transition">
-        <a class="text-lg font-semibold hover:text-sky-700" href={`/blog/${slug}/`}>{data.title}</a>
+        <a class="text-lg font-semibold hover:text-sky-700" href={routes.blog.post(slug)}>{data.title}</a>
         <p class="text-sm text-slate-600 mt-1">{data.description}</p>
         <p class="mt-2 text-xs text-slate-500">{new Date(data.publishDate).toLocaleDateString('en-AU')}</p>
       </li>

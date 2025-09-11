@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCollection } from 'astro:content';
+import { routes } from "@/lib/routes";
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', p => !p.data.draft);
@@ -14,7 +15,7 @@ const { post } = Astro.props;
 const { Content } = post ? await post.render() : { Content: null };
 if (!post) { Astro.response.status = 404; }
 const title = post ? `${post.data.title} | Blog` : 'Not found';
-const canonical = post ? `/blog/${post.slug}/` : '/blog/';
+const canonical = post ? routes.blog.post(post.slug) : routes.blog.index();
 function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c"); }
 const articleLD = post && {
   "@context":"https://schema.org","@type":"Article",

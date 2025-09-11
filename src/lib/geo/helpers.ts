@@ -1,5 +1,6 @@
 import suburbs from "../../data/suburbs.json";
 import services from "../../data/services.json";
+import { routes } from "../routes";
 
 export type Suburb = typeof suburbs[number];
 export type Service = typeof services[number];
@@ -27,5 +28,5 @@ export function findService(slug: string): Service | undefined {
   return (services as Service[]).find(s => s.slug === slug);
 }
 export function serviceUrl(svc: string, suburb: string) {
-  return `/services/${svc}/${suburb}/`;
+  return routes.services.serviceSuburb(svc, suburb);
 }

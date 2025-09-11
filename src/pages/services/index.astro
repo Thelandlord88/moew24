@@ -2,7 +2,8 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { SERVICES } from '@/lib/services';
 import { getAllSuburbs } from '@/lib/suburbs';
-const canonical = '/services/';
+import { routes } from '@/lib/routes';
+const canonical = routes.services.index();
 const sampleSuburb = getAllSuburbs()[0]?.slug;
 ---
 <BaseLayout title="Services | One N Done Bond Clean" description="Bathroom Deep Clean and Spring Clean across Brisbane, Ipswich and Logan." canonical={canonical}>
@@ -13,7 +14,7 @@ const sampleSuburb = getAllSuburbs()[0]?.slug;
         <h2 class="text-xl font-bold">{s.title}</h2>
         <p class="text-slate-600 mt-1">{s.description}</p>
         {sampleSuburb
-          ? <p class="mt-2 text-sm"><a class="underline hover:text-sky-700" href={`/services/${s.slug}/${sampleSuburb}/`}>Browse in a suburb →</a></p>
+          ? <p class="mt-2 text-sm"><a class="underline hover:text-sky-700" href={routes.services.serviceSuburb(s.slug, sampleSuburb)}>Browse in a suburb →</a></p>
           : <p class="mt-2 text-sm text-slate-500">Add suburb data to enable per-suburb pages.</p>}
       </li>
     ))}

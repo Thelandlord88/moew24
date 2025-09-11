@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
-function paths(){ try{ const j=JSON.parse(fs.readFileSync('tmp/smoke-paths.json','utf8')); return Array.isArray(j.paths)? j.paths : ['/suburbs/','/services/']; } catch { return ['/suburbs/','/services/']; } }
+import { routes } from '@/lib/routes';
+function paths(){ try{ const j=JSON.parse(fs.readFileSync('tmp/smoke-paths.json','utf8')); return Array.isArray(j.paths)? j.paths : [routes.suburbs.index(),routes.services.index()]; } catch { return [routes.suburbs.index(),routes.services.index()]; } }
 for(const p of paths()){
   test(`responds ${p}`, async ({ page }) => {
     const r = await page.goto(p); expect(r?.status()).toBeLessThan(400);

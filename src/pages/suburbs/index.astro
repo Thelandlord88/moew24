@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getAllSuburbs } from '@/lib/suburbs';
+import { routes } from '@/lib/routes';
 const list = getAllSuburbs();
 const byRegion = new Map<string, typeof list>();
 for (const s of list) { const k = s.region ?? 'unknown'; byRegion.set(k, [ ...(byRegion.get(k)||[]), s ]); }
-const canonical = '/suburbs/';
+const canonical = routes.suburbs.index();
 ---
 <BaseLayout title="Suburbs | One N Done Bond Clean" description="Browse suburbs we write about and service." canonical={canonical}>
   <h1 class="text-3xl font-extrabold mb-6">Suburbs</h1>
@@ -12,7 +13,7 @@ const canonical = '/suburbs/';
     <section class="mb-8">
       <h2 class="text-xl font-bold mb-3">{region[0]?.toUpperCase()}{region.slice(1)}</h2>
       <ul class="flex flex-wrap gap-3">
-        {subs.map(s => (<li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={`/suburbs/${s.slug}/`}>{s.name}</a></li>))}
+        {subs.map(s => (<li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={routes.suburbs.suburb(s.slug)}>{s.name}</a></li>))}
       </ul>
     </section>
   ))}

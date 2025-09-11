@@ -1,10 +1,11 @@
 ---
 import { findNearbySuburbs } from '@/lib/geo/proximity';
 import { findSuburbBySlug } from '@/lib/suburbs';
+import { routes } from '@/lib/routes';
 interface Props { suburbSlug: string; title?: string; limit?: number; }
 const { suburbSlug, title = 'Nearby suburbs we cover', limit = 6 } = Astro.props as Props;
 const src = findSuburbBySlug(suburbSlug);
-const items = findNearbySuburbs(suburbSlug, { limit }).map((s, i) => ({ ...s, position: i+1, href: `/suburbs/${s.slug}/` }));
+const items = findNearbySuburbs(suburbSlug, { limit }).map((s, i) => ({ ...s, position: i+1, href: routes.suburbs.suburb(s.slug) }));
 const ld = { "@context":"https://schema.org","@type":"ItemList", itemListElement: items.map(it => ({"@type":"ListItem", position: it.position, url: it.href, name: `Bond cleaning in ${it.name}`})) };
 function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c"); }
 ---

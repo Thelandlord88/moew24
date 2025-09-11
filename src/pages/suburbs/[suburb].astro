@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { findSuburbBySlug } from '@/lib/suburbs';
+import { routes } from '@/lib/routes';
 import NearbySuburbs from '@/components/NearbySuburbs.astro';
 import { getAllPosts } from '@/lib/blog';
 
@@ -20,7 +21,7 @@ const related = posts.filter(p => p.data.region === sub?.region).slice(0, 9);
 
 const title = sub ? `Bond Cleaning in ${sub.name} | One N Done` : 'Not found';
 const description = sub ? `Pricing, tips and guides for ${sub.name} and surrounding areas.` : '';
-const canonical = sub ? `/suburbs/${sub.slug}/` : '/suburbs/';
+const canonical = sub ? routes.suburbs.suburb(sub.slug) : routes.suburbs.index();
 const ld = sub && {
   "@context": "https://schema.org","@type": "Service",
   name: `Bond Cleaning in ${sub.name}`,
@@ -38,8 +39,8 @@ function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c"); }
       <section class="mb-8">
         <h2 class="text-xl font-semibold mb-3">Popular services in {sub.name}</h2>
         <ul class="flex flex-wrap gap-3 text-sm">
-          <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={`/services/bathroom-deep-clean/${sub.slug}/`}>Bathroom Deep Clean</a></li>
-          <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={`/services/spring-clean/${sub.slug}/`}>Spring Clean</a></li>
+          <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={routes.services.serviceSuburb('bathroom-deep-clean', sub.slug)}>Bathroom Deep Clean</a></li>
+          <li><a class="px-3 py-1 rounded-full border hover:bg-slate-50" href={routes.services.serviceSuburb('spring-clean', sub.slug)}>Spring Clean</a></li>
         </ul>
       </section>
 
@@ -51,7 +52,7 @@ function safeJsonLd(o:any){ return JSON.stringify(o).replace(/</g,"\\u003c"); }
           <ul class="grid gap-4 md:grid-cols-2">
             {related.map((p) => (
               <li class="border rounded p-4 hover:shadow-sm transition">
-                <a href={`/blog/${p.slug}/`} class="text-lg font-semibold hover:text-sky-700">{p.data.title}</a>
+                <a href={routes.blog.post(p.slug)} class="text-lg font-semibold hover:text-sky-700">{p.data.title}</a>
                 <p class="text-slate-600 mt-1">{p.data.description}</p>
               </li>
             ))}
