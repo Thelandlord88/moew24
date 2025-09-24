@@ -1,0 +1,7 @@
+{
+  "name": "AI Team Manifest",
+  "version": "1.0.0",
+  "description": "AI personality system manifest",
+  "personalities": ["daedalus", "hunter"],
+  "timestamp": "2025-09-24T04:34:00.000Z"
+}

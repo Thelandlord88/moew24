@@ -1,0 +1,36 @@
+{
+  "ok": 6,
+  "results": [
+    {
+      "exists": true,
+      "file": "dist/services/bathroom-deep-clean/ipswich/index.html",
+      "url": "/services/bathroom-deep-clean/ipswich/"
+    },
+    {
+      "exists": true,
+      "file": "dist/services/bathroom-deep-clean/kenmore/index.html",
+      "url": "/services/bathroom-deep-clean/kenmore/"
+    },
+    {
+      "exists": true,
+      "file": "dist/services/bond-cleaning/ipswich/index.html",
+      "url": "/services/bond-cleaning/ipswich/"
+    },
+    {
+      "exists": true,
+      "file": "dist/services/bond-cleaning/kenmore/index.html",
+      "url": "/services/bond-cleaning/kenmore/"
+    },
+    {
+      "exists": true,
+      "file": "dist/suburbs/ipswich/index.html",
+      "url": "/suburbs/ipswich/"
+    },
+    {
+      "exists": true,
+      "file": "dist/suburbs/kenmore/index.html",
+      "url": "/suburbs/kenmore/"
+    }
+  ],
+  "total": 6
+}

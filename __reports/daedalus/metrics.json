@@ -1,0 +1,12 @@
+{
+  "totalSuburbs": 1,
+  "totalServices": 4,
+  "nonreciprocal": 0,
+  "islands": 0,
+  "fixedNonreciprocal": 0,
+  "linkedIslands": 0,
+  "inboundGiniBefore": 0,
+  "inboundGiniAfter": 0,
+  "linkSubstitutions": 0,
+  "linkRemovals": 0
+}

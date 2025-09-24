@@ -1,0 +1,24 @@
+{
+  "paths": [
+    "/suburbs/",
+    "/services/",
+    "/suburbs/annerley/",
+    "/suburbs/albion/",
+    "/suburbs/alderley/",
+    "/suburbs/acacia-ridge/",
+    "/suburbs/archerfield/",
+    "/suburbs/anstead/",
+    "/services/spring-clean/annerley/",
+    "/services/bathroom-deep-clean/annerley/",
+    "/services/spring-clean/albion/",
+    "/services/bathroom-deep-clean/albion/",
+    "/services/spring-clean/alderley/",
+    "/services/bathroom-deep-clean/alderley/",
+    "/services/spring-clean/acacia-ridge/",
+    "/services/bathroom-deep-clean/acacia-ridge/",
+    "/services/spring-clean/archerfield/",
+    "/services/bathroom-deep-clean/archerfield/",
+    "/services/spring-clean/anstead/",
+    "/services/bathroom-deep-clean/anstead/"
+  ]
+}

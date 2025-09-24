@@ -1,0 +1,33 @@
+{
+  "generatedAt": "2025-09-24T07:42:42.457Z",
+  "mode": "build",
+  "totals": {
+    "pages": 1,
+    "linkEdges": 3,
+    "uniqueLinkTargets": 3
+  },
+  "metrics": {
+    "totalSuburbs": 1,
+    "totalServices": 4,
+    "nonreciprocal": 0,
+    "islands": 0,
+    "fixedNonreciprocal": 0,
+    "linkedIslands": 0,
+    "inboundGiniBefore": 0,
+    "inboundGiniAfter": 0,
+    "linkSubstitutions": 0,
+    "linkRemovals": 0
+  },
+  "issues": {
+    "count": 0,
+    "sample": []
+  },
+  "pages": [
+    {
+      "service": "bond-cleaning",
+      "suburb": "springfield-lakes",
+      "path": "src/pages/services/bond-cleaning/springfield-lakes/index.astro",
+      "neighbors": 3
+    }
+  ]
+}

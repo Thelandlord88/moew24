@@ -1,0 +1,24 @@
+{
+  "suburbs": {
+    "springfield-lakes": {
+      "name": "Springfield Lakes",
+      "region": "QLD",
+      "postcode": "4300"
+    },
+    "forest-lake": {
+      "name": "Forest Lake",
+      "region": "QLD",
+      "postcode": "4078"
+    },
+    "ripley": {
+      "name": "Ripley",
+      "region": "QLD",
+      "postcode": "4306"
+    }
+  },
+  "clusterOf": {
+    "springfield-lakes": "ipswich",
+    "forest-lake": "brisbane-southwest",
+    "ripley": "ipswich"
+  }
+}

@@ -1,1 +1,7 @@
-{ "ipswich": "ipswich" }
+{
+  "brisbane-city": "Brisbane",
+  "logan-city": "Logan",
+  "ipswich-city": "Ipswich",
+  "moreton-bay": "Moreton Bay",
+  "redland-city": "Redland"
+}

@@ -1,0 +1,375 @@
+{
+  "generatedAt": "2025-09-24T07:01:47.718Z",
+  "service": "bond-cleaning",
+  "variantsTried": 23,
+  "ranking": [
+    {
+      "kind": "baseline",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightCluster",
+      "weights": {
+        "weightCluster": 0.85,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightCluster",
+      "weights": {
+        "weightCluster": 0.95,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightCluster",
+      "weights": {
+        "weightCluster": 1.05,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightCluster",
+      "weights": {
+        "weightCluster": 1.15,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightDistance",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 0.85,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightDistance",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 0.95,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightDistance",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1.05,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightDistance",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1.15,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightReciprocalEdge",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.425,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightReciprocalEdge",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.475,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightReciprocalEdge",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.525,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightReciprocalEdge",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.575,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightHubDamping",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.425,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightHubDamping",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.475,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightHubDamping",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.525,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:weightHubDamping",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.575,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:distanceScaleKm",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 5
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:distanceScaleKm",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 8
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:distanceScaleKm",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 12
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "tweak:distanceScaleKm",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 15
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "combo:distance+hub",
+      "weights": {
+        "weightCluster": 1,
+        "weightDistance": 1.1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.55,
+        "distanceScaleKm": 10
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    },
+    {
+      "kind": "combo:cluster+local",
+      "weights": {
+        "weightCluster": 1.1,
+        "weightDistance": 1,
+        "weightReciprocalEdge": 0.5,
+        "weightHubDamping": 0.5,
+        "distanceScaleKm": 8
+      },
+      "metrics": {
+        "gini": 0,
+        "avgKm": null,
+        "clusterPurity": 0,
+        "totalLinks": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# Daedalus Run Summary
+Generated: 2025-09-24T07:42:42.457Z
+Pages: 1
+Links: 3 edges across 3 unique targets
+Inbound Gini: 0 → 0
+Issues: 0
+
+First 1 pages:
+- src/pages/services/bond-cleaning/springfield-lakes/index.astro (neighbors: 3)

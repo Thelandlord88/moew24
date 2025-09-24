@@ -1,0 +1,196 @@
+---
+const jsonld = {
+  "localBusiness": {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "One N Done Bond Clean",
+    "areaServed": {
+      "@context": "https://schema.org",
+      "@type": "Place",
+      "@id": "https://example.com/areas/springfield-lakes#place",
+      "name": "Springfield Lakes",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Springfield Lakes",
+        "addressRegion": "QLD",
+        "postalCode": "4300",
+        "addressCountry": "AU"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -27.66,
+        "longitude": 152.91
+      },
+      "sameAs": [
+        "https://en.wikipedia.org/wiki/Springfield,_Queensland"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "Starting price",
+          "value": "$239"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Guarantee",
+          "value": "72-hour bond-back policy"
+        }
+      ]
+    },
+    "amenityFeature": [
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Agent-ready guarantee",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Eco-friendly products",
+        "value": true
+      }
+    ],
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Starting price",
+        "value": "$239"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Guarantee",
+        "value": "72-hour bond-back policy"
+      }
+    ]
+  },
+  "cleaningService": {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Bathroom Deep Clean in Springfield Lakes",
+    "areaServed": {
+      "@context": "https://schema.org",
+      "@type": "Place",
+      "@id": "https://example.com/areas/springfield-lakes#place",
+      "name": "Springfield Lakes",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Springfield Lakes",
+        "addressRegion": "QLD",
+        "postalCode": "4300",
+        "addressCountry": "AU"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -27.66,
+        "longitude": 152.91
+      },
+      "sameAs": [
+        "https://en.wikipedia.org/wiki/Springfield,_Queensland"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "Starting price",
+          "value": "$239"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Guarantee",
+          "value": "72-hour bond-back policy"
+        }
+      ]
+    },
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Agent-ready guarantee",
+        "value": "true"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Eco-friendly products",
+        "value": "true"
+      }
+    ]
+  },
+  "place": {
+    "@context": "https://schema.org",
+    "@type": "Place",
+    "@id": "https://example.com/areas/springfield-lakes#place",
+    "name": "Springfield Lakes",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Springfield Lakes",
+      "addressRegion": "QLD",
+      "postalCode": "4300",
+      "addressCountry": "AU"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": -27.66,
+      "longitude": 152.91
+    },
+    "sameAs": [
+      "https://en.wikipedia.org/wiki/Springfield,_Queensland"
+    ],
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Starting price",
+        "value": "$239"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Guarantee",
+        "value": "72-hour bond-back policy"
+      }
+    ]
+  },
+  "dataset": {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "@id": "https://example.com/api/agents/suburbs.json#dataset",
+    "name": "Queensland Suburb Adjacency Graph",
+    "description": "Graph of suburbs, clusters, distances, and adjacency used to power localized routing and SEO.",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "keywords": [
+      "suburbs",
+      "adjacency",
+      "queensland",
+      "distances",
+      "clusters"
+    ]
+  }
+};
+const neighbors = [
+  "clusters",
+  "forest-lake",
+  "ripley"
+];
+const serviceSlug = 'bathroom-deep-clean';
+const suburbSlug = 'springfield-lakes';
+
+function titleCase(slug) {
+  return String(slug).replace(/-/g, ' ').replace(/w/g, c => c.toUpperCase());
+}
+---
+
+<!-- Compose your design‑system components here -->
+
+<script type="application/ld+json">{JSON.stringify(jsonld.localBusiness)}</script>
+<script type="application/ld+json">{JSON.stringify(jsonld.cleaningService)}</script>
+<script type="application/ld+json">{JSON.stringify(jsonld.place)}</script>
+<script type="application/ld+json">{JSON.stringify(jsonld.dataset)}</script>
+
+<section class="py-8">
+  <h1 class="text-3xl font-bold">{titleCase(serviceSlug)} in {titleCase(suburbSlug)}</h1>
+  <p class="mt-2 opacity-80">Professional, agent-ready results backed by a bond return guarantee.</p>
+</section>
+
+{neighbors?.length ? (
+  <section class="mt-12">
+    <h2 class="text-xl font-semibold">Nearby areas</h2>
+    <ul class="grid sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+      {neighbors.map(n => (<li><a href={`/services/bathroom-deep-clean/${n}/`}>{titleCase(n)}</a></li>))}
+    </ul>
+  </section>
+) : null}

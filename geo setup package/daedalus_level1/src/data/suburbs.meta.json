@@ -1,0 +1,30 @@
+{
+  "springfield-lakes": {
+    "name": "Springfield Lakes",
+    "region": "QLD",
+    "postcode": "4300",
+    "coordinates": {
+      "lat": -27.66,
+      "lng": 152.91
+    },
+    "uniqueFeatures": [
+      "Agent-ready guarantee",
+      "Eco-friendly products"
+    ],
+    "startingPrice": 239,
+    "guarantee": "72-hour bond-back policy",
+    "sameAs": [
+      "https://en.wikipedia.org/wiki/Springfield,_Queensland"
+    ]
+  },
+  "forest-lake": {
+    "name": "Forest Lake",
+    "region": "QLD",
+    "postcode": "4078"
+  },
+  "ripley": {
+    "name": "Ripley",
+    "region": "QLD",
+    "postcode": "4306"
+  }
+}

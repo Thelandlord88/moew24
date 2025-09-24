@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-09-24T04:44:21.507Z",
+  "files": {
+    "clusters": "src/data/areas.clusters.json",
+    "clusterMap": "src/data/cluster_map.json",
+    "adj": "src/data/areas.adj.json",
+    "prox": "src/data/proximity.json",
+    "cfg": "src/data/geo.config.json"
+  },
+  "counts": {
+    "clusters": 5,
+    "suburbs": 344,
+    "adjacency": 3,
+    "proximity": 1
+  },
+  "issues": {
+    "missing": [],
+    "schema": [
+      "Duplicate suburb slug \"chuwar\""
+    ],
+    "ref": [],
+    "warn": [
+      "Duplicate suburb name \"Chuwar\"",
+      "cluster_map.json missing — region will be undefined",
+      "cluster_map.json missing — region will be undefined",
+      "cluster_map.json missing — region will be undefined",
+      "cluster_map.json missing — region will be undefined",
+      "cluster_map.json missing — region will be undefined"
+    ],
+    "policy": []
+  }
+}

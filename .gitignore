@@ -1,9 +1,2 @@
 node_modules
-dist
-.tmp
-tmp
-.DS_Store
-coverage
-playwright-report
-__geo
-__ai
+

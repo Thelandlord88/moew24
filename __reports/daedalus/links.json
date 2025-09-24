@@ -1,0 +1,11 @@
+[
+  {
+    "service": "bond-cleaning",
+    "suburb": "springfield-lakes",
+    "neighbors": [
+      "clusters",
+      "forest-lake",
+      "ripley"
+    ]
+  }
+]

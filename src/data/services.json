@@ -1,14 +1,36 @@
-[
-  {
-    "slug": "bond-cleaning",
-    "name": "Bond Cleaning",
-    "short": "End-of-lease clean that satisfies agent checklists.",
-    "guarantee": "Bond-back friendly. If flagged, we re-clean the listed items."
-  },
-  {
-    "slug": "bathroom-deep-clean",
-    "name": "Bathroom Deep Clean",
-    "short": "Tiles, grout, glass, and fixtures restored to a hygienic shine.",
-    "guarantee": "We target grime, scale, and soap build-up thoroughly."
-  }
-]
+{
+  "services": [
+    {
+      "slug": "bond-cleaning",
+      "title": "Bond Cleaning",
+      "description": "Professional end-of-lease cleaning service to get your full bond back",
+      "shortDescription": "Get your bond back",
+      "price": "$199",
+      "duration": "3-6 hours"
+    },
+    {
+      "slug": "spring-cleaning",
+      "title": "Spring Cleaning",
+      "description": "Comprehensive deep cleaning service for your entire home",
+      "shortDescription": "Complete home refresh",
+      "price": "$299",
+      "duration": "4-8 hours"
+    },
+    {
+      "slug": "bathroom-deep-clean",
+      "title": "Bathroom Deep Clean",
+      "description": "Intensive bathroom cleaning including tiles, grout, and fixtures",
+      "shortDescription": "Bathroom transformation",
+      "price": "$149",
+      "duration": "2-3 hours"
+    },
+    {
+      "slug": "house-cleaning",
+      "title": "House Cleaning",
+      "description": "Regular house cleaning service for ongoing maintenance",
+      "shortDescription": "Regular maintenance",
+      "price": "$179",
+      "duration": "2-4 hours"
+    }
+  ]
+}

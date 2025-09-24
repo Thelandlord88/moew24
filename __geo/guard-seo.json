@@ -1,0 +1,41 @@
+{
+  "dist": "dist",
+  "pages": [
+    {
+      "canonical": true,
+      "file": "dist/suburbs/kenmore/index.html",
+      "jsonld": true
+    },
+    {
+      "canonical": true,
+      "file": "dist/suburbs/ipswich/index.html",
+      "jsonld": true
+    },
+    {
+      "canonical": true,
+      "file": "dist/services/bond-cleaning/kenmore/index.html",
+      "jsonld": true
+    },
+    {
+      "canonical": true,
+      "file": "dist/services/bond-cleaning/ipswich/index.html",
+      "jsonld": true
+    },
+    {
+      "canonical": true,
+      "file": "dist/services/bathroom-deep-clean/kenmore/index.html",
+      "jsonld": true
+    },
+    {
+      "canonical": true,
+      "file": "dist/services/bathroom-deep-clean/ipswich/index.html",
+      "jsonld": true
+    },
+    {
+      "canonical": true,
+      "file": "dist/blog/index.html",
+      "jsonld": true
+    }
+  ],
+  "warnings": []
+}

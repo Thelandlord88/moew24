@@ -1,0 +1,62 @@
+{
+  "site": "https://onendonebondclean.com.au",
+  "anchors": {
+    "commercial": ["bond clean","bond cleaning","end of lease","end-of-lease","bathroom deep clean","spring clean"],
+    "maxSamePerPage": 6
+  },
+  "nearby": {
+    "maxItems": 6,
+    "requireLockstep": true,
+    "selector": {
+      "section": "[data-invariant=\"nearby\"]",
+      "ui": "[data-role=\"nearby-ui\"] a",
+      "ld": "script[type=\"application/ld+json\"][data-role=\"nearby-ld\"]"
+    }
+  },
+  "schema": {
+    "requireReviewsPageForAggregateRating": true,
+    "offerCurrencyRequiredWhenPrice": true,
+    "faqMustBeVisibleIfFAQPage": true,
+    "breadcrumbMustResolve": true
+  },
+  "ethics": {
+    "blockUAConditionals": true,
+    "blockHiddenKeywordBlocks": true,
+    "allowScreenReaderOnly": true
+  },
+  "localContent": {
+    "minWords": 250,
+    "minLocalHints": 2,
+    "localHintTerms": ["council","inspection","agent","parking","waste","tenancy","postcode","nearby","dump","permit"]
+  },
+  "similarity": {
+    "enabled": true,
+    "routeGlob": "^/services/(spring-clean|bathroom-deep-clean)/.*/$",
+    "maxPairwise": 180,
+    "ngram": 3,
+    "jaccardThreshold": 0.85
+  },
+  "sitemap": {
+    "require200": true,
+    "requireCanonicalSelf": true,
+    "requireLinked": true
+  },
+  "geo": {
+    "requiredFiles": [
+      "src/data/areas.clusters.json",
+      "src/data/areas.adj.json",
+      "src/data/cluster_map.json",
+      "src/data/geo.config.json"
+    ],
+    "servicesMustExist": ["spring-clean","bathroom-deep-clean"],
+    "smokePerCluster": 4,
+    "maxPathsPerService": 16
+  },
+  "syndication": {
+    "enabled": true,
+    "outDir": "__ai/syndication",
+    "platforms": ["linkedin","medium","partners"],
+    "disclosure": "First published at",
+    "canonicalNote": "This summary points to the canonical full guide."
+  }
+}

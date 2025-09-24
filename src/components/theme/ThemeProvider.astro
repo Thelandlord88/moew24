@@ -1,0 +1,208 @@
+---
+// src/components/theme/ThemeProvider.astro
+/**
+ * Advanced Theme Provider Component
+ * Provides CSS custom properties based on service and location context
+ */
+import type { ThemeTokens } from '../../lib/theme/tokens';
+import { createTheme } from '../../lib/theme/tokens';
+
+interface Props {
+  service?: string;
+  location?: string;
+  suburb?: string;
+  className?: string;
+}
+
+const { service, location, suburb, className = '' } = Astro.props;
+
+// Determine location context from suburb if not provided
+let themeLocation = location;
+if (!themeLocation && suburb) {
+  // Simple mapping - in production this would use the geo data
+  if (suburb.includes('brisbane') || suburb.includes('city')) {
+    themeLocation = 'brisbane-city';
+  } else if (suburb.includes('logan')) {
+    themeLocation = 'logan-city';
+  } else if (suburb.includes('ipswich')) {
+    themeLocation = 'ipswich-city';
+  }
+}
+
+const theme = createTheme(service, themeLocation);
+
+// Convert theme tokens to CSS custom properties
+const cssVariables = {
+  // Brand colors
+  '--brand-primary': theme.brand.primary,
+  '--brand-secondary': theme.brand.secondary,
+  '--brand-accent': theme.brand.accent,
+  '--brand-on-primary': theme.brand.onPrimary,
+  '--brand-on-secondary': theme.brand.onSecondary,
+  
+  // Surface colors
+  '--surface-base': theme.surface.base,
+  '--surface-elevated': theme.surface.elevated,
+  '--surface-raised': theme.surface.raised,
+  '--surface-interactive': theme.surface.interactive,
+  '--surface-on': theme.surface.on,
+  '--surface-on-variant': theme.surface.onVariant,
+  '--surface-border': theme.surface.border,
+  '--surface-border-light': theme.surface.borderLight,
+  
+  // Semantic colors
+  '--semantic-success': theme.semantic.success,
+  '--semantic-warning': theme.semantic.warning,
+  '--semantic-error': theme.semantic.error,
+  '--semantic-info': theme.semantic.info,
+  '--semantic-on-success': theme.semantic.onSuccess,
+  '--semantic-on-warning': theme.semantic.onWarning,
+  '--semantic-on-error': theme.semantic.onError,
+  '--semantic-on-info': theme.semantic.onInfo,
+  
+  // Typography
+  '--typography-heading': theme.typography.heading,
+  '--typography-body': theme.typography.body,
+  '--typography-caption': theme.typography.caption,
+  '--typography-label': theme.typography.label,
+  
+  // Spacing
+  '--spacing-xs': theme.spacing.xs,
+  '--spacing-sm': theme.spacing.sm,
+  '--spacing-md': theme.spacing.md,
+  '--spacing-lg': theme.spacing.lg,
+  '--spacing-xl': theme.spacing.xl,
+  '--spacing-xxl': theme.spacing.xxl,
+  
+  // Shadows
+  '--shadow-sm': theme.shadows.sm,
+  '--shadow-md': theme.shadows.md,
+  '--shadow-lg': theme.shadows.lg,
+  '--shadow-xl': theme.shadows.xl,
+  
+  // Transitions
+  '--transition-fast': theme.transitions.fast,
+  '--transition-medium': theme.transitions.medium,
+  '--transition-slow': theme.transitions.slow,
+};
+
+const styleString = Object.entries(cssVariables)
+  .map(([property, value]) => `${property}: ${value}`)
+  .join('; ');
+---
+
+<div 
+  class={`theme-provider ${className}`}
+  style={styleString}
+  data-theme-service={service}
+  data-theme-location={themeLocation}
+>
+  <slot />
+</div>
+
+<style>
+  .theme-provider {
+    min-height: inherit;
+    color: var(--surface-on);
+    background-color: var(--surface-base);
+  }
+  
+  /* Global theme-aware utility classes */
+  :global(.btn-primary) {
+    background-color: var(--brand-primary);
+    color: var(--brand-on-primary);
+    border: 2px solid var(--brand-primary);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all var(--transition-medium);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  :global(.btn-primary:hover) {
+    background-color: var(--brand-secondary);
+    border-color: var(--brand-secondary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  :global(.btn-secondary) {
+    background-color: transparent;
+    color: var(--brand-primary);
+    border: 2px solid var(--brand-primary);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all var(--transition-medium);
+  }
+  
+  :global(.btn-secondary:hover) {
+    background-color: var(--brand-primary);
+    color: var(--brand-on-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  :global(.card) {
+    background-color: var(--surface-elevated);
+    border: 1px solid var(--surface-border);
+    border-radius: 1rem;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-medium);
+  }
+  
+  :global(.card:hover) {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--brand-accent);
+  }
+  
+  :global(.badge-success) {
+    background-color: var(--semantic-success);
+    color: var(--semantic-on-success);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
+  :global(.badge-info) {
+    background-color: var(--semantic-info);
+    color: var(--semantic-on-info);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
+  :global(.text-heading) {
+    color: var(--typography-heading);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  
+  :global(.text-body) {
+    color: var(--typography-body);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  
+  :global(.text-caption) {
+    color: var(--typography-caption);
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  
+  :global(.surface-raised) {
+    background-color: var(--surface-raised);
+    border-radius: 1rem;
+    padding: var(--spacing-lg);
+  }
+  
+  :global(.interactive-hover:hover) {
+    background-color: var(--surface-interactive);
+    transition: background-color var(--transition-fast);
+  }
+</style>

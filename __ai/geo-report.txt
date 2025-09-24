@@ -1,0 +1,20 @@
+Geo Doctor
+Time: 2025-09-24T04:44:21.507Z
+clusters: 5
+suburbs: 344
+adjacency sources: 3
+proximity sources: 1
+
+missing: 0
+schema: 1
+referential: 0
+warnings: 6
+
+Top messages:
+ - Duplicate suburb slug "chuwar"
+ - Duplicate suburb name "Chuwar"
+ - cluster_map.json missing — region will be undefined
+ - cluster_map.json missing — region will be undefined
+ - cluster_map.json missing — region will be undefined
+ - cluster_map.json missing — region will be undefined
+ - cluster_map.json missing — region will be undefined

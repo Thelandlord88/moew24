@@ -1,0 +1,586 @@
+[
+  {
+    "page": "/blog/bond-cleaning-checklist/index.html",
+    "canonical": "https://onendonebondclean.com.au/blog/bond-cleaning-checklist/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Bond Cleaning Checklist: Agent-Ready Essentials",
+        "datePublished": "2025-09-07T00:00:00.000Z",
+        "author": {
+          "@type": "Organization",
+          "name": "One N Done Bond Clean"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/blog/index.html",
+    "canonical": "https://onendonebondclean.com.au/blog/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/services/bathroom-deep-clean/brookwater/index.html",
+    "canonical": "https://onendonebondclean.com.au/services/bathroom-deep-clean/brookwater/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/suburbs/springfield-lakes/",
+            "name": "Bond cleaning in Springfield Lakes"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": "https://onendonebondclean.com.au/services/bathroom-deep-clean/brookwater/#service",
+        "name": "Bathroom Deep Clean in Brookwater",
+        "serviceType": "Bathroom Deep Clean",
+        "areaServed": {
+          "@type": "City",
+          "name": "Brookwater",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "ipswich"
+          }
+        },
+        "provider": {
+          "@type": "LocalBusiness",
+          "@id": "https://onendonebondclean.com.au#business"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "url": "https://onendonebondclean.com.au/services/bathroom-deep-clean/brookwater/"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/services/bathroom-deep-clean/ipswich/index.html",
+    "canonical": "https://onendonebondclean.com.au/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/services/bathroom-deep-clean/kenmore/index.html",
+    "canonical": "https://onendonebondclean.com.au/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/services/bathroom-deep-clean/springfield-lakes/index.html",
+    "canonical": "https://onendonebondclean.com.au/services/bathroom-deep-clean/springfield-lakes/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/suburbs/brookwater/",
+            "name": "Bond cleaning in Brookwater"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": "https://onendonebondclean.com.au/services/bathroom-deep-clean/springfield-lakes/#service",
+        "name": "Bathroom Deep Clean in Springfield Lakes",
+        "serviceType": "Bathroom Deep Clean",
+        "areaServed": {
+          "@type": "City",
+          "name": "Springfield Lakes",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "ipswich"
+          }
+        },
+        "provider": {
+          "@type": "LocalBusiness",
+          "@id": "https://onendonebondclean.com.au#business"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "url": "https://onendonebondclean.com.au/services/bathroom-deep-clean/springfield-lakes/"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/services/bond-cleaning/ipswich/index.html",
+    "canonical": "https://onendonebondclean.com.au/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/services/bond-cleaning/kenmore/index.html",
+    "canonical": "https://onendonebondclean.com.au/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/services/index.html",
+    "canonical": "https://onendonebondclean.com.au/services/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/services/spring-clean/brookwater/index.html",
+    "canonical": "https://onendonebondclean.com.au/services/spring-clean/brookwater/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/suburbs/springfield-lakes/",
+            "name": "Bond cleaning in Springfield Lakes"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": "https://onendonebondclean.com.au/services/spring-clean/brookwater/#service",
+        "name": "Spring Clean in Brookwater",
+        "serviceType": "Spring Clean",
+        "areaServed": {
+          "@type": "City",
+          "name": "Brookwater",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "ipswich"
+          }
+        },
+        "provider": {
+          "@type": "LocalBusiness",
+          "@id": "https://onendonebondclean.com.au#business"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "url": "https://onendonebondclean.com.au/services/spring-clean/brookwater/"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/services/spring-clean/springfield-lakes/index.html",
+    "canonical": "https://onendonebondclean.com.au/services/spring-clean/springfield-lakes/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/suburbs/brookwater/",
+            "name": "Bond cleaning in Brookwater"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": "https://onendonebondclean.com.au/services/spring-clean/springfield-lakes/#service",
+        "name": "Spring Clean in Springfield Lakes",
+        "serviceType": "Spring Clean",
+        "areaServed": {
+          "@type": "City",
+          "name": "Springfield Lakes",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "ipswich"
+          }
+        },
+        "provider": {
+          "@type": "LocalBusiness",
+          "@id": "https://onendonebondclean.com.au#business"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "url": "https://onendonebondclean.com.au/services/spring-clean/springfield-lakes/"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/suburbs/brookwater/index.html",
+    "canonical": "https://onendonebondclean.com.au/suburbs/brookwater/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/suburbs/springfield-lakes/",
+            "name": "Bond cleaning in Springfield Lakes"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Bond Cleaning in Brookwater",
+        "areaServed": {
+          "@type": "City",
+          "name": "Brookwater",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "ipswich"
+          }
+        },
+        "provider": {
+          "@type": "LocalBusiness",
+          "@id": "https://onendonebondclean.com.au#business"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/suburbs/index.html",
+    "canonical": "https://onendonebondclean.com.au/suburbs/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/suburbs/ipswich/index.html",
+    "canonical": "https://onendonebondclean.com.au/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/suburbs/kenmore/index.html",
+    "canonical": "https://onendonebondclean.com.au/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      }
+    ]
+  },
+  {
+    "page": "/suburbs/springfield-lakes/index.html",
+    "canonical": "https://onendonebondclean.com.au/suburbs/springfield-lakes/",
+    "jsonld": [
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://onendonebondclean.com.au#business",
+        "name": "One N Done Bond Clean",
+        "url": "https://onendonebondclean.com.au",
+        "telephone": "+61 7 3000 0000",
+        "email": "quotes@onendone.com.au",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Clean Street",
+          "addressLocality": "Brisbane",
+          "addressRegion": "QLD",
+          "postalCode": "4000",
+          "addressCountry": "AU"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "/suburbs/brookwater/",
+            "name": "Bond cleaning in Brookwater"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Bond Cleaning in Springfield Lakes",
+        "areaServed": {
+          "@type": "City",
+          "name": "Springfield Lakes",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "ipswich"
+          }
+        },
+        "provider": {
+          "@type": "LocalBusiness",
+          "@id": "https://onendonebondclean.com.au#business"
+        }
+      }
+    ]
+  }
+]

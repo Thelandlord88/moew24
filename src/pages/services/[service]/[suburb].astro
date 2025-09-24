@@ -10,7 +10,7 @@ export const trailingSlash = 'always';
 
 export async function getStaticPaths() {
   const subs = getAllSuburbs().map(s => s.slug);
-  const services: ServiceId[] = ['bathroom-deep-clean','spring-clean'];
+  const services: ServiceId[] = ['bathroom-deep-clean','spring-clean','bond-cleaning','house-cleaning'];
   const paths = [];
   for (const suburb of subs) for (const service of services) paths.push({ params: { service, suburb } });
   return paths;

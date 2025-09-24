@@ -1,0 +1,20 @@
+{
+  "counts": {
+    "suburbs": 2
+  },
+  "details": {
+    "adjacencyBreaks": [],
+    "clusterGhosts": [],
+    "duplicates": [],
+    "missingCoords": [
+      "ipswich",
+      "kenmore"
+    ]
+  },
+  "errors": [],
+  "ok": true,
+  "warnings": [
+    "2 suburb(s) missing lat/lon",
+    "geo.config.json not found"
+  ]
+}

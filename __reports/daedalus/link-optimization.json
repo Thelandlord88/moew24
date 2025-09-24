@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2025-09-24T07:42:42.453Z",
+  "policyCapUsed": 1,
+  "substitutionsCount": 0,
+  "removalsCount": 0,
+  "metrics": {
+    "before": {
+      "totalLinks": 3,
+      "gini": 0
+    },
+    "after": {
+      "totalLinks": 3,
+      "gini": 0
+    }
+  },
+  "substitutions": [],
+  "removals": []
+}

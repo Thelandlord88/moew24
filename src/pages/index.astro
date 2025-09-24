@@ -1,0 +1,813 @@
+---
+import ProfessionalLayout from '@/layouts/ProfessionalLayout.astro';
+import Card from '@/components/ui/Card.astro';
+import Button from '@/components/ui/Button.astro';
+import Badge from '@/components/ui/Badge.astro';
+import { routes } from '@/lib/routes';
+
+// Service data with enhanced information
+const services = [
+  {
+    id: 'bond-cleaning',
+    title: 'Bond Cleaning',
+    description: 'Complete end-of-lease cleaning to real estate standards',
+    icon: 'home',
+    features: ['100% Bond Back Guarantee', 'Real Estate Approved', 'Comprehensive Checklist'],
+    color: 'primary'
+  },
+  {
+    id: 'spring-clean',
+    title: 'Spring Cleaning',
+    description: 'Comprehensive deep cleaning for your entire home',
+    icon: 'refresh',
+    features: ['Deep Clean Every Room', 'Eco-Friendly Products', 'Professional Team'],
+    color: 'success'
+  },
+  {
+    id: 'bathroom-deep-clean', 
+    title: 'Bathroom Deep Clean',
+    description: 'Intensive bathroom cleaning including tiles and grout',
+    icon: 'droplet',
+    features: ['Mould & Mildew Removal', 'Tile & Grout Restoration', 'Professional Equipment'],
+    color: 'info'
+  },
+  {
+    id: 'house-cleaning',
+    title: 'House Cleaning',
+    description: 'Regular house cleaning for ongoing maintenance',
+    icon: 'sparkles',
+    features: ['Regular Schedules', 'Trusted Cleaners', 'Flexible Booking'],
+    color: 'warning'
+  }
+];
+
+const areas = [
+  { name: 'Brisbane City', suburbs: 194, description: 'CBD, inner city, and surrounding areas' },
+  { name: 'Logan City', suburbs: 69, description: 'Beenleigh, Browns Plains, Logan Central' },
+  { name: 'Ipswich City', suburbs: 82, description: 'Springfield, Yamanto, Goodna' }
+];
+
+const trustIndicators = [
+  { label: '100% Bond Back', variant: 'success' },
+  { label: 'Fully Insured', variant: 'primary' },
+  { label: 'Real Estate Approved', variant: 'info' },
+  { label: '345+ Suburbs', variant: 'secondary' }
+];
+---
+
+<ProfessionalLayout 
+  title="Professional Bond Cleaning Services Brisbane | One N Done Bond Clean"
+  description="Get your full bond back with our professional end-of-lease cleaning services. Covering Brisbane, Logan, and Ipswich with guaranteed results."
+  canonical={routes.site.home()}
+>
+  <div class="container">
+    <!-- Advanced Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-badges">
+          {trustIndicators.map(indicator => (
+            <Badge variant={indicator.variant as any} size="sm">
+              {indicator.label}
+            </Badge>
+          ))}
+        </div>
+        
+        <h1 class="hero-title">
+          Get Your <span class="hero-highlight">Full Bond Back</span><br />
+          <span class="hero-subtitle">Guaranteed</span>
+        </h1>
+        
+        <p class="hero-description">
+          Professional end-of-lease cleaning services across Brisbane, Logan, and Ipswich. 
+          Real estate approved with 100% bond back guarantee or we re-clean for free.
+        </p>
+        
+        <div class="hero-actions">
+          <Button 
+            variant="primary" 
+            size="lg" 
+            href={routes.site.quote()}
+          >
+            Get Free Quote Today
+            <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </Button>
+          
+          <Button 
+            variant="secondary" 
+            size="lg" 
+            href={routes.services.index()}
+          >
+            View All Services
+          </Button>
+        </div>
+        
+        <!-- Trust Proof -->
+        <div class="hero-proof">
+          <div class="proof-stats">
+            <div class="stat">
+              <span class="stat-number">1000+</span>
+              <span class="stat-label">Happy Customers</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">345+</span>
+              <span class="stat-label">Suburbs Covered</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Bond Back Rate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Hero Visual -->
+      <div class="hero-visual">
+        <Card variant="feature" size="lg" className="hero-card">
+          <div class="hero-card-content">
+            <h3 class="hero-card-title">Why Choose Us?</h3>
+            <ul class="hero-card-features">
+              <li>✓ 100% Bond Back Guarantee</li>
+              <li>✓ Real Estate Approved</li>
+              <li>✓ Fully Insured & Bonded</li>
+              <li>✓ Professional Equipment</li>
+              <li>✓ Eco-Friendly Products</li>
+              <li>✓ Same Day Service Available</li>
+            </ul>
+          </div>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Advanced Services Section -->
+    <section class="services-section">
+      <div class="section-header">
+        <h2 class="section-title">Our Professional Cleaning Services</h2>
+        <p class="section-description">
+          Expert cleaning solutions tailored to your specific needs with guaranteed results
+        </p>
+      </div>
+      
+      <div class="services-grid">
+        {services.map((service) => (
+          <Card variant="interactive" className="service-card">
+            <div class="service-icon">
+              <svg class="service-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                {service.icon === 'home' && (
+                  <>
+                    <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2Z"></path>
+                    <path d="M8 21v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"></path>
+                  </>
+                )}
+                {service.icon === 'refresh' && (
+                  <>
+                    <path d="M12 2v6.5"></path>
+                    <path d="m19 5-7 7-7-7"></path>
+                    <path d="M12 22v-6.5"></path>
+                    <path d="m5 19 7-7 7 7"></path>
+                  </>
+                )}
+                {service.icon === 'droplet' && (
+                  <>
+                    <path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path>
+                    <path d="M15 2v5"></path>
+                    <path d="M12 7l3-3 3 3"></path>
+                  </>
+                )}
+                {service.icon === 'sparkles' && (
+                  <>
+                    <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2Z"></path>
+                    <path d="M21 9h-4.85"></path>
+                  </>
+                )}
+              </svg>
+            </div>
+            
+            <div class="service-content">
+              <h3 class="service-title">{service.title}</h3>
+              <p class="service-description">{service.description}</p>
+              
+              <ul class="service-features">
+                {service.features.map(feature => (
+                  <li class="service-feature">
+                    <svg class="feature-check" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              
+              <div class="service-action">
+                <Button variant="secondary" size="sm" href={`/services/${service.id}/`}>
+                  Learn More
+                </Button>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </section>
+
+    <!-- Coverage Areas Section -->
+    <section class="areas-section surface-raised">
+      <div class="section-header">
+        <h2 class="section-title">Servicing 345+ Suburbs Across Queensland</h2>
+        <p class="section-description">
+          Comprehensive coverage across Brisbane, Logan, and Ipswich with local expertise in every area
+        </p>
+      </div>
+      
+      <div class="areas-grid">
+        {areas.map((area) => (
+          <Card variant="elevated" className="area-card">
+            <div class="area-header">
+              <h3 class="area-title">{area.name}</h3>
+              <Badge variant="primary" size="sm">{area.suburbs}+ suburbs</Badge>
+            </div>
+            <p class="area-description">{area.description}</p>
+            <div class="area-action">
+              <Button variant="link" size="sm" href={routes.suburbs.index()}>
+                View {area.name} Areas →
+              </Button>
+            </div>
+          </Card>
+        ))}
+      </div>
+      
+      <div class="areas-cta">
+        <Button variant="secondary" size="lg" href={routes.suburbs.index()}>
+          View All Service Areas
+        </Button>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="benefits-section">
+      <div class="section-header">
+        <h2 class="section-title">Why Choose One N Done?</h2>
+        <p class="section-description">
+          Professional excellence meets customer satisfaction with guaranteed results
+        </p>
+      </div>
+      
+      <div class="benefits-grid">
+        <Card variant="default" className="benefit-card">
+          <div class="benefit-icon success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12l2 2 4-4"></path>
+              <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9Z"></path>
+            </svg>
+          </div>
+          <h3 class="benefit-title">100% Bond Back Guarantee</h3>
+          <p class="benefit-description">
+            We guarantee you'll get your full bond back or we'll re-clean for free. 
+            No questions asked, complete peace of mind.
+          </p>
+        </Card>
+        
+        <Card variant="default" className="benefit-card">
+          <div class="benefit-icon primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v6.5"></path>
+              <path d="m19 5-7 7-7-7"></path>
+            </svg>
+          </div>
+          <h3 class="benefit-title">Real Estate Approved</h3>
+          <p class="benefit-description">
+            Our cleaning meets all real estate and property management standards. 
+            Trusted by agents across Queensland.
+          </p>
+        </Card>
+        
+        <Card variant="default" className="benefit-card">
+          <div class="benefit-icon info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="benefit-title">Professional Team</h3>
+          <p class="benefit-description">
+            Experienced, insured, and trained cleaning professionals with 
+            background checks and professional equipment.
+          </p>
+        </Card>
+        
+        <Card variant="default" className="benefit-card">
+          <div class="benefit-icon warning">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 6v6l4 2"></path>
+            </svg>
+          </div>
+          <h3 class="benefit-title">Same Day Service</h3>
+          <p class="benefit-description">
+            Urgent bond clean needed? We offer same-day service for 
+            last-minute bookings across all our service areas.
+          </p>
+        </Card>
+        
+        <Card variant="default" className="benefit-card">
+          <div class="benefit-icon success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+              <path d="m3.3 7 8.7 5 8.7-5"></path>
+              <path d="M12 22V12"></path>
+            </svg>
+          </div>
+          <h3 class="benefit-title">Eco-Friendly Products</h3>
+          <p class="benefit-description">
+            Safe for your family, pets, and the environment. Professional-grade 
+            cleaning products that deliver results without compromise.
+          </p>
+        </Card>
+        
+        <Card variant="default" className="benefit-card">
+          <div class="benefit-icon primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path>
+            </svg>
+          </div>
+          <h3 class="benefit-title">Fully Insured</h3>
+          <p class="benefit-description">
+            Complete public liability and professional indemnity insurance 
+            coverage gives you peace of mind during every service.
+          </p>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Final Call to Action -->
+    <section class="cta-section">
+      <Card variant="feature" size="lg" className="cta-card">
+        <div class="cta-content">
+          <h2 class="cta-title">Ready to Get Your Bond Back?</h2>
+          <p class="cta-description">
+            Join thousands of satisfied customers across Queensland who trust One N Done 
+            for their bond cleaning needs. Get your free quote today!
+          </p>
+          
+          <div class="cta-actions">
+            <Button variant="secondary" size="xl" href={routes.site.quote()}>
+              Get Your Free Quote Today
+              <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </Button>
+          </div>
+          
+          <div class="cta-proof">
+            <p class="cta-proof-text">✓ Free quotes ✓ No hidden fees ✓ 24-hour response</p>
+          </div>
+        </div>
+      </Card>
+    </section>
+  </div>
+</ProfessionalLayout>
+
+<style>
+  /* Hero Section */
+  .hero-section {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: var(--spacing-xxl);
+    align-items: center;
+    padding: var(--spacing-xxl) 0;
+    min-height: 80vh;
+  }
+  
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-lg);
+    color: var(--typography-heading);
+  }
+  
+  .hero-highlight {
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .hero-subtitle {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--brand-secondary);
+    margin-top: var(--spacing-sm);
+  }
+  
+  .hero-description {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--typography-body);
+    margin-bottom: var(--spacing-xl);
+    max-width: 600px;
+  }
+  
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xxl);
+  }
+  
+  .hero-proof {
+    border-top: 1px solid var(--surface-border);
+    padding-top: var(--spacing-lg);
+  }
+  
+  .proof-stats {
+    display: flex;
+    gap: var(--spacing-xl);
+  }
+  
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--brand-primary);
+    line-height: 1;
+  }
+  
+  .stat-label {
+    font-size: 0.875rem;
+    color: var(--typography-caption);
+    font-weight: 500;
+    margin-top: var(--spacing-xs);
+  }
+  
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .hero-card {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .hero-card-content {
+    text-align: center;
+  }
+  
+  .hero-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    color: var(--brand-on-primary);
+  }
+  
+  .hero-card-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+  }
+  
+  .hero-card-features li {
+    font-size: 1rem;
+    color: var(--brand-on-primary);
+    margin-bottom: var(--spacing-sm);
+    opacity: 0.95;
+  }
+  
+  /* Section Styling */
+  .services-section,
+  .areas-section,
+  .benefits-section,
+  .cta-section {
+    padding: var(--spacing-xxl) 0;
+  }
+  
+  .areas-section {
+    margin: var(--spacing-xxl) -var(--spacing-lg);
+    padding: var(--spacing-xxl) var(--spacing-lg);
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xxl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--typography-heading);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.2;
+  }
+  
+  .section-description {
+    font-size: 1.125rem;
+    color: var(--typography-body);
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  /* Services Grid */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+  }
+  
+  .service-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .service-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .service-icon-svg {
+    width: 32px;
+    height: 32px;
+    color: var(--brand-on-primary);
+  }
+  
+  .service-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .service-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--typography-heading);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .service-description {
+    color: var(--typography-body);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .service-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--spacing-lg) 0;
+    flex: 1;
+  }
+  
+  .service-feature {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    font-size: 0.875rem;
+    color: var(--typography-body);
+  }
+  
+  .feature-check {
+    width: 16px;
+    height: 16px;
+    color: var(--semantic-success);
+    flex-shrink: 0;
+  }
+  
+  .service-action {
+    margin-top: auto;
+  }
+  
+  /* Areas Grid */
+  .areas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .area-card {
+    text-align: left;
+  }
+  
+  .area-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .area-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--typography-heading);
+    margin: 0;
+  }
+  
+  .area-description {
+    color: var(--typography-body);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-lg) 0;
+  }
+  
+  .areas-cta {
+    text-align: center;
+  }
+  
+  /* Benefits Grid */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+  }
+  
+  .benefit-card {
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .benefit-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .benefit-icon.success {
+    background-color: rgba(5, 150, 105, 0.1);
+    color: var(--semantic-success);
+  }
+  
+  .benefit-icon.primary {
+    background-color: rgba(3, 105, 161, 0.1);
+    color: var(--brand-primary);
+  }
+  
+  .benefit-icon.info {
+    background-color: rgba(37, 99, 235, 0.1);
+    color: var(--semantic-info);
+  }
+  
+  .benefit-icon.warning {
+    background-color: rgba(217, 119, 6, 0.1);
+    color: var(--semantic-warning);
+  }
+  
+  .benefit-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .benefit-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--typography-heading);
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+  
+  .benefit-description {
+    color: var(--typography-body);
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+  }
+  
+  /* CTA Section */
+  .cta-section {
+    text-align: center;
+  }
+  
+  .cta-card {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .cta-content {
+    text-align: center;
+  }
+  
+  .cta-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 var(--spacing-md) 0;
+    color: var(--brand-on-primary);
+  }
+  
+  .cta-description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-xl) 0;
+    color: var(--brand-on-primary);
+    opacity: 0.95;
+  }
+  
+  .cta-actions {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .cta-proof-text {
+    font-size: 0.875rem;
+    color: var(--brand-on-primary);
+    opacity: 0.9;
+    margin: 0;
+    font-weight: 500;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .hero-section {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-xl);
+      text-align: center;
+      min-height: auto;
+      padding: var(--spacing-xl) 0;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 2rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .cta-title {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.5rem;
+    }
+    
+    .hero-description {
+      font-size: 1rem;
+    }
+    
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .proof-stats {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--spacing-md);
+    }
+    
+    .services-grid,
+    .areas-grid,
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .section-title {
+      font-size: 1.75rem;
+    }
+    
+    .cta-title {
+      font-size: 1.75rem;
+    }
+  }
+</style>
