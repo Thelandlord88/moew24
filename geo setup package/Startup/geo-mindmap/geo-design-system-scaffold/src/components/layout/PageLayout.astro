@@ -1,0 +1,93 @@
+---
+// src/components/layout/PageLayout.astro
+import { createTheme } from '../../lib/themeProvider.js';
+import { getServiceTheme } from '../../lib/serviceThemes.js';
+import Button from '../ui/Button.astro';
+import Banner from '../ui/Banner.astro';
+import Card from '../ui/Card.astro';
+
+const {
+  suburb,
+  service,
+  title,
+  metaDescription,
+  availableServices = [],
+  adjacentSuburbs = [],
+  children,
+  ...props
+} = Astro.props;
+
+const theme = createTheme(suburb.slug, service);
+const serviceTheme = theme.serviceTheme;
+const suburbTheme = theme.suburbTheme;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={metaDescription} />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root { --font-family: "Inter", sans-serif; }
+      body { font-family: var(--font-family); line-height: 1.6; }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <Banner suburb={suburb} service={service}>
+      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <Button suburb={suburb} service={service} variant="gradient" size="xl">Get Your Free Quote Now</Button>
+        <Button suburb={suburb} service={service} variant="secondary" size="xl">View Pricing</Button>
+      </div>
+    </Banner>
+
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      {children}
+
+      {availableServices.length > 0 && (
+        <section class="mt-12">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">Other Services in {suburb.name}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {availableServices.map(otherService => (
+              <Card
+                suburb={suburb}
+                service={otherService}
+                title={`${getServiceTheme(otherService).name} in ${suburb.name}`}
+                description={getServiceTheme(otherService).description}
+                href={`/services/${otherService}/${suburb.slug}/`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {adjacentSuburbs.length > 0 && (
+        <section class="mt-12">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">Services in Nearby Suburbs</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {adjacentSuburbs.slice(0, 6).map(adjacent => (
+              <Card
+                suburb={adjacent}
+                service={service}
+                title={`${serviceTheme.name} in ${adjacent.name}`}
+                description={`Professional ${serviceTheme.name.toLowerCase()} services in ${adjacent.name}`}
+                href={`/services/${service}/${adjacent.slug}/`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <p>&copy; 2025 Company Name. All rights reserved.</p>
+          <p class="mt-2">Serving {suburb.name} and surrounding areas with professional cleaning services.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

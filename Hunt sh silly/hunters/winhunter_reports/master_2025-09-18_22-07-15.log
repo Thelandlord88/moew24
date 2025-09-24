@@ -1,0 +1,29 @@
+Hunter Pack - REPORT  (RestorePoint=0  Speed=0)
+Logs - sh silly\hunters\winhunter_reports
+Trace - sh silly\hunters\winhunter_reports\hunt-events.ndjson
+[SECTION] storage: disk + clutter
+C: Used=94,346MB Free=19,463MB
+D: Used=0MB Free=0MB
+E: Used=226,366MB Free=727,501MB
+TEMP total ~ 184 MB; Recycle Bin ~ 5 MB
+[SECTION] network: DNS + sockets
+DNS cache present; flushing can help after VPN/wifi changes.
+Listening sockets logged - sh silly\hunters\winhunter_reports\net_listening_2025-09-18_22-07-15.txt
+[SECTION] startup: boot + autostart
+Startup lists:
+ - C:\Users\imaba\Pictures\__review\Hunt sh silly\hunters\winhunter_reports\startup_user_2025-09-18_22-07-15.txt
+ - C:\Users\imaba\Pictures\__review\Hunt sh silly\hunters\winhunter_reports\startup_machine_2025-09-18_22-07-15.txt
+ - C:\Users\imaba\Pictures\__review\Hunt sh silly\hunters\winhunter_reports\startup_tasks_2025-09-18_22-07-15.csv
+[SECTION] health: component store + file integrity (report)
+
+Error: 740
+
+Elevated permissions are required to run DISM. 
+Use an elevated command prompt to complete these tasks.
+[SECTION] power: power plan
+Current scheme: 192ba261-ae4f-4284-88d1-a1a87a2d0494  (Ultimate Performance)
+Tip: add /SPEED with /FIX to set High performance temporarily.
+[SECTION] Thinker: Do-Next agenda
+Wrote insights - sh silly\hunters\winhunter_reports\insights_2025-09-18_22-07-15.txt
+ECHO is off.
+Done. See insights - sh silly\hunters\winhunter_reports\insights_2025-09-18_22-07-15.txt

@@ -1,0 +1,29 @@
+%% docs/geo-system-mindmap.mmd
+%% Mermaid mindmap showing the data tree for the geo system
+mindmap
+  root((Geo System))
+    Data Sources
+      GeoJSON Enriched (preferred)
+      GeoJSON Basic (fallback)
+      Suburbs CSV (optional)
+      Adjacency CSV (optional)
+      Region Map JSON (optional)
+    Build Scripts
+      csv-to-geojson.mjs
+      geojson-to-clusters.mjs
+      adjacency-from-csv.mjs
+      validate-suburbs.mjs
+      validate-adj.mjs
+      prebuild-geo.sh
+    Outputs
+      areas.clusters.json
+      areas.adj.json
+    Consumers
+      getStaticPaths (areas/[lga]/[suburb])
+      (optional) service × suburb pages
+    Guardrails
+      Biome + Prettier(.astro)
+      Playwright + Axe (@a11y)
+      PSI Budgets (perf:psi)
+    CI Flow
+      geo:prebuild --> astro build --> tests + perf:psi --> dist/

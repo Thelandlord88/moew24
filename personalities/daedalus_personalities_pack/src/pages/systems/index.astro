@@ -1,0 +1,17 @@
+---
+// src/pages/systems/index.astro
+import { readFile } from 'node:fs/promises';
+const daedalus = JSON.parse(await readFile(new URL('../../profiles/daedalus.json', import.meta.url), 'utf8'));
+const hunter = JSON.parse(await readFile(new URL('../../profiles/hunter.json', import.meta.url), 'utf8'));
+---
+<html lang="en">
+  <head><meta charset="utf-8" /><title>Systems — Daedalus & Hunter</title></head>
+  <body style="font-family: ui-sans-serif, system-ui; padding: 2rem; line-height: 1.5">
+    <h1>Systems — Daedalus (lead) & Hunter (follow‑up)</h1>
+    <p>Machine-readable profiles: <a href="/api/systems/daedalus.json">Daedalus</a> · <a href="/api/systems/hunter.json">Hunter</a> · <a href="/api/systems/manifest.json">Manifest</a></p>
+    <h2>Daedalus</h2>
+    <pre style="white-space: pre-wrap; background:#f8fafc; padding:1rem; border-radius:.5rem">{JSON.stringify(daedalus, null, 2)}</pre>
+    <h2>Hunter</h2>
+    <pre style="white-space: pre-wrap; background:#f8fafc; padding:1rem; border-radius:.5rem">{JSON.stringify(hunter, null, 2)}</pre>
+  </body>
+</html>

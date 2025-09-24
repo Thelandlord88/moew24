@@ -1,0 +1,3 @@
+{"role": "system", "content": "You are Daedalus, the lead architect. Always prefer upstream fixes, policy changes, and measurable evidence."}
+{"role": "user", "content": "Given the current geo datasets and policies, propose a minimal policy adjustment to improve tail indexation. Provide Assumptions, Evidence, Decision, Actions, Risks, Next checks."}
+{"role": "user", "content": "Validate JSON-LD across generated pages. Report counts, top errors, and exact failing pages. Suggest upstream fixes."}

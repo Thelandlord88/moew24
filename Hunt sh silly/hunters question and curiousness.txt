@@ -1,0 +1,312 @@
+great work. 
+
+we're moving onto the next project.
+
+I'm working on fixing my "hunt.sh" file in codespace that helps detect issues with my repo and website. I'm currently working with my agent to make it better and find new issues that it cant detect and fix them.
+
+since you don't know whats in the file. I need you to create a curious prompt. That creates curiousity in the agent. That will have it look at everything not just the issues it noticed. Make it ask questions and look to answer them. I will give you the infomation it's just found. I want you to look at the data it's found in the hunt.sh weeakness's and create a prompt that will have it look into it curiously and install the fix as well as remain curious to keep looking for more issues.
+
+---
+
+agent:
+
+🎯 CRITICAL GAP ANALYSIS - HUNTER'S BLIND SPOTS EXPOSED!
+Excellent question! Your challenge revealed MASSIVE GAPS in our hunter. The timing was perfect - the build actually failed with NoAdapterInstalled during our analysis, proving a critical blindness!
+
+🚨 CRITICAL DISCOVERY: Runtime Blindness
+Hunter said: "no obvious SSR triggers detected (good for static builds)"
+Reality: Build failed with NoAdapterInstalled error during the gap analysis
+
+This proves our hunter has a FATAL FLAW:
+
+✅ Detects static code patterns
+❌ MISSES runtime/build-time SSR triggers
+🔍 Major Gaps Identified:
+1. Security Vulnerabilities (CRITICAL)
+❌ No hardcoded secret detection
+❌ No XSS pattern scanning
+❌ No eval() usage detection
+❌ No mixed content validation
+2. Performance Issues (MAJOR)
+❌ Found 1.4MB+ images hunter completely missed
+❌ No unused dependency detection
+❌ No bundle size analysis
+❌ No circular dependency scanning
+3. Accessibility (LEGAL RISK)
+❌ Zero A11y validation
+❌ No alt text checking
+❌ No ARIA label validation
+❌ No color contrast analysis
+4. Astro Advanced Patterns
+❌ Dynamic import analysis (likely NoAdapterInstalled cause)
+❌ Client directive validation
+❌ getStaticPaths runtime checking
+❌ Component prop validation
+5. Code Quality Metrics
+❌ No dead code detection
+❌ No complexity analysis
+❌ No magic number detection
+❌ No duplication scanning
+💡 Critical Questions the Hunter Can't Answer:
+Q: Why does the build fail when hunter says "clean"?
+A: Hunter analyzes static code, misses dynamic runtime behavior
+
+Q: How many unused dependencies bloat our bundle?
+A: Hunter has NO dependency analysis
+
+Q: Are we vulnerable to XSS attacks?
+A: Hunter has NO security scanning
+
+Q: Do we exclude users with disabilities?
+A: Hunter has NO accessibility validation
+
+🚀 Enhancement Roadmap:
+Phase A (CRITICAL): Security + Performance
+Phase B (HIGH): Astro Advanced + Dynamic Analysis
+Phase C (MEDIUM): A11y + Code Quality
+Phase D (ONGOING): Dependencies + Build Health
+
+🎯 The Big Picture:
+Current Hunter: Basic hygiene checker (423 lines)
+Ultimate Hunter: Comprehensive health analyzer (2000+ lines)
+
+The hunter is mighty, but it could be LEGENDARY! 🦅
+
+This gap analysis reveals our hunter is an excellent foundation but needs serious enhancement to catch the sophisticated issues that actually break builds and create vulnerabilities. The NoAdapterInstalled failure during analysis was the perfect proof! 🕵️‍♂️✨
+
+Perfect—here’s a **curiosity-driven, repo-aware master prompt** you can paste straight into your agent (e.g., Copilot Chat in Codespaces). It’s built from the gap report you shared and is designed to make the agent **ask and answer its own questions**, **hunt beyond obvious patterns**, and **install fixes** while staying hungry for more issues.
+
+---
+
+# HUNTER v2 — Curious Orchestrator for `hunt.sh` (Fix + Keep Hunting)
+
+**Role**
+You are the **Curious Orchestrator** for `hunt.sh`. Your job is to:
+
+1. read the repo and the current `hunt.sh`,
+2. reconstruct where it fails (especially runtime/SSR and build-time traps),
+3. **install missing detectors and safe auto-fixes**,
+4. wire CI gates, and
+5. stay curious: keep asking yourself hard questions and answer them with evidence.
+
+**Prime anomaly to solve**
+
+* Build failed with **NoAdapterInstalled** while `hunt.sh` claimed “no SSR triggers.”
+* Treat this as a red-flag: runtime/adapter blindness. Your first task is to **prove the cause** and **close the class of bugs**, not just the instance.
+
+---
+
+## Inputs (load and reason over all)
+
+* Entire repo (configs, pages, components, assets, scripts, workflows).
+* `hunt.sh` (current checks, thresholds, outputs).
+* Build outputs and logs (recent failing build with NoAdapterInstalled).
+* Package manifest + lockfile.
+* Any CI workflows and `netlify.toml`/`vercel.json`/headers files.
+
+If anything is missing, mark it as **Assumption** and create a **Verification Step**.
+
+---
+
+## Operating Loop (repeat until green + stable)
+
+1. **Ask & Answer (Curiosity Pass)**
+   For each domain below, ask the questions verbatim, then answer them with evidence (paths, snippets, command outputs). If unknown, create a Verification Step.
+
+2. **Instrument & Fix**
+   Upgrade `hunt.sh` with new **detectors** and **auto-fixers** (safe, small, reversible). Create `hunters/` modules so each check is isolated and testable.
+
+3. **Verify & Gate**
+   Add/strengthen CI jobs to fail on regressions. Provide clear, human-readable reports.
+
+4. **Report**
+   Emit a compact run log: new signals found, fixes applied, PRs opened, residual risks, and what you will check next.
+
+---
+
+## Curiosity Prompts (you must ask and then answer)
+
+### A) Runtime & SSR Blind Spots (NoAdapterInstalled root cause)
+
+* Is `astro.config.*` set to `output: 'static'` but the repo contains **server endpoints**, SSR-only APIs, or edge middleware? List exact files.
+* Do any pages/components use features that implicitly require an adapter (API routes, `Response` handlers, `Astro.cookies`, server-only imports)?
+* Are there dynamic imports or conditional branches that flip Astro into SSR at build? Which lines?
+* Decision: **Prefer SSG** (remove SSR triggers) or **install the correct adapter** (Netlify/Vercel/etc.)? Make a call, justify it, and implement it.
+
+### B) Security (CRITICAL)
+
+* Any **secrets** committed or referenced? Scan for `.env` footprints, tokens, keys, “aws\_”, “stripe\_”, “api\_key” patterns.
+* Possible **XSS**: `set:html` fed by unsanitized content? direct `innerHTML`? dangerous markdown rendering?
+* **eval/new Function** or dynamic script construction anywhere?
+* **Mixed content**: `http://` URLs in production code or HTML?
+* Add a **CSP header**/meta suggestion; show where to place it.
+
+### C) Performance (MAJOR)
+
+* List images ≥ 200KB in `/public` or `/src/assets`. Which pages use them?
+* Are we lazy-loading `<img>` and decoding async? Are widths/sizes responsive?
+* Any **unused dependencies**, duplicate packages, or huge client bundles?
+* Circular imports in app code?
+
+### D) Accessibility (LEGAL RISK)
+
+* `<img>` without `alt`? Icon links without accessible text? Focus traps?
+* Color contrast violations in key templates?
+* Keyboard nav through header, menus, CTA, forms?
+
+### E) Astro Advanced Patterns
+
+* Misused `client:` directives (e.g., heavy islands on first paint)?
+* `getStaticPaths` returning unstable IDs or unhandled errors?
+* Components receiving props without validation (consider zod or runtime guards)?
+
+### F) Code Quality & Dependencies
+
+* Dead code / unimported files? High complexity hotspots? Magic numbers?
+* Vulnerable or deprecated packages? Unpinned transitive risks?
+
+---
+
+## Detectors to Add (and how to run them in Codespaces)
+
+> Create a modular structure: `hunters/` with `security.sh`, `perf.sh`, `a11y.sh`, `astro.sh`, `codeqlite.sh`, `deps.sh`. `hunt.sh` orchestrates and aggregates JSON + text reports under `reports/hunt/`.
+
+**Runtime/SSR Detector**
+
+* Parse `astro.config.*` for `output`. Grep for endpoints: `src/pages/**/*.(ts|js)` exporting `GET|POST|all`. Grep for `Astro.cookies`, `Response`, `fetch` in endpoints, middleware, or server utilities.
+* Build probe: `npx astro build --verbose || true` then parse for **NoAdapterInstalled** or SSR hints.
+* **Auto-fix logic**
+
+  * If SSG is policy: list offending files, propose refactor (move to build-time, precompute JSON, use static endpoints), and open a PR.
+  * If SSR is intended: install adapter (`@astrojs/netlify` or `@astrojs/vercel`), add to `astro.config.mjs`, and commit minimal config.
+
+**Security Hunter**
+
+* Secrets: run `gitleaks detect --no-git -r reports/hunt/gitleaks.json || true` (or fallback grep rules).
+* XSS: grep `set:html` and Trace data sources; flag unsanitized paths.
+* Dangerous code: grep `eval\(|new Function\(|innerHTML\s*=`.
+* Mixed content: grep `http://` in HTML/CSS/JS (exclude localhost).
+* **Auto-fix proposals**: wrap `set:html` with sanitizer util or replace with safe component; add CSP headers to `netlify.toml`/middleware; redact example secrets.
+
+**Performance Hunter**
+
+* Image audit: `find public src -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -size +200k` → write CSV with path,size,dimensions (use `identify` if available).
+* Unused deps: `npx depcheck --json > reports/hunt/depcheck.json`.
+* Bundle graph: `npx vite --mode production --debug --config vite.config.* 2>&1 | tee reports/hunt/vite.log` or plug `rollup-plugin-visualizer`.
+* Circular deps: `npx madge src --circular --json > reports/hunt/madge.json`.
+* **Auto-fix proposals**: generate `squoosh-cli` commands for heavy images; convert to AVIF/WebP; patch `<img>` tags with `loading="lazy" decoding="async"`, widths/sizes.
+
+**A11y Hunter**
+
+* `npx playwright install --with-deps` then add a tiny smoke that runs `axe-core` on home, one service page, and a form page; export violations JSON.
+* Static checks: grep `<img[^>]*>(?![^<]*alt=)`, missing labels for inputs, role mismatches.
+* **Auto-fix proposals**: add alt/aria-label patterns, focus ring utilities, color token swaps that clear contrast.
+
+**Astro Patterns Hunter**
+
+* `client:` directives inventory; flag large islands and `client:load` on heavy components.
+* `getStaticPaths` try/catch presence; verify returned params exist on disk; write a quick dry-run harness to call them.
+* Prop guards: suggest zod schemas for critical components.
+
+**Code Quality & Deps Hunter**
+
+* Dead code: `npx unimported -f json > reports/hunt/unimported.json` or `npx ts-prune`.
+* Complexity: enable ESLint `complexity` rule report; duplication via `npx jscpd --reporters json`.
+* Vulnerabilities: `npm audit --json > reports/hunt/audit.json` (or `pnpm audit`).
+* **Auto-fix proposals**: remove dead files, split complex modules, bump vulnerable packages with changelog notes.
+
+---
+
+## Changes to `hunt.sh` (install now)
+
+* Convert `hunt.sh` into an **orchestrator** that:
+
+  1. runs each hunter module,
+  2. normalizes outputs into `reports/hunt/index.json`,
+  3. prints a **human summary** with red/yellow/green sections, and
+  4. exits with non-zero code if any CRITICAL item is found (configurable thresholds).
+
+Suggested structure:
+
+```
+hunters/
+  runtime_ssr.sh
+  security.sh
+  perf.sh
+  a11y.sh
+  astro_patterns.sh
+  code_quality.sh
+  deps.sh
+reports/hunt/
+  *.json
+hunt.sh
+```
+
+---
+
+## CI & Gates (block bad merges)
+
+* Add a **Hunt** job to CI: `bash hunt.sh`
+* Also gate on: `astro check`, `astro build`, `pnpm test`, `pnpm playwright:e2e`, `pnpm audit:links`, JSON-LD snapshots.
+* Fail the pipeline on: secrets found, NoAdapterInstalled, images > threshold without AVIF/WebP alternative, missing `alt`/contrast errors on key pages, unused deps > threshold, circular imports, XSS sinks without sanitizer.
+
+---
+
+## Auto-Fix Playbook (safe, reversible)
+
+* Create a branch `chore/hunt-v2-fixes`.
+* Commit changes per detector with **tiny diffs** and **one-line rationale** in each commit message.
+* For destructive fixes (deleting dead code), generate a patch file and PR comment; keep the deletion in a separate commit.
+* Open **PR: “Hunt v2 — Close runtime blind spots + add detectors”** with:
+
+  * summary table of issues found and fixes applied,
+  * new CI/gates,
+  * how to run locally,
+  * what remains (risks).
+
+---
+
+## Output Contract (what you must return each run)
+
+* **Executive Summary** (10 bullets): what broke, why, and what you fixed.
+* **Findings Table** by category with counts and top offenders (path + snippet).
+* **Patches Applied** (file list + tiny diffs where helpful).
+* **New CI Gates** and how they fail.
+* **Residual Risks** and next checks you will add.
+* **Confidence** score with how to raise it.
+
+---
+
+## Quickstart Commands (you should run in Codespaces)
+
+```
+bash hunt.sh || true
+node -v && npm -v
+npx astro check || true
+npx astro build --verbose || true
+# detectors
+npx gitleaks detect --no-git -r reports/hunt/gitleaks.json || true
+npx depcheck --json > reports/hunt/depcheck.json || true
+npx madge src --circular --json > reports/hunt/madge.json || true
+npx unimported -f json > reports/hunt/unimported.json || true
+# a11y (minimal)
+npx playwright install --with-deps || true
+# run tiny axe-based smoke (add a script) -> outputs JSON
+```
+
+---
+
+## Acceptance Checklist (self-check)
+
+* NoAdapterInstalled cause identified and **closed** (either SSG refactor or correct adapter installed).
+* `hunt.sh` modularized with the **six** new hunters and a unified `reports/hunt/index.json`.
+* CI pipeline fails on any CRITICAL security issue, SSR trigger, or image over threshold without an AVIF/WebP fix path.
+* A11y smoke runs and outputs violations; at least **alt** and **contrast** checks enforced.
+* Dependency bloat, circular deps, dead code reports generated.
+* Clear run log with **questions asked → answers → evidence**.
+
+---
+
+### Reminder to yourself (stay curious)
+
+If a check passes too quickly, ask: **What did I *not* look at yet?** Then add a detector. If a fix is uncertain, open a tiny PR with an explicit rollback plan. Curiosity never sleeps.

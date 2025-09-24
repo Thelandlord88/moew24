@@ -1,0 +1,200 @@
+#!/usr/bin/env bash
+set +H  # Disable history expansion
+# hunters/runtime_ssr.sh — SSR Detection & NoAdapterInstalled Prevention
+#
+# PURPOSE: Detect runtime SSR triggers that could cause NoAdapterInstalled errors
+# ELIMINATION TARGET: Entire class of build-time SSR detection failures
+#
+# Box: NoAdapterInstalled errors during build
+# Closet: Dynamic imports and SSR-triggering patterns
+# Policy: Catch SSR triggers before build, force SSG compliance
+
+set -uo pipefail  # Removed -e to handle expected failures gracefully
+
+# Trace (optional)
+HUNTER_MODULE="runtime_ssr"; if [[ -f hunters/trace.sh ]]; then source hunters/trace.sh || true; fi
+
+# Inherit environment from parent hunt.sh
+REPORT_DIR="${REPORT_DIR:-__reports/hunt}"
+TIMESTAMP="${TIMESTAMP:-$(date -u +%Y%m%d-%H%M%S)}"
+mkdir -p "$REPORT_DIR"
+
+# Colors
+if [[ -t 1 ]]; then
+  RED='\e[31m'; YEL='\e[33m'; GRN='\e[32m'; CYA='\e[36m'; RST='\e[0m'
+else
+  RED=''; YEL=''; GRN=''; CYA=''; RST=''
+fi
+
+okay() { printf "${GRN}✓ %s${RST}\n" "$*"; }
+warn() { printf "${YEL}⚠ %s${RST}\n" "$*"; }
+fail() { printf "${RED}✗ %s${RST}\n" "$*"; }
+
+# Output files
+SSR_REPORT="$REPORT_DIR/runtime_ssr.json"
+SSR_LOG="$REPORT_DIR/runtime_ssr.log"
+
+echo "🚀 SSR Runtime Detection" > "$SSR_LOG"
+echo "========================" >> "$SSR_LOG"
+
+# Initialize report (normalized)
+cat > "$SSR_REPORT" <<EOF
+{ "timestamp":"$TIMESTAMP","module":"runtime_ssr","status":"running","critical_issues":0,"warning_issues":0,"issues_total":0,"findings":{},"upstream_analysis":{"box":"","closet":"","policy":""},"recommendations":[] }
+EOF
+
+declare -i ISSUES=0
+declare -i CRITICAL=0
+
+# 1) Check astro.config.* for SSR vs SSG configuration (enforced flags)
+echo "Checking astro.config.* configuration..." | tee -a "$SSR_LOG"
+if [[ -f astro.config.mjs ]]; then
+  if grep -q 'output.*static' astro.config.mjs; then
+    okay "astro.config.mjs set to output: 'static' (SSG mode)"
+  else
+    if [[ "${SSR_ENFORCE_STATIC:-0}" == "1" ]]; then
+      fail "astro.config.mjs missing output: 'static' (SSR_ENFORCE_STATIC=1)"
+      ((CRITICAL++))
+      trace_issue "missing_static_output" "astro.config.mjs" "critical" || true
+    else
+      warn "astro.config.mjs missing output: 'static' declaration"
+      ((ISSUES++))
+      trace_issue "missing_static_output" "astro.config.mjs" "warn" || true
+    fi
+  fi
+  if grep -q '^[^/]*adapter:' astro.config.mjs; then
+    if [[ "${ALLOW_ADAPTER:-0}" == "1" ]]; then
+      warn "Adapter present but ALLOW_ADAPTER=1 set"
+      ((ISSUES++))
+    else
+      fail "Active adapter found (adapter not allowed)"
+      ((CRITICAL++))
+      trace_issue "active_adapter_present" "astro.config.mjs" "critical" || true
+    fi
+  fi
+else
+  warn "No astro.config.mjs found"
+  ((ISSUES++))
+  trace_issue "missing_astro_config" "astro.config.mjs" "warn" || true
+fi
+
+# 2) Detect dangerous dynamic imports (allowlist support)
+echo "Scanning for dynamic imports that trigger SSR detection..." | tee -a "$SSR_LOG"
+ALLOWLIST_FILE=".config/runtime-ssr-dynamic-allowlist"
+declare -a ALLOW_PATTERNS=()
+if [[ -f $ALLOWLIST_FILE ]]; then
+  while IFS= read -r pat; do [[ -n "$pat" && ! "$pat" =~ ^# ]] && ALLOW_PATTERNS+=("$pat"); done < "$ALLOWLIST_FILE"
+fi
+RAW_DYNAMIC=$(rg -n "import\s*\(" src/ --type js --type ts 2>/dev/null | head -200 || true)
+FILTERED=()
+if [[ -n "$RAW_DYNAMIC" ]]; then
+  while IFS= read -r ln; do
+    file=${ln%%:*}
+    allowed=0
+    for pat in "${ALLOW_PATTERNS[@]}"; do [[ "$file" == *${pat}* ]] && { allowed=1; break; }; done
+    (( allowed==0 )) && FILTERED+=("$ln")
+  done <<< "$RAW_DYNAMIC"
+fi
+DYNAMIC_COUNT=${#FILTERED[@]}
+if (( DYNAMIC_COUNT>0 )); then
+  warn "Found $DYNAMIC_COUNT dynamic import(s) not in allowlist"
+  for l in "${FILTERED[@]}"; do
+    echo "  • $l" | tee -a "$SSR_LOG"
+    trace_issue "dynamic_import" "${l%%:*}" "warn" || true
+  done
+  ((ISSUES++))
+else
+  okay "No unallowlisted dynamic imports"
+fi
+
+# 3) Check for import assertions (major SSR trigger)
+echo "Checking for import assertions..." | tee -a "$SSR_LOG"
+IMPORT_ASSERTIONS=$(rg -n "assert.*type.*json" src/ || true)
+if [[ -n "$IMPORT_ASSERTIONS" ]]; then
+  ASSERT_COUNT=$(echo "$IMPORT_ASSERTIONS" | wc -l)
+  fail "Found $ASSERT_COUNT import assertion(s) - MAJOR SSR trigger:"
+  # Use here-string to avoid subshell issues
+  while IFS= read -r line; do
+    echo "  • $line" | tee -a "$SSR_LOG"
+    trace_issue "import_assertion" "${line%%:*}" "critical" || true
+  done <<< "$IMPORT_ASSERTIONS"
+  ((CRITICAL++))
+else
+  okay "No import assertions found"
+  ASSERT_COUNT=0
+fi
+
+# 4) API route validation
+echo "Validating API routes for SSG compliance..." | tee -a "$SSR_LOG"
+API_ROUTES=$(find src/pages -name "*.ts" -o -name "*.js" 2>/dev/null || true)
+if [[ -n "$API_ROUTES" ]]; then
+  for route in $API_ROUTES; do
+    if grep -q "export.*GET\|export.*POST" "$route"; then
+      if ! grep -q "prerender.*true" "$route"; then
+        warn "API route $route missing 'export const prerender = true'"
+        ((ISSUES++))
+      else
+        okay "API route $route has prerender = true"
+      fi
+    fi
+  done
+fi
+
+# 5) Build test (FAST mode optional)
+RUN_BUILD=1
+if [[ "${SSR_FAST:-0}" == "1" && $DYNAMIC_COUNT -eq 0 && $ASSERT_COUNT -eq 0 && $CRITICAL -eq 0 ]]; then
+  RUN_BUILD=0
+fi
+if (( RUN_BUILD==1 )); then
+  echo "Running build test to detect NoAdapterInstalled..." | tee -a "$SSR_LOG"
+  BUILD_TEST=$(timeout 60s npm run build 2>&1 || echo "BUILD_FAILED")
+else
+  echo "Skipping build test (SSR_FAST enabled & no triggers)" | tee -a "$SSR_LOG"
+  BUILD_TEST="FAST_SKIPPED"
+fi
+if echo "$BUILD_TEST" | grep -q "NoAdapterInstalled"; then
+  fail "BUILD FAILS: NoAdapterInstalled error detected!"
+  echo "$BUILD_TEST" | grep -A 5 -B 5 "NoAdapterInstalled" | tee -a "$SSR_LOG"
+  ((CRITICAL++))
+  trace_issue "no_adapter_installed" "astro.build" "critical" || true
+elif echo "$BUILD_TEST" | grep -q "BUILD_FAILED"; then
+  warn "Build failed for other reasons (timeout or other error)"
+  ((ISSUES++))
+  trace_issue "build_failed_other" "astro.build" "warn" || true
+else
+  okay "Build test passed - no NoAdapterInstalled error"
+fi
+
+# Update final report
+STATUS="pass"
+if (( CRITICAL > 0 )); then
+  STATUS="critical"
+elif (( ISSUES > 0 )); then
+  STATUS="warn"
+fi
+
+# Generate final JSON report
+NO_ADAPTER=0
+if echo "$BUILD_TEST" | grep -q NoAdapterInstalled; then NO_ADAPTER=1; fi
+
+DETAIL_JSON=$(printf '%s\n' "${FILTERED[@]}" | jq -R . | jq -s .)
+cat > "$SSR_REPORT" <<EOF
+{ "timestamp":"$TIMESTAMP","module":"runtime_ssr","status":"$STATUS","critical_issues":$CRITICAL,"warning_issues":$ISSUES,"issues_total":$((CRITICAL+ISSUES)),"findings":{"dynamic_imports":$DYNAMIC_COUNT,"dynamic_imports_detail":$DETAIL_JSON,"import_assertions":$ASSERT_COUNT,"api_routes_checked":$(echo "$API_ROUTES" | wc -w),"build_test":"$(if (( NO_ADAPTER==1 )); then echo FAILED; else echo PASSED; fi)","fast_mode":"${SSR_FAST:-0}"},"recommendations":["Replace import assertions","Eliminate SSR triggers or add adapter","Ensure API routes are prerendered","Populate .config/runtime-ssr-dynamic-allowlist for legitimate patterns"],"policy_invariants":["findings.import_assertions==0","findings.dynamic_imports==0","findings.build_test=='PASSED'"],"upstream_analysis":{"box":"NoAdapterInstalled risk","closet":"SSR-triggering code patterns","policy":"Static output + enforced allowlist & fast gating"} }
+EOF
+
+# Summary
+echo | tee -a "$SSR_LOG"
+echo "SSR Detection Summary:" | tee -a "$SSR_LOG"
+echo "=====================" | tee -a "$SSR_LOG"
+echo "Issues: $ISSUES" | tee -a "$SSR_LOG"
+echo "Critical: $CRITICAL" | tee -a "$SSR_LOG"
+echo "Status: $STATUS" | tee -a "$SSR_LOG"
+echo "Report: $SSR_REPORT" | tee -a "$SSR_LOG"
+
+# Exit with appropriate code
+if (( CRITICAL > 0 )); then
+  exit 2  # Critical issues
+elif (( ISSUES > 0 )); then
+  exit 1  # Warning issues
+else
+  exit 0  # Clean
+fi

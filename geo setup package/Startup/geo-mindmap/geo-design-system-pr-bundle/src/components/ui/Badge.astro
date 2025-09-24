@@ -1,0 +1,25 @@
+---
+// src/components/ui/Badge.astro
+import { createTheme } from '../../lib/themeProvider.js';
+
+const { suburb, service, variant = 'solid', children } = Astro.props;
+const theme = createTheme(suburb.slug, service);
+const color = theme.serviceTheme.color;
+const colorHover = theme.serviceTheme.colorHover;
+
+const styles = {
+  solid: `--badge-bg:${color};--badge-text:#fff;`,
+  outline: `--badge-bg:transparent;--badge-text:${color};--badge-border:${color};`,
+  subtle: `--badge-bg:${theme.serviceTheme.backgroundColor};--badge-text:#111827;`
+};
+
+const classes = {
+  solid:   "inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[var(--badge-bg)] text-[var(--badge-text)]",
+  outline: "inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold border border-[var(--badge-border)] text-[var(--badge-text)]",
+  subtle:  "inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[var(--badge-bg)] text-[var(--badge-text)]",
+};
+
+const variantClass = classes[variant] || classes.solid;
+const style = styles[variant] || styles.solid;
+---
+<span class={variantClass} style={style}>{children}</span>

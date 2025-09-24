@@ -1,0 +1,28 @@
+---
+// src/components/ui/Banner.astro
+import { createTheme } from '../../lib/themeProvider.js';
+
+const { suburb, service, title, subtitle, children, ...props } = Astro.props;
+
+const theme = createTheme(suburb.slug, service);
+const suburbTheme = theme.suburbTheme;
+const serviceTheme = theme.serviceTheme;
+---
+
+<div class={`${suburbTheme.gradient} text-white py-8 px-4 sm:px-6 lg:px-8`} {...props}>
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center">
+      <div class="flex items-center justify-center mb-4">
+        <span class="text-3xl mr-3">{suburbTheme.icon}</span>
+        <span class="text-3xl">{serviceTheme.icon}</span>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-extrabold mb-4">
+        {title || `${serviceTheme.name} in ${suburb.name}`}
+      </h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto">
+        {subtitle || serviceTheme.description}
+      </p>
+      {children}
+    </div>
+  </div>
+</div>

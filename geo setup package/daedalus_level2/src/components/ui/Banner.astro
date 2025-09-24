@@ -1,0 +1,8 @@
+---
+// src/components/ui/Banner.astro
+const { title, subtitle } = Astro.props as { title: string; subtitle?: string };
+---
+<section class="rounded-2xl p-6 md:p-8 shadow-sm border" style="background: var(--surface-base); border-color: var(--surface-border)">
+  <h1 class="text-3xl md:text-4xl font-bold tracking-tight">{title}</h1>
+  {subtitle ? <p class="mt-2 opacity-80">{subtitle}</p> : null}
+</section>

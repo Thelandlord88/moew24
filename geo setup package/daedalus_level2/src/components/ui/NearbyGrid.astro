@@ -1,0 +1,24 @@
+---
+// src/components/ui/NearbyGrid.astro
+const { service, neighbors } = Astro.props as { service: string; neighbors: string[] };
+
+function titleCase(slug: string) {
+  return slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+---
+{neighbors?.length ? (
+  <section class="mt-12">
+    <h2 class="text-xl font-semibold">Nearby areas</h2>
+    <ul class="grid sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+      {neighbors.map(n => (
+        <li>
+          <a class="block rounded-xl p-3 border hover:shadow-sm transition"
+             style="border-color: var(--surface-border)"
+             href={`/services/${service}/${n}/`}>
+            {titleCase(n)}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+) : null}

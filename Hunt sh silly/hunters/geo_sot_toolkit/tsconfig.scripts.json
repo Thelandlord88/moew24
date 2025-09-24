@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "outDir": "./build/scripts",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "lib": [
+      "ES2022"
+    ],
+    "types": [
+      "node"
+    ],
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noEmit": false,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "useUnknownInCatchVariables": true,
+    "verbatimModuleSyntax": true,
+    "allowJs": false
+  },
+  "include": [
+    "scripts/geo/**/*.ts",
+    "tests/geo/**/*.ts"
+  ]
+}

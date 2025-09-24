@@ -1,0 +1,694 @@
+diff --git a/src/lib/geo/adjacency.js b/src/lib/geo/adjacency.js
+new file mode 100644
+index 0000000..63628bf
+--- /dev/null
++++ b/src/lib/geo/adjacency.js
+@@ -0,0 +1,43 @@
++// src/lib/geo/adjacency.js
++import fs from "node:fs";
++import path from "node:path";
++
++const ROOT = process.cwd();
++const CLUSTERS_PATH = path.join(ROOT, "src/data/areas.clusters.json");
++const ADJ_PATH = path.join(ROOT, "src/data/areas.adj.json");
++
++function readJson(file) {
++  const raw = fs.readFileSync(file, "utf8");
++  return JSON.parse(raw);
++}
++
++let _cache = null;
++/** Loads and caches clusters + adjacency */
++function load() {
++  if (_cache) return _cache;
++  const clusters = readJson(CLUSTERS_PATH); // { id: { id, name, ... }, ... }
++  const adj = readJson(ADJ_PATH);          // { id: ["nbr","nbr2"], ... }
++  _cache = { clusters, adj };
++  return _cache;
++}
++
++/** Returns [{ slug, name }] neighbors for the given suburb slug. */
++export function getAdjacentSuburbsBySlug(suburbSlug, limit = 6) {
++  const { clusters, adj } = load();
++  const nbrs = adj[suburbSlug] || [];
++  const out = [];
++  for (const slug of nbrs) {
++    const row = clusters[slug];
++    if (!row) continue;
++    out.push({ slug, name: row.name });
++    if (out.length >= limit) break;
++  }
++  return out;
++}
++
++/** Get one suburb by slug from clusters. */
++export function getSuburbBySlug(slug) {
++  const { clusters } = load();
++  const row = clusters[slug];
++  return row ? { slug, name: row.name, ...row } : null;
++}
+
+diff --git a/src/components/ui/Badge.astro b/src/components/ui/Badge.astro
+new file mode 100644
+index 0000000..378b020
+--- /dev/null
++++ b/src/components/ui/Badge.astro
+@@ -0,0 +1,25 @@
++---
++// src/components/ui/Badge.astro
++import { createTheme } from '../../lib/themeProvider.js';
++
++const { suburb, service, variant = 'solid', children } = Astro.props;
++const theme = createTheme(suburb.slug, service);
++const color = theme.serviceTheme.color;
++const colorHover = theme.serviceTheme.colorHover;
++
++const styles = {
++  solid: `--badge-bg:${color};--badge-text:#fff;`,
++  outline: `--badge-bg:transparent;--badge-text:${color};--badge-border:${color};`,
++  subtle: `--badge-bg:${theme.serviceTheme.backgroundColor};--badge-text:#111827;`
++};
++
++const classes = {
++  solid:   "inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[var(--badge-bg)] text-[var(--badge-text)]",
++  outline: "inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold border border-[var(--badge-border)] text-[var(--badge-text)]",
++  subtle:  "inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[var(--badge-bg)] text-[var(--badge-text)]",
++};
++
++const variantClass = classes[variant] || classes.solid;
++const style = styles[variant] || styles.solid;
++---
++<span class={variantClass} style={style}>{children}</span>
+
+diff --git a/src/components/ui/Tabs.astro b/src/components/ui/Tabs.astro
+new file mode 100644
+index 0000000..30138b8
+--- /dev/null
++++ b/src/components/ui/Tabs.astro
+@@ -0,0 +1,47 @@
++---
++// src/components/ui/Tabs.astro
++// Minimal tabs component without external deps.
++// Usage:
++// <Tabs tabs={[{id:'overview',label:'Overview'},{id:'pricing',label:'Pricing'}]} active="overview">
++//   <Fragment slot="overview">Overview content</Fragment>
++//   <Fragment slot="pricing">Pricing content</Fragment>
++// </Tabs>
++
++const { tabs = [], active = (tabs[0]?.id || 'tab-1') } = Astro.props;
++---
++<div class="w-full">
++  <div class="flex gap-2 border-b border-gray-200">
++    {tabs.map(t => (
++      <a href={`#${t.id}`} class={`px-4 py-2 text-sm font-medium ${t.id === active ? 'border-b-2 border-blue-600 text-blue-700' : 'text-gray-600 hover:text-gray-900'}`}>
++        {t.label}
++      </a>
++    ))}
++  </div>
++  <div class="mt-4">
++    {tabs.map(t => (
++      <section id={t.id} class={t.id === active ? '' : 'hidden'}>
++        <slot name={t.id} />
++      </section>
++    ))}
++  </div>
++</div>
++
++<script is:inline>
++  // Tiny client enhancement to switch sections when clicking tabs
++  document.currentScript?.closest('div')?.querySelectorAll('a[href^="#"]').forEach((a) => {
++    a.addEventListener('click', (e) => {
++      const root = a.closest('div')?.parentElement;
++      const id = a.getAttribute('href')?.slice(1);
++      if (!id || !root) return;
++      root.querySelectorAll('section[id]').forEach(sec => sec.classList.toggle('hidden', sec.id !== id));
++      root.querySelectorAll('a[href^="#"]').forEach(link => {
++        const on = link.getAttribute('href')?.slice(1) === id;
++        link.classList.toggle('border-b-2', on);
++        link.classList.toggle('border-blue-600', on);
++        link.classList.toggle('text-blue-700', on);
++        link.classList.toggle('text-gray-600', !on);
++      });
++      e.preventDefault();
++    }, { passive: false });
++  });
++</script>
+
+diff --git a/src/components/ui/Accordion.astro b/src/components/ui/Accordion.astro
+new file mode 100644
+index 0000000..075a31c
+--- /dev/null
++++ b/src/components/ui/Accordion.astro
+@@ -0,0 +1,16 @@
++---
++// src/components/ui/Accordion.astro
++// No JS needed, uses <details>.
++const { items = [] } = Astro.props;
++// items: [{title, content}]
++---
++<div class="space-y-2">
++  {items.map(item => (
++    <details class="bg-white border border-gray-200 rounded-md p-4 open:shadow-sm">
++      <summary class="cursor-pointer font-semibold text-gray-900">{item.title}</summary>
++      <div class="mt-2 text-gray-700">
++        {item.content}
++      </div>
++    </details>
++  ))}
++</div>
+
+diff --git a/src/lib/designTokens.js b/src/lib/designTokens.js
+new file mode 100644
+index 0000000..390f832
+--- /dev/null
++++ b/src/lib/designTokens.js
+@@ -0,0 +1,35 @@
++// src/lib/designTokens.js
++export const designTokens = {
++  colors: {
++    primary: {
++      50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc',
++      400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
++      800: '#075985', 900: '#0c4a6e'
++    },
++    success: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669' },
++    warning: { 50: '#fffbeb', 500: '#f59e0b', 600: '#d97706' },
++    danger:  { 50: '#fef2f2', 500: '#ef4444', 600: '#dc2626' },
++    neutral: {
++      50:'#f9fafb',100:'#f3f4f6',200:'#e5e7eb',300:'#d1d5db',400:'#9ca3af',
++      500:'#6b7280',600:'#4b5563',700:'#374151',800:'#1f2937',900:'#111827'
++    }
++  },
++  typography: {
++    fontFamily: { heading: '"Inter", sans-serif', body: '"Inter", sans-serif' },
++    fontSize: { xs:'0.75rem', sm:'0.875rem', base:'1rem', lg:'1.125rem', xl:'1.25rem', '2xl':'1.5rem', '3xl':'1.875rem', '4xl':'2.25rem', '5xl':'3rem', '6xl':'3.75rem' },
++    fontWeight: { normal:'400', medium:'500', semibold:'600', bold:'700', extrabold:'800' }
++  },
++  spacing: { 0:'0px',1:'0.25rem',2:'0.5rem',3:'0.75rem',4:'1rem',5:'1.25rem',6:'1.5rem',8:'2rem',10:'2.5rem',12:'3rem',16:'4rem',20:'5rem',24:'6rem',32:'8rem',40:'10rem',48:'12rem',56:'14rem',64:'16rem' },
++  borderRadius: { none:'0px', sm:'0.125rem', DEFAULT:'0.25rem', md:'0.375rem', lg:'0.5rem', xl:'0.75rem', '2xl':'1rem', '3xl':'1.5rem', full:'9999px' },
++  boxShadow: {
++    sm:'0 1px 2px 0 rgba(0, 0, 0, 0.05)',
++    DEFAULT:'0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06)',
++    md:'0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)',
++    lg:'0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)',
++    xl:'0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
++    '2xl':'0 25px 50px -12px rgba(0,0,0,0.25)',
++    inner:'inset 0 2px 4px 0 rgba(0,0,0,0.06)'
++  }
++};
++
++export const { colors, typography, spacing, borderRadius, boxShadow } = designTokens;
+
+diff --git a/src/lib/suburbThemes.js b/src/lib/suburbThemes.js
+new file mode 100644
+index 0000000..623dd39
+--- /dev/null
++++ b/src/lib/suburbThemes.js
+@@ -0,0 +1,51 @@
++// src/lib/suburbThemes.js
++import { colors } from './designTokens.js';
++
++export const suburbThemes = {
++  'ipswich': {
++    primary: colors.danger[500],
++    primaryHover: colors.danger[600],
++    secondary: colors.danger[50],
++    gradient: 'bg-gradient-to-r from-red-500 to-orange-500',
++    icon: '🔥', buttonPrefix: '🔥 ', buttonSuffix: ' 🔥'
++  },
++  'toowong': {
++    primary: colors.success[500],
++    primaryHover: colors.success[600],
++    secondary: colors.success[50],
++    gradient: 'bg-gradient-to-r from-green-500 to-teal-500',
++    icon: '🌸', buttonPrefix: '🌸 ', buttonSuffix: ' 🌸'
++  },
++  'kenmore': {
++    primary: colors.warning[500],
++    primaryHover: colors.warning[600],
++    secondary: colors.warning[50],
++    gradient: 'bg-gradient-to-r from-yellow-500 to-orange-500',
++    icon: '☀️', buttonPrefix: '☀️ ', buttonSuffix: ' ☀️'
++  },
++  'st-lucia': {
++    primary: colors.primary[500],
++    primaryHover: colors.primary[600],
++    secondary: colors.primary[100],
++    gradient: 'bg-gradient-to-r from-blue-500 to-purple-500',
++    icon: '🎓', buttonPrefix: '🎓 ', buttonSuffix: ' 🎓'
++  },
++  'indooroopilly': {
++    primary: colors.warning[500],
++    primaryHover: colors.warning[600],
++    secondary: colors.warning[50],
++    gradient: 'bg-gradient-to-r from-yellow-500 to-amber-500',
++    icon: '🛍️', buttonPrefix: '🛍️ ', buttonSuffix: ' 🛍️'
++  },
++  default: {
++    primary: colors.primary[500],
++    primaryHover: colors.primary[600],
++    secondary: colors.primary[100],
++    gradient: 'bg-gradient-to-r from-blue-500 to-cyan-500',
++    icon: '📍', buttonPrefix: '', buttonSuffix: ''
++  }
++};
++
++export function getSuburbTheme(suburbSlug) {
++  return suburbThemes[suburbSlug] || suburbThemes.default;
++}
+
+diff --git a/src/lib/serviceThemes.js b/src/lib/serviceThemes.js
+new file mode 100644
+index 0000000..b2077c1
+--- /dev/null
++++ b/src/lib/serviceThemes.js
+@@ -0,0 +1,45 @@
++// src/lib/serviceThemes.js
++import { colors } from './designTokens.js';
++
++export const serviceThemes = {
++  'bond-cleaning': {
++    name: 'Bond Cleaning',
++    color: colors.danger[500],
++    colorHover: colors.danger[600],
++    backgroundColor: colors.danger[50],
++    gradient: 'bg-gradient-to-r from-red-500 to-pink-500',
++    icon: '🏠',
++    description: 'Get your full bond back with our thorough cleaning service.'
++  },
++  'spring-cleaning': {
++    name: 'Spring Cleaning',
++    color: colors.success[500],
++    colorHover: colors.success[600],
++    backgroundColor: colors.success[50],
++    gradient: 'bg-gradient-to-r from-green-500 to-emerald-500',
++    icon: '🌿',
++    description: 'Deep clean your home to welcome the new season.'
++  },
++  'bathroom-deep-clean': {
++    name: 'Bathroom Deep Cleaning',
++    color: colors.primary[500],
++    colorHover: colors.primary[600],
++    backgroundColor: colors.primary[50],
++    gradient: 'bg-gradient-to-r from-blue-500 to-indigo-500',
++    icon: '🚿',
++    description: 'Eliminate mold and grime with our intensive bathroom cleaning.'
++  },
++  default: {
++    name: 'Service',
++    color: colors.primary[500],
++    colorHover: colors.primary[600],
++    backgroundColor: colors.primary[50],
++    gradient: 'bg-gradient-to-r from-blue-500 to-cyan-500',
++    icon: '✨',
++    description: 'Professional cleaning services for your home.'
++  }
++};
++
++export function getServiceTheme(serviceSlug) {
++  return serviceThemes[serviceSlug] || serviceThemes.default;
++}
+
+diff --git a/src/lib/themeProvider.js b/src/lib/themeProvider.js
+new file mode 100644
+index 0000000..6fc81c8
+--- /dev/null
++++ b/src/lib/themeProvider.js
+@@ -0,0 +1,64 @@
++// src/lib/themeProvider.js
++import { getSuburbTheme } from './suburbThemes.js';
++import { getServiceTheme } from './serviceThemes.js';
++
++export class ThemeProvider {
++  constructor(suburbSlug, serviceSlug) {
++    this.suburbSlug = suburbSlug;
++    this.serviceSlug = serviceSlug;
++    this.suburbTheme = getSuburbTheme(suburbSlug);
++    this.serviceTheme = getServiceTheme(serviceSlug);
++  }
++
++  // Classes that use Tailwind arbitrary values bound to CSS variables.
++  // We set the CSS variables via style="" on the element.
++  getButtonTheme(variant = 'primary') {
++    const themes = {
++      primary: {
++        classes: 'text-white bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] border border-[var(--btn-border)]',
++        style: `--btn-bg:${this.serviceTheme.color};--btn-hover:${this.serviceTheme.colorHover};--btn-border:${this.serviceTheme.color};`
++      },
++      secondary: {
++        classes: 'text-gray-900 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover)] border border-[var(--btn-border)]',
++        style: `--btn-bg:${this.suburbTheme.secondary};--btn-hover:${this.suburbTheme.primaryHover};--btn-border:${this.suburbTheme.primary};`
++      },
++      gradient: {
++        classes: `${this.suburbTheme.gradient} text-white hover:opacity-90 border-0`,
++        style: ''
++      }
++    };
++    return themes[variant] || themes.primary;
++  }
++
++  getSuburbButtonConfig(buttonType = 'quote') {
++    const special = {
++      ipswich: {
++        'bond-cleaning': { text: `${this.suburbTheme.buttonPrefix}Premium Bond Cleaning Quote${this.suburbTheme.buttonSuffix}`, size: 'large', variant: 'gradient' }
++      },
++      toowong: {
++        'spring-cleaning': { text: `${this.suburbTheme.buttonPrefix}Eco-Friendly Spring Cleaning${this.suburbTheme.buttonSuffix}`, size: 'large', variant: 'gradient' }
++      },
++      kenmore: {
++        'bathroom-deep-clean': { text: `${this.suburbTheme.buttonPrefix}Luxury Bathroom Cleaning${this.suburbTheme.buttonSuffix}`, size: 'large', variant: 'gradient' }
++      }
++    };
++    if (special[this.suburbSlug] && special[this.suburbSlug][this.serviceSlug]) {
++      return special[this.suburbSlug][this.serviceSlug];
++    }
++    const defaults = {
++      quote: { text: `Get Your Free ${this.serviceTheme.name} Quote`, size: 'medium', variant: 'primary' },
++      learn: { text: `Learn More About ${this.serviceTheme.name}`, size: 'medium', variant: 'secondary' },
++      book:  { text: `Book ${this.serviceTheme.name} Now`, size: 'medium', variant: 'primary' }
++    };
++    return defaults[buttonType] || defaults.quote;
++  }
++
++  getSizeClasses(size = 'medium') {
++    const sizes = { small:'px-3 py-1 text-sm', medium:'px-4 py-2', large:'px-6 py-3 text-lg', xl:'px-8 py-4 text-xl' };
++    return sizes[size] || sizes.medium;
++  }
++}
++
++export function createTheme(suburbSlug, serviceSlug) {
++  return new ThemeProvider(suburbSlug, serviceSlug);
++}
+
+diff --git a/src/components/ui/Button.astro b/src/components/ui/Button.astro
+new file mode 100644
+index 0000000..a37d6ba
+--- /dev/null
++++ b/src/components/ui/Button.astro
+@@ -0,0 +1,28 @@
++---
++// src/components/ui/Button.astro
++import { createTheme } from '../../lib/themeProvider.js';
++
++const {
++  suburb,
++  service,
++  variant = 'primary',
++  size = 'medium',
++  type = 'button',
++  fullWidth = false,
++  children,
++  ...props
++} = Astro.props;
++
++const theme = createTheme(suburb.slug, service);
++const cfg = theme.getSuburbButtonConfig('quote');
++const btn = theme.getButtonTheme(variant);
++const sizeClasses = theme.getSizeClasses(size);
++
++const base = 'rounded-md font-medium transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2';
++const width = fullWidth ? 'w-full' : '';
++const classes = `${base} ${btn.classes} ${sizeClasses} ${width}`;
++---
++
++<button class={classes} style={btn.style} type={type} {...props}>
++  {children || cfg.text}
++</button>
+
+diff --git a/src/components/ui/Card.astro b/src/components/ui/Card.astro
+new file mode 100644
+index 0000000..c9554dd
+--- /dev/null
++++ b/src/components/ui/Card.astro
+@@ -0,0 +1,41 @@
++---
++// src/components/ui/Card.astro
++import { createTheme } from '../../lib/themeProvider.js';
++
++const { suburb, service, title, description, children, href, ...props } = Astro.props;
++
++const theme = createTheme(suburb.slug, service);
++const serviceTheme = theme.serviceTheme;
++const suburbTheme = theme.suburbTheme;
++const bgStyle = `--card-bg:${serviceTheme.backgroundColor};`;
++const cardHeader = `bg-[var(--card-bg)]`;
++---
++
++<div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden" {...props}>
++  {href ? (
++    <a href={href} class="block">
++      <div class={`p-6 ${cardHeader}`} style={bgStyle}>
++        <div class="flex items-center mb-2">
++          <span class="text-2xl mr-2">{serviceTheme.icon}</span>
++          <h3 class="text-xl font-bold text-gray-900">{title}</h3>
++        </div>
++        <p class="text-gray-700">{description}</p>
++      </div>
++      <div class="px-6 py-4 border-t border-gray-200">
++        <div class="flex items-center text-sm text-gray-500">
++          <span class="mr-2">{suburbTheme.icon}</span>
++          <span>{suburb.name}</span>
++        </div>
++      </div>
++    </a>
++  ) : (
++    <div class={`p-6 ${cardHeader}`} style={bgStyle}>
++      <div class="flex items-center mb-2">
++        <span class="text-2xl mr-2">{serviceTheme.icon}</span>
++        <h3 class="text-xl font-bold text-gray-900">{title}</h3>
++      </div>
++      <p class="text-gray-700 mb-4">{description}</p>
++      {children}
++    </div>
++  )}
++</div>
+
+diff --git a/src/components/ui/Banner.astro b/src/components/ui/Banner.astro
+new file mode 100644
+index 0000000..382a68a
+--- /dev/null
++++ b/src/components/ui/Banner.astro
+@@ -0,0 +1,28 @@
++---
++// src/components/ui/Banner.astro
++import { createTheme } from '../../lib/themeProvider.js';
++
++const { suburb, service, title, subtitle, children, ...props } = Astro.props;
++
++const theme = createTheme(suburb.slug, service);
++const suburbTheme = theme.suburbTheme;
++const serviceTheme = theme.serviceTheme;
++---
++
++<div class={`${suburbTheme.gradient} text-white py-8 px-4 sm:px-6 lg:px-8`} {...props}>
++  <div class="max-w-7xl mx-auto">
++    <div class="text-center">
++      <div class="flex items-center justify-center mb-4">
++        <span class="text-3xl mr-3">{suburbTheme.icon}</span>
++        <span class="text-3xl">{serviceTheme.icon}</span>
++      </div>
++      <h1 class="text-3xl md:text-4xl font-extrabold mb-4">
++        {title || `${serviceTheme.name} in ${suburb.name}`}
++      </h1>
++      <p class="text-xl md:text-2xl max-w-3xl mx-auto">
++        {subtitle || serviceTheme.description}
++      </p>
++      {children}
++    </div>
++  </div>
++</div>
+
+diff --git a/src/components/layout/PageLayout.astro b/src/components/layout/PageLayout.astro
+new file mode 100644
+index 0000000..30774fa
+--- /dev/null
++++ b/src/components/layout/PageLayout.astro
+@@ -0,0 +1,97 @@
++---
++// src/components/layout/PageLayout.astro
++import { createTheme } from '../../lib/themeProvider.js';
++import { getServiceTheme } from '../../lib/serviceThemes.js';
++import { getAdjacentSuburbsBySlug } from '../../lib/geo/adjacency.js';
++import Button from '../ui/Button.astro';
++import Banner from '../ui/Banner.astro';
++import Card from '../ui/Card.astro';
++
++const {
++  suburb,
++  service,
++  title,
++  metaDescription,
++  availableServices = [],
++  adjacentSuburbs = [],
++  children,
++  ...props
++} = Astro.props;
++
++const theme = createTheme(suburb.slug, service);
++const serviceTheme = theme.serviceTheme;
++const suburbTheme = theme.suburbTheme;
++
++// Fallback: if adjacentSuburbs not provided, derive from JSON (limit 6)
++const fallbackAdj = adjacentSuburbs.length ? adjacentSuburbs : getAdjacentSuburbsBySlug(suburb.slug, 6);
++---
++
++<!DOCTYPE html>
++<html lang="en">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>{title}</title>
++    <meta name="description" content={metaDescription} />
++    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
++    <style>
++      :root { --font-family: "Inter", sans-serif; }
++      body { font-family: var(--font-family); line-height: 1.6; }
++    </style>
++  </head>
++  <body class="bg-gray-50">
++    <Banner suburb={suburb} service={service}>
++      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
++        <Button suburb={suburb} service={service} variant="gradient" size="xl">Get Your Free Quote Now</Button>
++        <Button suburb={suburb} service={service} variant="secondary" size="xl">View Pricing</Button>
++      </div>
++    </Banner>
++
++    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
++      {children}
++
++      {availableServices.length > 0 && (
++        <section class="mt-12">
++          <h2 class="text-2xl font-bold text-gray-900 mb-6">Other Services in {suburb.name}</h2>
++          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
++            {availableServices.map(otherService => (
++              <Card
++                suburb={suburb}
++                service={otherService}
++                title={`${getServiceTheme(otherService).name} in ${suburb.name}`}
++                description={getServiceTheme(otherService).description}
++                href={`/services/${otherService}/${suburb.slug}/`}
++              />
++            ))}
++          </div>
++        </section>
++      )}
++
++      {fallbackAdj.length > 0 && (
++        <section class="mt-12">
++          <h2 class="text-2xl font-bold text-gray-900 mb-6">Services in Nearby Suburbs</h2>
++          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
++            {fallbackAdj.slice(0, 6).map(adjacent => (
++              <Card
++                suburb={adjacent}
++                service={service}
++                title={`${serviceTheme.name} in ${adjacent.name}`}
++                description={`Professional ${serviceTheme.name.toLowerCase()} services in ${adjacent.name}`}
++                href={`/services/${service}/${adjacent.slug}/`}
++              />
++            ))}
++          </div>
++        </section>
++      )}
++    </main>
++
++    <footer class="bg-gray-800 text-white py-8 mt-12">
++      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
++        <div class="text-center">
++          <p>&copy; 2025 Company Name. All rights reserved.</p>
++          <p class="mt-2">Serving {suburb.name} and surrounding areas with professional cleaning services.</p>
++        </div>
++      </div>
++    </footer>
++  </body>
++</html>
+
+diff --git a/src/pages/services/[service]/[suburb]/index.astro b/src/pages/services/[service]/[suburb]/index.astro
+new file mode 100644
+index 0000000..3ae4bf3
+--- /dev/null
++++ b/src/pages/services/[service]/[suburb]/index.astro
+@@ -0,0 +1,45 @@
++---
++// src/pages/services/[service]/[suburb]/index.astro
++import PageLayout from '../../../components/layout/PageLayout.astro';
++import { astroPropsGenerator } from '~/lib/astroPropsGenerator.js';
++import { renderTemplates } from '~/lib/templateRenderer.js';
++
++export async function getStaticPaths() {
++  return await astroPropsGenerator.generateServicePaths();
++}
++
++const {
++  title,
++  metaDescription,
++  suburb,
++  service,
++  cluster,
++  availableServices,
++  adjacentSuburbs,
++  structuredData
++} = Astro.props;
++
++const renderedTitle = await renderTemplates(title);
++const renderedMetaDescription = await renderTemplates(metaDescription);
++---
++
++<PageLayout
++  suburb={suburb}
++  service={service}
++  title={renderedTitle}
++  metaDescription={renderedMetaDescription}
++  availableServices={availableServices}
++  adjacentSuburbs={adjacentSuburbs}
++>
++  <section class="prose max-w-none">
++    <h2>About Our {service.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())} Service</h2>
++    <p>Our professional {service.replace(/-/g, ' ')} service in {suburb.name} is designed to meet the highest standards of cleanliness and customer satisfaction.</p>
++    <h3>Why Choose Us in {suburb.name}?</h3>
++    <ul>
++      <li>Local {suburb.name} team who knows the area</li>
++      <li>Flexible scheduling to suit your needs</li>
++      <li>Eco-friendly cleaning products</li>
++      <li>100% satisfaction guarantee</li>
++    </ul>
++  </section>
++</PageLayout>
+
+diff --git a/docs/DESIGN_SYSTEM.md b/docs/DESIGN_SYSTEM.md
+new file mode 100644
+index 0000000..fa11161
+--- /dev/null
++++ b/docs/DESIGN_SYSTEM.md
+@@ -0,0 +1,32 @@
++# Design System — Geo‑Dominance UI Engine
++
++This is a **drop‑in component library** wired to your geo data (suburbs/services). It works with your SSG build and `areas.clusters.json`/`areas.adj.json` flow.
++
++## Files
++- `src/lib/designTokens.js` — color/typography/spacing tokens
++- `src/lib/suburbThemes.js` — per‑suburb theme (hex + gradient classes)
++- `src/lib/serviceThemes.js` — per‑service theme
++- `src/lib/themeProvider.js` — runtime combiner + helpers
++- `src/components/ui/Button.astro` — themable button (CSS variables + Tailwind)
++- `src/components/ui/Card.astro` — service/suburb cards
++- `src/components/ui/Banner.astro` — hero banner
++- `src/components/layout/PageLayout.astro` — ready‑to‑use page shell
++- `src/pages/services/[service]/[suburb]/index.astro` — example page using the layout
++
++## How it styles without React
++- Components are **Astro** files using Tailwind v4 classes.
++- We set **CSS variables** (e.g. `--btn-bg`) inline, and use Tailwind **arbitrary values**: `bg-[var(--btn-bg)]`, `border-[var(--btn-border)]`.
++- Gradients use standard Tailwind classes (e.g. `from-red-500`).
++
++## Data assumptions
++- `suburb.slug` and `suburb.name` exist (from your generators).
++- `service` is a slug like `bond-cleaning`.
++- `availableServices` is an array of service slugs.
++- `adjacentSuburbs` is an array of `{ slug, name }` (you can map from `areas.adj.json`).
++
++## Wire‑up
++- Import the layout in your route and pass in the geo props you already generate.
++- Add or change suburb/service themes by editing `suburbThemes.js` / `serviceThemes.js`.
++
++## Extending
++- Add more UI (Tabs, Badges, Accordions) in `src/components/ui/` and use `createTheme(suburb.slug, service)` to stay consistent.

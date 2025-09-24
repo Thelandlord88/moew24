@@ -1,0 +1,32 @@
+{
+  "srcGlobs": ["src/**/*.{astro,html,js,jsx,ts,tsx,mjs,mdx}"],
+  "cssGlobs": ["src/**/*.css"],
+  "semanticPrefixes": [
+    "btn", "badge", "label", "card", "nav", "pill", "chip",
+    "link-brand", "text-brand", "bg-brand", "ring-brand", "bar-brand", 
+    "prose-custom", "focus-ring", "q-", "blog-", "review-"
+  ],
+  "allowlist": [
+    "grecaptcha-badge", 
+    "third-party-widget-*", 
+    "blog-*", 
+    "q-*", 
+    "review-*",
+    "absolute", "relative", "fixed", "sticky", "static",
+    "hidden", "block", "inline", "visible", "invisible",
+    "appearance-none", "pointer-events-none", "bg-length:*",
+    "active", "back", "between", "after-label"
+  ],
+  "denylist": [
+    "tmp-*", "todo-*", "debug-*", "test-*"
+  ],
+  "helperFunctions": [
+    "clsx", "classnames", "twJoin", "twMerge", "cva", "tv", "cx"
+  ],
+  "ciThresholds": {
+    "suspicious": 90,
+    "missingDefinitions": 0,
+    "unusedCustom": 50,
+    "bannedTokens": 0
+  }
+}

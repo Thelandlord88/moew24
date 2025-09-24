@@ -1,0 +1,8 @@
+"\OneDrive Startup Task-S-1-5-21-55517030-2123359743-1316079189-1001","N/A","Ready"
+"\Microsoft\Windows\Application Experience\StartupAppTask","N/A","Ready"
+"\Microsoft\Windows\Management\Provisioning\Logon","N/A","Ready"
+"\Microsoft\Windows\Management\Provisioning\RunOnReboot","N/A","Disabled"
+"\Microsoft\Windows\Plug and Play\Device Install Reboot Required","N/A","Ready"
+"\Microsoft\Windows\Plug and Play\Device Install Reboot Required","N/A","Ready"
+"\Microsoft\Windows\SoftwareProtectionPlatform\SvcRestartTaskLogon","N/A","Disabled"
+"\Microsoft\Windows\Work Folders\Work Folders Logon Synchronization","N/A","Ready"

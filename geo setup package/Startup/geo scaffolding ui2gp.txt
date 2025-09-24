@@ -1,0 +1,301 @@
+love it — this is *exactly* the kind of local, unique data Daedalus should weave into both the page and the JSON-LD.
+
+Below is a tight, drop-in way to wire your “Brisbane City”-style facts into Daedalus so they show up:
+
+* in the UI (unique local content blocks),
+* in `LocalBusiness`/`Service` schema (as `amenityFeature` & `additionalProperty`),
+* in a `Place` schema for the suburb itself,
+* and in a `Dataset` schema advertising your adjacency graph.
+
+---
+
+# 1) Add suburb meta (source of truth)
+
+```json
+// data/suburbs.meta.json
+{
+  "brisbane-city": {
+    "tagline": "The heart of Brisbane with vibrant city life and commercial activity",
+    "uniqueFeatures": [
+      "High-rise apartment expertise",
+      "CBD location convenience",
+      "Professional commercial standards"
+    ],
+    "population": 12000,
+    "postcode": "4000",
+    "startingPrice": 299,
+    "guarantee": "100% bond back guarantee",
+    "sameAs": [
+      "https://www.brisbane.qld.gov.au/",
+      "https://en.wikipedia.org/wiki/Brisbane_CBD"
+    ],
+    "cluster": "brisbane",
+    "landmarks": ["Robelle Domain"],          // optional
+    "notes": "High-rise access & CBD parking" // optional
+  }
+}
+```
+
+---
+
+# 2) Extend your theme provider to surface this meta
+
+```js
+// themeProvider.js (excerpt)
+import suburbsMeta from './data/suburbs.meta.json' assert { type: 'json' };
+
+export function createTheme(serviceSlug, suburbSlug) {
+  const service = /* your existing service loader */;
+  const suburb = /* your existing suburb loader */;
+
+  const meta = suburbsMeta[suburbSlug] || {};
+  return {
+    service,
+    suburb: {
+      ...suburb,
+      meta
+    }
+  };
+}
+```
+
+---
+
+# 3) Inject into your existing generators
+
+### a) LocalBusiness / CleaningService: add amenityFeature + facts
+
+```js
+// Add inside generateLocalBusinessSchema(...)
+const features = (suburb.meta.uniqueFeatures || []).map(f => ({
+  "@type": "LocationFeatureSpecification",
+  "name": f,
+  "value": true
+}));
+
+const extraProps = [
+  suburb.meta.startingPrice != null && {
+    "@type": "PropertyValue",
+    "name": "Starting price",
+    "value": `$${suburb.meta.startingPrice}`
+  },
+  suburb.meta.guarantee && {
+    "@type": "PropertyValue",
+    "name": "Guarantee",
+    "value": suburb.meta.guarantee
+  },
+  suburb.meta.population && {
+    "@type": "PropertyValue",
+    "name": "Population",
+    "value": String(suburb.meta.population)
+  }
+].filter(Boolean);
+
+schema.amenityFeature = features;                 // ✅ structured “✓ bullets”
+schema.additionalProperty = extraProps;           // ✅ concrete facts
+if (Array.isArray(suburb.meta.sameAs)) {
+  schema.sameAs = [...new Set([...(schema.sameAs||[]), ...suburb.meta.sameAs])];
+}
+```
+
+### b) Service schema: echo the USPs
+
+```js
+// Add inside generateServiceSchema(...)
+if (features?.length) {
+  schema.additionalProperty = (schema.additionalProperty || []).concat(
+    features.map(f => ({
+      "@type": "PropertyValue",
+      "name": f.name,
+      "value": "true"
+    }))
+  );
+}
+```
+
+---
+
+# 4) Add a `Place` schema for the suburb node (great for the knowledge graph)
+
+```js
+export function generatePlaceSchema(suburbSlug) {
+  const { suburb } = createTheme('any', suburbSlug); // service not needed here
+  return {
+    "@context": "https://schema.org",
+    "@type": "Place",
+    "@id": `https://onedonecleaning.com.au/areas/${suburbSlug}#place`,
+    "name": suburb.name,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": suburb.name,
+      "addressRegion": suburb.region,
+      "postalCode": suburb.meta?.postcode || suburb.postcode,
+      "addressCountry": "AU"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": suburb.coordinates.lat,
+      "longitude": suburb.coordinates.lng
+    },
+    "containedInPlace": suburb.meta?.cluster ? {
+      "@type": "AdministrativeArea",
+      "@id": `https://onedonecleaning.com.au/areas/${suburb.meta.cluster}#area`,
+      "name": suburb.region
+    } : undefined,
+    "sameAs": suburb.meta?.sameAs || [],
+    "additionalProperty": [
+      suburb.meta?.population && {
+        "@type": "PropertyValue", "name": "Population", "value": String(suburb.meta.population)
+      },
+      suburb.meta?.notes && {
+        "@type": "PropertyValue", "name": "Notes", "value": suburb.meta.notes
+      }
+    ].filter(Boolean)
+  };
+}
+```
+
+> Note: Schema.org doesn’t have an official `nearby` property for `Place`. To express adjacency, advertise a **Dataset** and link to it (below), and interlink pages in HTML.
+
+---
+
+# 5) Advertise your adjacency graph as a `Dataset`
+
+```js
+export function generateAdjacencyDatasetSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "@id": "https://onedonecleaning.com.au/api/agents/suburbs.json#dataset",
+    "name": "Queensland Suburb Adjacency Graph",
+    "description": "Graph of suburbs, clusters, distances, and adjacency used to power localized routing and SEO.",
+    "creator": { "@type": "Organization", "name": "OneDone Cleaning" },
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "keywords": ["suburbs","adjacency","queensland","distances","clusters"],
+    "distribution": [
+      {
+        "@type": "DataDownload",
+        "encodingFormat": "application/json",
+        "contentUrl": "https://onedonecleaning.com.au/api/agents/suburbs.json"
+      },
+      {
+        "@type": "DataDownload",
+        "encodingFormat": "text/csv",
+        "contentUrl": "https://onedonecleaning.com.au/api/agents/suburbs.csv"
+      }
+    ]
+  };
+}
+```
+
+**Minimal API route** (Astro/Next/Node — concept stays the same):
+
+```js
+// /api/agents/suburbs.json
+import adj from '../../data/adjacency.json' assert { type: 'json' };
+import dist from '../../data/adjacency.distances.json' assert { type: 'json' };
+import clusters from '../../data/areas.clusters.json' assert { type: 'json' };
+
+export async function GET(_, res) {
+  const payload = { adjacency: adj, distances: dist, clusters };
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(payload));
+}
+```
+
+---
+
+# 6) Emit your JSON-LD and meta tags cleanly
+
+```js
+// utils/emitHead.js
+export const ld = (obj) =>
+  `<script type="application/ld+json">${JSON.stringify(obj)}</script>`;
+
+export function emitSEO(seo) {
+  const out = [];
+  out.push(`<title>${seo.title}</title>`);
+  out.push(`<link rel="canonical" href="${seo.canonical}">`);
+  if (seo.description) out.push(`<meta name="description" content="${seo.description}">`);
+  // Optional: keywords (kept only if you really want it)
+  if (seo.keywords) out.push(`<meta name="keywords" content="${seo.keywords}">`);
+  // Open Graph
+  const og = seo.og || {};
+  Object.entries({
+    "og:title": og.title,
+    "og:description": og.description,
+    "og:image": og.image,
+    "og:url": og.url,
+    "og:type": og.type || 'website',
+    "og:site_name": og.site_name || 'OneDone Cleaning',
+    "og:locale": og.locale || 'en_AU'
+  }).forEach(([k,v]) => v && out.push(`<meta property="${k}" content="${v}">`));
+  // Twitter
+  const tw = seo.twitter || {};
+  Object.entries({
+    "twitter:card": tw.card || 'summary_large_image',
+    "twitter:title": tw.title,
+    "twitter:description": tw.description,
+    "twitter:image": tw.image,
+    "twitter:site": tw.site,
+    "twitter:creator": tw.creator
+  }).forEach(([k,v]) => v && out.push(`<meta name="${k}" content="${v}">`));
+  return out.join('\n');
+}
+```
+
+---
+
+# 7) Example: Brisbane City page wiring
+
+```js
+// in your page component / head builder
+const seo = generateSEOMetadata('bond-cleaning', 'brisbane-city');
+const lb  = generateLocalBusinessSchema('bond-cleaning', 'brisbane-city');
+const svc = generateServiceSchema('bond-cleaning', 'brisbane-city');
+const plc = generatePlaceSchema('brisbane-city');
+const dts = generateAdjacencyDatasetSchema();
+
+head.innerHTML = [
+  emitSEO(seo),
+  ld(lb),
+  ld(svc),
+  ld(plc),
+  ld(dts)
+].join('\n');
+```
+
+---
+
+# 8) Nice UX block (what users see)
+
+Render your local facts right where people look:
+
+```jsx
+{/* Brisbane City facts card */}
+<section className="local-facts">
+  <h2>About {suburb.name}</h2>
+  <p>{suburb.meta.tagline}</p>
+  <ul>
+    {(suburb.meta.uniqueFeatures || []).map(f => <li key={f}>✓ {f}</li>)}
+  </ul>
+  <div className="stats">
+    <div><span>Population</span><strong>{suburb.meta.population?.toLocaleString?.() || '—'}</strong></div>
+    <div><span>Postcode</span><strong>{suburb.meta.postcode || suburb.postcode}</strong></div>
+    {suburb.meta.startingPrice != null && (
+      <div><span>From</span><strong>${suburb.meta.startingPrice}</strong></div>
+    )}
+    {suburb.meta.guarantee && (
+      <div><span>Guarantee</span><strong>{suburb.meta.guarantee}</strong></div>
+    )}
+  </div>
+</section>
+```
+
+---
+
+## TL;DR
+
+Yes — **information exactly like your Brisbane City snippet**. Store it in `suburbs.meta.json`, render it for humans, and embed it for machines via `amenityFeature`, `additionalProperty`, a `Place` schema, and a `Dataset` for your adjacency graph. That combination turns each suburb page into a high-value node in your site’s knowledge graph.
+
+If you want, I can also wrap this into a tiny Daedalus plugin (`daedalus.locality()`) so you call one function and it wires all four JSON-LD blocks automatically.

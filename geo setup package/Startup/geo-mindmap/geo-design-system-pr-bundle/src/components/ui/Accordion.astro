@@ -1,0 +1,16 @@
+---
+// src/components/ui/Accordion.astro
+// No JS needed, uses <details>.
+const { items = [] } = Astro.props;
+// items: [{title, content}]
+---
+<div class="space-y-2">
+  {items.map(item => (
+    <details class="bg-white border border-gray-200 rounded-md p-4 open:shadow-sm">
+      <summary class="cursor-pointer font-semibold text-gray-900">{item.title}</summary>
+      <div class="mt-2 text-gray-700">
+        {item.content}
+      </div>
+    </details>
+  ))}
+</div>

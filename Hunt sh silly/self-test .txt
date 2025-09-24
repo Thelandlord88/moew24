@@ -1,0 +1,484 @@
+# Yes — and here’s a complete, production-grade plan to make it real
+
+You can absolutely build a “FAQ Investigator” that ingests real user demand signals, audits your current FAQ content, highlights the gaps/risks, **writes JSON+MD reports**, and **optionally drafts PR-ready MDX stubs** with valid FAQPage JSON-LD. Below is a concrete, no-nonsense blueprint with code, schemas, gating rules, and CI wiring that you can paste in and iterate.&#x20;
+
+---
+
+# What the system will do (end-to-end)
+
+1. **Collect demand** (what users *ask* for): site-search queries, recurring 404 paths, support/ticket subjects.
+2. **Crawl content** (what you *actually cover*): scan `docs/**`, `content/**`, `src/pages/**` (MD/MDX/Astro).
+3. **Extract Q\&A**: detect headings that look like questions, `Q:/A:` blocks, and schema.org FAQPage sections.
+4. **Audit quality**: length/freshness/readability, duplicate questions, broken/missing anchors, link health, inbound link coverage.
+5. **Match demand→coverage**: fuzzy matching (simple to start, pluggable for embeddings later) to find unserved queries.
+6. **Output artifacts**: machine report (`__reports/faq-pi.json`) + human summary (`__reports/faq-pi.md`) + optional **PR-ready MDX stubs** for gaps.
+7. **Policy gate in CI**: fail PRs that introduce FAQ regressions (e.g., broken anchors) or leave top demand queries uncovered.
+
+---
+
+# Repository layout (minimal)
+
+```
+scripts/
+  docs/
+    faq_pi.mjs              # investigator (Node, no deps)
+__reports/                  # JSON/MD outputs (artifacted in CI)
+analytics/search.csv        # optional: site search export
+logs/404.csv                # optional: 404 log export
+support/tickets.csv         # optional: ticket subjects
+content/faq/                # existing or to-be-created FAQ entries (MD/MDX)
+```
+
+---
+
+# Investigator script (drop-in, dependency-light)
+
+Paste the following to `scripts/docs/faq_pi.mjs`. It’s self-contained (Node standard libs only), LF line endings, and safe to run locally or in CI. It writes **both** JSON and Markdown when `--write` is passed; otherwise it prints JSON to stdout for piping.
+
+```js
+#!/usr/bin/env node
+// FAQ PI — Private Investigator for your FAQ
+// Usage:
+//   node scripts/docs/faq_pi.mjs --write            # write JSON+MD to __reports
+//   node scripts/docs/faq_pi.mjs | jq .counts       # print JSON only (no writes)
+
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
+
+// ---------- config (tweak as needed) ----------
+const ROOT = process.cwd();
+const REPORT_DIR = path.join(ROOT, "__reports");
+const DEMAND_FILES = [
+  { path: "analytics/search.csv", column: 0, optional: true },
+  { path: "logs/404.csv",         column: 0, optional: true },
+  { path: "support/tickets.csv",  column: 0, optional: true },
+];
+const MAX_GAP_LIST = 100;     // cap gap list to keep reports focused
+const STALE_DAYS   = 120;     // > N days since mtime => stale
+const MIN_ANS_WORD = 20;      // too short if < 20 words
+const MAX_ANS_WORD = 450;     // too long if > 450 words
+const WRITE = process.argv.includes("--write");
+
+// ---------- util ----------
+const read = (p) => fs.readFileSync(p, "utf8");
+const exists = (p) => fs.existsSync(p);
+const toLines = (s) => s.split(/\r?\n/);
+const words = (s) => (s.trim().match(/\S+/g) || []).length;
+const daysSince = (d) => Math.floor((Date.now() - d.getTime()) / 86400000);
+const sha8 = (s) => crypto.createHash("sha256").update(s).digest("hex").slice(0, 8);
+const norm = (s) => s.toLowerCase().normalize("NFKC")
+  .replace(/[`’'"]/g, "")
+  .replace(/[\W_]+/g, " ")
+  .replace(/\s+/g, " ")
+  .trim();
+
+// ---------- walk repo (skip heavy dirs) ----------
+const SKIP_DIRS = new Set(["node_modules",".git","__reports","dist","build","coverage",".output",".next"]);
+/** @returns {string[]} */
+function walk(dir) {
+  /** @type {string[]} */ const out = [];
+  for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (SKIP_DIRS.has(ent.name)) continue;
+    const p = path.join(dir, ent.name);
+    if (ent.isDirectory()) out.push(...walk(p)); else out.push(p);
+  }
+  return out;
+}
+
+const ALL = walk(ROOT);
+const CONTENT_FILES = ALL.filter(f => /\.(md|mdx|markdown|astro)$/i.test(f));
+const ROUTE_FILES   = ALL.filter(f => /src\/pages\/.+\.(astro|mdx?)$/i.test(f));
+
+// ---------- demand ingestion (robust CSV first column only) ----------
+const demandTerms = [];
+for (const cfg of DEMAND_FILES) {
+  if (!exists(cfg.path)) { if (!cfg.optional) console.error(`missing ${cfg.path}`); continue; }
+  const rows = toLines(read(cfg.path)).slice(1); // skip header if present
+  for (const r of rows) {
+    const col = r.split(",")[cfg.column] ?? "";
+    const v = norm(col);
+    if (v) demandTerms.push(v);
+  }
+}
+const demandSet = Array.from(new Set(demandTerms));
+
+// ---------- FAQ extraction ----------
+/**
+ * We detect:
+ *  1) H2/H3 that look like questions (contain '?') + capture following block
+ *  2) Q:/A: pairs
+ *  3) Shallow schema.org FAQPage hints
+ */
+const faq = [];
+for (const file of CONTENT_FILES) {
+  const src = read(file);
+  const mtime = fs.statSync(file).mtime;
+  const lines = toLines(src);
+
+  // 1) Headings that look like questions
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^#{2,3}\s+(.+)/);
+    if (!m) continue;
+    const qRaw = m[1].trim();
+    if (!qRaw || qRaw.length > 200 || !qRaw.includes("?")) continue;
+
+    let j = i + 1, body = [];
+    while (j < lines.length && !/^#{1,6}\s+/.test(lines[j])) { body.push(lines[j]); j++; }
+    faq.push({ file, line: i + 1, q: qRaw.trim(), a: body.join("\n").trim(), mtime });
+  }
+
+  // 2) Q: / A: pairs
+  const qa = [...src.matchAll(/^\s*Q:\s*(.+)\n([\s\S]*?)^\s*A:\s*([\s\S]*?)(?=^\s*Q:|\Z)/gmi)];
+  for (const m of qa) {
+    faq.push({ file, line: 1, q: m[1].trim(), a: (m[3] || "").trim(), mtime });
+  }
+
+  // 3) FAQPage marker (breadcrumb only)
+  if (/FAQPage|\"@type\"\s*:\s*\"Question\"/i.test(src)) {
+    // Could parse JSON-LD here if present; we just note its existence for now.
+  }
+}
+
+// ---------- quality & link checks ----------
+const anchorInAnswer = /\(#([^)]+)\)/g;
+const explicitIdRx   = /\{#([A-Za-z0-9\-_]+)\}/g;
+
+const duplicates = (() => {
+  const map = new Map();
+  for (const e of faq) {
+    const k = norm(e.q);
+    if (!map.has(k)) map.set(k, []);
+    map.get(k).push(e);
+  }
+  return [...map.entries()].filter(([, arr]) => arr.length > 1)
+    .map(([question, entries]) => ({ question, entries }));
+})();
+
+const brokenAnchors = [];
+for (const e of faq) {
+  const anchors = [];
+  let m;
+  while ((m = anchorInAnswer.exec(e.a))) anchors.push(m[1]);
+  for (const id of anchors) {
+    // light check: require explicit anchor in the same answer block
+    if (!explicitIdRx.test(e.a)) {
+      brokenAnchors.push({ q: e.q, file: e.file, anchor: id });
+    }
+  }
+}
+
+const tooShort = faq.filter(e => words(e.a) < MIN_ANS_WORD);
+const tooLong  = faq.filter(e => words(e.a) > MAX_ANS_WORD);
+const stale    = faq.filter(e => daysSince(e.mtime) > STALE_DAYS);
+const awkwardQ = faq.filter(e => !/\?$/.test(e.q)); // lacks trailing '?'
+
+// ---------- demand coverage (simple heuristic) ----------
+function covers(q, term) {
+  const nq = norm(q);
+  if (nq.includes(term)) return true;
+  // fuzzy: token overlap >= 2 tokens
+  const tq = new Set(nq.split(" "));
+  const tt = term.split(" ").filter(Boolean);
+  let hit = 0; for (const t of tt) if (tq.has(t)) hit++;
+  return hit >= Math.min(2, tt.length);
+}
+const coverage = demandSet.map(term => {
+  const hit = faq.find(e => covers(e.q, term));
+  return { term, covered: !!hit, example: hit?.q || null };
+});
+const gaps = coverage.filter(x => !x.covered).slice(0, MAX_GAP_LIST);
+
+// ---------- improvement & drafting briefs ----------
+const improv = faq.slice(0, 100).map(e => ({
+  q: e.q,
+  brief: `Rewrite in 140–220 words, add a short bullet list, include exactly one relevant internal link, end with a one-sentence CTA.`,
+}));
+const drafts = gaps.map(g => ({
+  q: `FAQ: ${g.term}?`,
+  frontmatter: {
+    title: `FAQ: ${g.term}?`,
+    description: `Concise answer to: ${g.term}`,
+    updated: new Date().toISOString(),
+    tags: ["faq"],
+  },
+  brief: `Draft 120–180 words that directly resolve the intent "${g.term}". Include one internal link and JSON-LD FAQPage block.`,
+}));
+
+// ---------- report ----------
+const report = {
+  schemaVersion: 1,
+  generatedAt: new Date().toISOString(),
+  meta: {
+    filesScanned: CONTENT_FILES.length,
+    routesSeen: ROUTE_FILES.length,
+    inputsHash: sha8(JSON.stringify({ CONTENT_FILES, ROUTE_FILES, demandSet: demandSet.slice(0,100) })),
+    thresholds: { STALE_DAYS, MIN_ANS_WORD, MAX_ANS_WORD },
+  },
+  counts: {
+    totalFAQ: faq.length,
+    duplicates: duplicates.length,
+    brokenAnchors: brokenAnchors.length,
+    tooShort: tooShort.length,
+    tooLong: tooLong.length,
+    awkwardQuestions: awkwardQ.length,
+    stale: stale.length,
+    gaps: gaps.length,
+  },
+  duplicates,
+  brokenAnchors,
+  tooShort,
+  tooLong,
+  awkwardQ,
+  stale,
+  gaps,
+  improv,
+  drafts
+};
+
+// ---------- write or print ----------
+if (WRITE) {
+  if (!exists(REPORT_DIR)) fs.mkdirSync(REPORT_DIR);
+  fs.writeFileSync(path.join(REPORT_DIR, "faq-pi.json"), JSON.stringify(report, null, 2) + "\n");
+  const md = [
+    `# FAQ Case File`,
+    `Generated: ${report.generatedAt}`,
+    ``,
+    `**Totals** — entries: ${report.counts.totalFAQ}, gaps: ${report.counts.gaps}, stale: ${report.counts.stale}, dupes: ${report.counts.duplicates}, broken anchors: ${report.counts.brokenAnchors}`,
+    ``,
+    `## Top Gaps`,
+    ...gaps.slice(0, 25).map(g => `- ${g.term}`),
+    ``,
+    `## Duplicate Questions`,
+    ...duplicates.slice(0, 20).map(d => `- ${d.question} (${d.entries.length} places)`),
+    ``,
+    `## Rewrite Briefs (samples)`,
+    ...improv.slice(0, 20).map(b => `- **${b.q}** — ${b.brief}`),
+  ].join("\n");
+  fs.writeFileSync(path.join(REPORT_DIR, "faq-pi.md"), md + "\n");
+  console.log("Wrote __reports/faq-pi.json");
+  console.log("Wrote __reports/faq-pi.md");
+} else {
+  process.stdout.write(JSON.stringify(report, null, 2));
+}
+```
+
+---
+
+# JSON schema for the machine report
+
+Use this to validate in CI or consume in a dashboard:
+
+```json
+{
+  "schemaVersion": 1,
+  "generatedAt": "ISO-8601",
+  "meta": {
+    "filesScanned": "number",
+    "routesSeen": "number",
+    "inputsHash": "string",
+    "thresholds": {
+      "STALE_DAYS": "number",
+      "MIN_ANS_WORD": "number",
+      "MAX_ANS_WORD": "number"
+    }
+  },
+  "counts": {
+    "totalFAQ": "number",
+    "duplicates": "number",
+    "brokenAnchors": "number",
+    "tooShort": "number",
+    "tooLong": "number",
+    "awkwardQuestions": "number",
+    "stale": "number",
+    "gaps": "number"
+  },
+  "duplicates": [
+    { "question": "normalized-string", "entries": [{ "file":"path","line":"number","q":"string","a":"string","mtime":"date"}] }
+  ],
+  "brokenAnchors": [{ "q":"string", "file":"path", "anchor":"string" }],
+  "tooShort": [{ "file":"path","q":"string"}],
+  "tooLong": [{ "file":"path","q":"string"}],
+  "awkwardQ": [{ "file":"path","q":"string"}],
+  "stale": [{ "file":"path","q":"string"}],
+  "gaps": [{ "term":"string", "covered":"boolean", "example": "string|null" }],
+  "improv": [{ "q":"string", "brief":"string" }],
+  "drafts": [{
+    "q":"string",
+    "frontmatter": { "title":"string","description":"string","updated":"string","tags":["string"] },
+    "brief":"string"
+  }]
+}
+```
+
+---
+
+# Optional: auto-draft MDX files for gaps
+
+Add this helper (separate script or extend `faq_pi.mjs`) to **generate MDX stubs** for top N gaps under `content/faq/` without committing them automatically (review first).
+
+```bash
+node scripts/docs/faq_pi.mjs --write
+node -e '
+const fs=require("fs"); const data=JSON.parse(fs.readFileSync("__reports/faq-pi.json","utf8"));
+const top = data.drafts.slice(0,10);
+for (const d of top) {
+  const slug = d.q.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+  const fp = `content/faq/${slug}.mdx`;
+  if (fs.existsSync(fp)) continue;
+  const front = `---\n`+
+    `title: "${d.frontmatter.title}"\n`+
+    `description: "${d.frontmatter.description}"\n`+
+    `updated: "${d.frontmatter.updated}"\n`+
+    `tags: [faq]\n`+
+    `---\n\n`;
+  const body = `## ${d.q}\n\n`+
+`<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [{
+    "@type": "Question",
+    "name": "${d.q}",
+    "acceptedAnswer": { "@type": "Answer", "text": "TODO: Write 120–180 words that resolve the query. Include exactly one internal link and a one-sentence CTA." }
+  }]
+}
+</script>\n\n`+
+`A: TODO\n`;
+  fs.mkdirSync("content/faq", { recursive: true });
+  fs.writeFileSync(fp, front+body);
+  console.log("Drafted", fp);
+}'
+```
+
+---
+
+# CI integration (with hard gates + artifacts)
+
+Add a job that runs the investigator, uploads reports, and fails on policy:
+
+```yaml
+# .github/workflows/faq-hygiene.yml
+name: FAQ Hygiene
+on: [pull_request, push]
+
+jobs:
+  faq-pi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node -v
+      - name: Run FAQ Investigator
+        run: |
+          node scripts/docs/faq_pi.mjs --write
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: faq-reports
+          path: __reports/faq-pi.*
+      - name: Enforce policy
+        run: |
+          jq '.counts' __reports/faq-pi.json
+          GAPS=$(jq '.counts.gaps' __reports/faq-pi.json)
+          BROKEN=$(jq '.counts.brokenAnchors' __reports/faq-pi.json)
+          STALE=$(jq '.counts.stale' __reports/faq-pi.json)
+          if [ "$BROKEN" -gt 0 ]; then echo "❌ Broken anchors"; exit 1; fi
+          if [ "$GAPS" -gt 0 ]; then echo "❌ Demand gaps"; exit 1; fi
+          # If you prefer soft-fail on staleness, just echo a warning instead of exit 1
+```
+
+> If you already run a hygiene script (e.g., `rg-hunt.sh`), call the PI **inside** it and compound the exit status.
+
+---
+
+# Anchor governance (prevent broken intra-site links)
+
+**Policy**: every question heading gets a stable explicit ID so refactors don’t break links.
+
+* Authoring rule: `## Can I reschedule my clean? {#reschedule-policy}`
+* Investigator check: if an answer contains `(#[slug])`, require a matching `{#slug}` in the same file or at the target heading.
+* PR guard: if a heading text changes but `{#id}` didn’t exist, the investigator will fail the “brokenAnchors” bucket until you add a `{#stable-id}`.
+
+---
+
+# Readability & length rules (tunable)
+
+* **Too short**: < 20 words → prompts a rewrite brief (add an example, answer directly first).
+* **Too long**: > 450 words → prompts a tightening brief (cut fluff, bullets, one CTA).
+* **Awkward question**: missing trailing `?` → nudge to make it an actual user-facing question.
+
+---
+
+# Demand matching (simple → advanced)
+
+Start deterministic (token overlap, substring, normalized matching). When you want smarter recall without third-party services:
+
+* **Synonym table**: a small JSON (`faq.synonyms.json`) to map common variants (e.g., “bond clean price” → “bond cleaning cost”).
+* **Phrase windows**: prefer 2-3 token spans over single words to reduce noise.
+* **Weighting**: count of occurrences in logs to prioritize which gaps to draft first.
+
+*(You can later slot in embeddings if you want, but you’ll get 80% value with deterministic rules and a synonym map.)*
+
+---
+
+# Security & privacy
+
+* Treat `support/tickets.csv` as potentially sensitive; only ingest the **subject** field.
+* Normalize + lower-case early; strip emails/order IDs with a regex before hashing or writing reports.
+* Reports live in `__reports/` and are artifacted in CI; avoid committing them to the repo if they contain sensitive terms.
+
+---
+
+# Performance & determinism
+
+* Single-threaded walk is fine for most repos; if you scan tens of thousands of files, batch the walk and process in chunks to keep memory stable.
+* Always **sort outputs** (by slug/question) before writing so PR diffs are stable.
+* Include `inputsHash` and `schemaVersion` in the JSON to make caches and test snapshots reliable.
+
+---
+
+# Local runbook
+
+```bash
+# Generate reports
+node scripts/docs/faq_pi.mjs --write
+
+# Inspect in terminal
+bat __reports/faq-pi.md
+jq .counts __reports/faq-pi.json
+
+# Draft 10 MDX stubs for largest gaps (optional)
+# (see auto-draft snippet above)
+```
+
+---
+
+# Minimal test fixtures (fast guardrails)
+
+Create `tests/faq-fixtures/` with:
+
+* `a.mdx` — two valid Q/As, one explicit `{#id}`, one long answer (to trigger “tooLong”).
+* `b.md` — duplicate question text to trigger “duplicates”.
+* `analytics/search.csv` — a couple of queries that do/do not match.
+* A tiny script:
+
+  ```bash
+  node scripts/docs/faq_pi.mjs > /tmp/faq.json
+  jq -e '.counts.totalFAQ >= 2' /tmp/faq.json
+  jq -e '.counts.duplicates >= 1' /tmp/faq.json
+  ```
+
+---
+
+# What you’ll see in a healthy run
+
+* `__reports/faq-pi.json` showing **zero** `brokenAnchors`, a small or empty `gaps` list for top queries, and **no** “tooShort”.
+* `__reports/faq-pi.md` with a short “Top Gaps” list (ideally empty) and a handful of “Rewrite Briefs” you can knock over quickly.
+
+---
+
+# Bottom line
+
+* **Feasible**: 100%. The script above runs today with zero external deps.
+* **Valuable**: it converts messy signals into precise actions (fix anchors, merge dupes, refresh stale, write missing articles).
+* **Operational**: JSON for machines, Markdown for humans, and a simple CI gate so your FAQ health can’t silently regress.

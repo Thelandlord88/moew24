@@ -1,0 +1,346 @@
+Awesome — this is exactly the context we needed to lock the rendering strategy and the geo merge. Bottom line: keep the site **pure SSG** and tighten the SoT-driven page factory so every new page is “data-only.” Here’s a clear, do-this-now plan that folds your docs into concrete changes.
+
+# TL;DR (do this first)
+
+1. **Set Astro to static & remove SSR creep.**
+2. **Archive old routes** (keep CSS/tokens) and stand up **one parametric route**: `/services/[service]/[suburb].astro`.
+3. **Unify geo data** behind a typed loader (SoT) and generate paths via `coverage.json` + `registry=published`.
+4. **Bake internal linking** from `adjacency.json` with **seeded, stable** ordering.
+5. **Add Doctor + Gate** so builds fail on data/link regressions.
+6. **Generate per-service sitemaps** and ship redirects for human variants.
+
+(Your SSR vs SSG analysis concludes SSG wins on performance, reliability, cost, and matches your data model. Keep `output: 'static'` and `getStaticPaths()` everywhere. )
+(Your pre-migration analysis shows the current geo system is mature—346 suburbs, proven adjacency, 580+ static pages—so the SoT migration is low-risk and mostly plumbing. )
+
+---
+
+# 1) Lock Astro to **SSG only**
+
+**astro.config.mjs**
+
+```ts
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({
+  output: 'static',            // ✅ Pure SSG
+  // adapter: netlify(),       // 🚫 Leave commented/removed unless you later go hybrid
+  experimental: { staticImportMetaEnv: true }
+});
+```
+
+**Pages**: use `getStaticPaths()` and (optionally) `export const prerender = true` — but with `output: 'static'`, it’s implicit. (Matches the findings that your pages already generate entirely from build-time data. )
+
+---
+
+# 2) Archive current routes; keep CSS & UI primitives
+
+```bash
+git checkout -b reset/geo-props-ssg
+mkdir -p __legacy__
+git mv src/pages __legacy__/pages_$(date +%F)
+# Keep your design system alive:
+# leave src/styles/**, tailwind config, and reusable components in place
+echo "__legacy__/**" >> .eslintignore
+echo "__legacy__/**" >> .prettierignore
+# tsconfig.json → add "exclude": ["__legacy__/**","dist","node_modules"]
+git commit -m "chore(legacy): archive existing routes; prep for parametric SSG"
+```
+
+(You explicitly wanted to “delete but keep” — this makes legacy inert while retrievable later.)
+
+---
+
+# 3) Single parametric **page factory**
+
+Create **one** route that renders every suburb × service from data.
+
+**src/pages/services/\[service]/\[suburb].astro**
+
+```astro
+---
+import type { ServiceSlug } from '~/lib/geo/types';
+import { SERVICE_META } from '~/lib/services/meta';
+import { listCovered, buildCtx } from '~/lib/geo/data';
+
+export async function getStaticPaths() {
+  const services = Object.keys(SERVICE_META) as ServiceSlug[];
+  return services.flatMap((svc) =>
+    listCovered(svc).map((suburb) => ({ params: { service: svc, suburb } }))
+  );
+}
+
+const { service, suburb } = Astro.params as { service: ServiceSlug; suburb: string };
+const ctx = buildCtx(suburb, service); // typed SoT loader
+const meta = SERVICE_META[service];
+
+const title = `${meta.h1(ctx.suburb.name)} | One N Done`;
+const desc  = meta.description(ctx.suburb.name);
+const canonical = `/services/${meta.path}/${ctx.suburb.slug}/`;
+---
+
+<html lang="en">
+  <head>
+    <title>{title}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+  </head>
+  <body class="min-h-screen">
+    <main class="mx-auto max-w-5xl p-6">
+      <h1 class="text-3xl font-bold">{meta.h1(ctx.suburb.name)}</h1>
+      <p class="mt-2">{desc}</p>
+
+      {/* Cross-service */}
+      {ctx.otherServices.length > 0 && (
+        <section class="mt-8">
+          <h2 class="text-xl font-semibold">Other services in {ctx.suburb.name}</h2>
+          <ul class="grid sm:grid-cols-2 gap-3 mt-3">
+            {ctx.otherServices.map(os => (
+              <li><a href={`/services/${SERVICE_META[os].path}/${ctx.suburb.slug}/`}>{SERVICE_META[os].label}</a></li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Nearby suburbs */}
+      <section class="mt-10">
+        <h2 class="text-xl font-semibold">Nearby suburbs</h2>
+        <ul class="grid sm:grid-cols-2 md:grid-cols-3 gap-2 mt-3">
+          {ctx.neighbors.map(n => (
+            <li><a href={`/services/${meta.path}/${n}/`}>{n.replace(/-/g,' ')}</a></li>
+          ))}
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
+```
+
+This matches your current content scale (hundreds of static pages) and keeps the perfect fit with SSG your analysis showed.&#x20;
+
+---
+
+# 4) Typed **SoT** loaders + deterministic linking
+
+**Data shape** (keep it file-based, same as now):
+
+```
+src/data/
+  suburbs.json              // [{slug,name,cluster,coords:{lat,lng}}, ...]
+  adjacency.json            // { [slug]: [neighborSlug,...] }
+  coverage.json             // { [serviceSlug]: [suburbSlug,...] }
+  registry.json             // { suburbs: { [slug]: { state: published|staged|... } } }
+```
+
+(Your pre-migration inventory confirms these are your canonical files and counts; preserve them. )
+
+**Loader & context:**
+
+```ts
+// src/lib/geo/types.ts
+import { z } from 'zod';
+export const Services = z.enum(['bond-cleaning','bathroom-deep-clean','spring-cleaning']);
+export type ServiceSlug = z.infer<typeof Services>;
+export const Suburb = z.object({
+  slug: z.string(), name: z.string(),
+  cluster: z.enum(['brisbane','ipswich','logan']),
+  coords: z.object({ lat: z.number(), lng: z.number() })
+});
+export type SuburbT = z.infer<typeof Suburb>;
+export type GeoPageCtx = {
+  suburb: SuburbT; service: ServiceSlug;
+  neighbors: string[]; otherServices: ServiceSlug[];
+};
+```
+
+```ts
+// src/lib/services/meta.ts
+import type { ServiceSlug } from '~/lib/geo/types';
+export const SERVICE_META: Record<ServiceSlug, {
+  label: string; path: string; h1: (s: string) => string; description: (s: string) => string;
+}> = {
+  'bond-cleaning': {
+    label: 'Bond Clean', path: 'bond-cleaning',
+    h1: s => `${s} Bond Clean`,
+    description: s => `Agent-ready bond cleaning in ${s}. Fixed-quote, thorough, on time.`
+  },
+  'bathroom-deep-clean': {
+    label: 'Bathroom Deep Clean', path: 'bathroom-deep-clean',
+    h1: s => `${s} Bathroom Deep Clean`,
+    description: s => `A meticulous bathroom deep clean for homes in ${s}.`
+  },
+  'spring-cleaning': {
+    label: 'Spring Clean', path: 'spring-cleaning',
+    h1: s => `${s} Spring Clean`,
+    description: s => `A seasonal, top-to-bottom refresh for ${s}.`
+  }
+} as const;
+```
+
+```ts
+// src/lib/geo/data.ts
+import fs from 'node:fs'; import path from 'node:path';
+import { z } from 'zod';
+import { Services, Suburb, type ServiceSlug, type GeoPageCtx } from './types';
+
+const D = (p:string) => JSON.parse(fs.readFileSync(path.join(process.cwd(),'src/data',p),'utf8'));
+
+const suburbs = z.array(Suburb).parse(D('suburbs.json'));
+const adjacency = D('adjacency.json') as Record<string,string[]>;
+const coverage  = D('coverage.json')  as Record<string,string[]>;
+const registry  = D('registry.json')  as { suburbs: Record<string,{state:string}> };
+
+const bySlug = new Map(suburbs.map(s => [s.slug, s]));
+const published = (slug:string) => registry.suburbs?.[slug]?.state === 'published';
+
+export function listCovered(svc: ServiceSlug): string[] {
+  return (coverage[svc] || []).filter(published).filter(s=>bySlug.has(s)).sort();
+}
+
+function mulberry32(seed:number){return()=>{let t=(seed+=0x6d2b79f5);t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};}
+function stableShuffle<T>(arr:T[], seedStr:string){const seed=[...seedStr].reduce((n,c)=>n+c.charCodeAt(0),0);const r=mulberry32(seed);const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+export function buildCtx(suburbSlug: string, service: ServiceSlug): GeoPageCtx {
+  const suburb = bySlug.get(suburbSlug);
+  if (!suburb) throw new Error(`Unknown suburb: ${suburbSlug}`);
+
+  const neighbors = stableShuffle(
+    (adjacency[suburbSlug] || []).filter(n => bySlug.get(n)?.cluster === suburb.cluster && published(n)),
+    `${suburbSlug}:${service}`
+  ).slice(0, 12);
+
+  const otherServices = (Object.keys(coverage) as ServiceSlug[])
+    .filter(s => s !== service && (coverage[s]||[]).includes(suburbSlug) && published(suburbSlug))
+    .sort();
+
+  return { suburb, service, neighbors, otherServices };
+}
+```
+
+---
+
+# 5) “Doctor + Gate” — fail fast on data or link rot
+
+**scripts/geo/doctor.mjs** (quick checks)
+
+```js
+#!/usr/bin/env node
+import fs from 'node:fs'; import path from 'node:path';
+const D = p => JSON.parse(fs.readFileSync(path.join('src/data',p),'utf8'));
+const suburbs = D('suburbs.json'); const adjacency = D('adjacency.json');
+const coverage = D('coverage.json'); const registry = D('registry.json');
+const slugs = new Set(suburbs.map(s=>s.slug));
+const published = s => registry.suburbs?.[s]?.state === 'published';
+
+let ok = true; const err = (m)=>{console.error('×',m); ok=false;}; const okr = (m)=>console.log('✓',m);
+
+okr('coords'); suburbs.every(s=>typeof s.coords?.lat==='number'&&typeof s.coords?.lng==='number') || err('missing lat/lng');
+okr('adjacency symmetry'); Object.entries(adjacency).every(([a,ns]) => ns.every(b => (adjacency[b]||[]).includes(a))) || err('non-symmetric edges');
+okr('coverage points to known slugs'); Object.values(coverage).flat().every(s=>slugs.has(s)) || err('coverage->unknown suburb');
+okr('coverage uses published only'); Object.entries(coverage).every(([svc,arr])=>arr.every(published)) || err('non-published in coverage');
+process.exit(ok?0:1);
+```
+
+**scripts/geo/gate.mjs** (policy thresholds you care about)
+
+```js
+#!/usr/bin/env node
+import fs from 'node:fs';
+const policy = { neighbors:{min:4,max:14} };
+const report = JSON.parse(fs.readFileSync('__reports/geo-page-sample.json','utf8')); // optional: generate a small sample ctxs
+
+let violations = 0;
+for (const p of report.pages) {
+  if (p.neighbors.length < policy.neighbors.min) { console.error(`× few neighbors: ${p.slug}`); violations++; }
+  if (p.neighbors.length > policy.neighbors.max) { console.error(`× too many neighbors: ${p.slug}`); violations++; }
+}
+process.exit(violations?1:0);
+```
+
+Wire into build:
+
+```json
+{
+  "scripts": {
+    "geo:doctor": "node scripts/geo/doctor.mjs",
+    "geo:gate": "node scripts/geo/gate.mjs || true",   // start as warn; flip to hard fail later
+    "build": "npm run geo:doctor && astro build && npm run geo:gate"
+  }
+}
+```
+
+(Doctor/Gate mirrors the validation you’ve already proven useful in the current system; keep that strength. )
+
+---
+
+# 6) Sitemaps & redirects
+
+**Per-service sitemaps** (postbuild):
+
+```js
+// scripts/seo/sitemaps.mjs
+#!/usr/bin/env node
+import fs from 'node:fs';
+const base = 'https://www.example.com';
+const coverage = JSON.parse(fs.readFileSync('src/data/coverage.json','utf8'));
+function urlset(urls){return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(u=>`<url><loc>${u}</loc></url>`).join('\n')}
+</urlset>`;}
+fs.mkdirSync('public',{recursive:true});
+const maps = Object.keys(coverage).map(svc=>{
+  const urls = (coverage[svc]||[]).map(slug=>`${base}/services/${svc}/${slug}/`);
+  const file = `sitemap-${svc}.xml`; fs.writeFileSync(`public/${file}`, urlset(urls)); return file;
+});
+fs.writeFileSync('public/sitemap.xml',
+  `<?xml version="1.0" encoding="UTF-8"?>
+   <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   ${maps.map(f=>`<sitemap><loc>${base}/${f}</loc></sitemap>`).join('\n')}
+   </sitemapindex>`);
+```
+
+**package.json**
+
+```json
+{ "scripts": { "postbuild": "node scripts/seo/sitemaps.mjs" } }
+```
+
+**Redirects** (example Netlify patterns → canonical):
+
+```
+/:suburb-bond-clean        /services/bond-cleaning/:suburb/  301!
+/bond-clean-:suburb        /services/bond-cleaning/:suburb/  301!
+/:suburb-bond-cleaners     /services/bond-cleaning/:suburb/  301!
+```
+
+---
+
+# 7) What NOT to change (per your docs)
+
+* Don’t introduce SSR unless you add **real** runtime requirements (auth, real-time pricing, per-user dashboards). Your own matrix shows **zero** current drivers; SSG wins outright.&#x20;
+* Preserve the **adjacency algorithm output** and the **cluster mapping**; they’re already correct and validated in the pre-migration system.&#x20;
+
+---
+
+# 8) Sanity run (order of operations)
+
+```bash
+# 0) Branch + archive
+git checkout -b reset/geo-props-ssg
+# 1) Astro set to output: static
+# 2) Parametric route in place
+# 3) SoT data + loaders added
+npm run geo:doctor
+astro build
+npm run geo:gate
+```
+
+If all green, merge and deploy.
+
+---
+
+## Why this matches your docs
+
+* Your SSR/SSG analysis finds **100% of dynamic routes are build-time** and confirms the SoT async access pattern is still compatible with `getStaticPaths()` — perfect for SSG.&#x20;
+* Your pre-migration report shows a **mature, type-safe geo layer** with proven adjacency and coverage — we’re just wiring it into a cleaner page factory and adding hard gates so quality can’t regress.&#x20;
+
+If you want, I can turn this into a ready-to-commit patch (file tree + diffs + scripts) next.

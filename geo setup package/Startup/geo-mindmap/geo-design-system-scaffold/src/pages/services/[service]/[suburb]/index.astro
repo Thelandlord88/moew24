@@ -1,0 +1,45 @@
+---
+// src/pages/services/[service]/[suburb]/index.astro
+import PageLayout from '../../../components/layout/PageLayout.astro';
+import { astroPropsGenerator } from '~/lib/astroPropsGenerator.js';
+import { renderTemplates } from '~/lib/templateRenderer.js';
+
+export async function getStaticPaths() {
+  return await astroPropsGenerator.generateServicePaths();
+}
+
+const {
+  title,
+  metaDescription,
+  suburb,
+  service,
+  cluster,
+  availableServices,
+  adjacentSuburbs,
+  structuredData
+} = Astro.props;
+
+const renderedTitle = await renderTemplates(title);
+const renderedMetaDescription = await renderTemplates(metaDescription);
+---
+
+<PageLayout
+  suburb={suburb}
+  service={service}
+  title={renderedTitle}
+  metaDescription={renderedMetaDescription}
+  availableServices={availableServices}
+  adjacentSuburbs={adjacentSuburbs}
+>
+  <section class="prose max-w-none">
+    <h2>About Our {service.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())} Service</h2>
+    <p>Our professional {service.replace(/-/g, ' ')} service in {suburb.name} is designed to meet the highest standards of cleanliness and customer satisfaction.</p>
+    <h3>Why Choose Us in {suburb.name}?</h3>
+    <ul>
+      <li>Local {suburb.name} team who knows the area</li>
+      <li>Flexible scheduling to suit your needs</li>
+      <li>Eco-friendly cleaning products</li>
+      <li>100% satisfaction guarantee</li>
+    </ul>
+  </section>
+</PageLayout>

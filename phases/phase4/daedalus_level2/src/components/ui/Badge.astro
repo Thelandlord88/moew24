@@ -1,0 +1,8 @@
+---
+// src/components/ui/Badge.astro
+const { label } = Astro.props as { label: string };
+---
+<span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium"
+      style="background: var(--brand-primary); color: var(--brand-onPrimary)">
+  {label}
+</span>

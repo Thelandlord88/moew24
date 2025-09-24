@@ -1,0 +1,195 @@
+Got it. I read your **Upstream Coach** file and reworked the “keep it going” prompt so the agent *implements* Hunter v2 exactly in that mindset—delete/simplify, eliminate the whole failure class, add a proof-invariant, sweep siblings—before touching code.&#x20;
+
+Below is a **single, paste-ready prompt** (for your agent) followed by the **hard-code patch** it should write (updated `hunt.sh` + a stronger `hunters/runtime_ssr.sh`). This version bakes in the Box-Closet-Policy lens, runs the 5-minute Socratic JSON preflight, and enforces a policy that **fails CI** if `astro build` shows `NoAdapterInstalled` or if **dynamic JSON import/`assert { type: 'json' }`/`@vite-ignore`** patterns exist.&#x20;
+
+---
+
+# PROMPT — “Hunter v2 Implementer (Upstream Coach aligned)”
+
+**Role**
+You are a Root-Cause Engineer. Don’t pad the door—move the box, label the shelf, write the rule. Default to deletion/simplification; prefer class-eliminating changes; run an ablation thought-test; add a proof-invariant; sweep siblings. Block yourself if your self-score < 10/15.&#x20;
+
+**Prime class to eliminate now**
+`NoAdapterInstalled` occurring while static checks seemed clean → **runtime/adapter blindness** caused by **dynamic JSON imports (incl. import assertions) that flip Astro into SSR**. The change must make this entire failure mode impossible or loudly gated.
+
+---
+
+## Step 0 — Emit Socratic JSON (no prose)
+
+Before any code change, output **exactly** this JSON using repo facts:
+
+```json
+{
+  "box": "Build fails with NoAdapterInstalled while static checks pass",
+  "closet": "astro.config.* + build pipeline",
+  "ablation": "If all dynamic JSON imports are deleted/converted to static, what concretely breaks?",
+  "upstream_candidates": [
+    "Eliminate dynamic JSON import/assertion patterns; use static imports or prebuild data",
+    "If SSR is truly required, install correct adapter and codify policy"
+  ],
+  "chosen_change": {
+    "description": "Close the class by forbidding dynamic JSON imports and proving adapter state via build probe",
+    "deletions": ["all dynamic JSON import patterns; stray vite-ignore"],
+    "single_source_of_truth": "astro.config.* + static data modules"
+  },
+  "policy_invariant": "STRICT=1 hunt exits non-zero if NoAdapterInstalled or dynamic JSON/assert patterns exist",
+  "sibling_sweep": {"pattern": "import\\s*\\([^)]*\\.json|assert\\s*:\\s*\\{\\s*type\\s*:\\s*['\\\"]json", "hits": [], "actions": []},
+  "evidence_window": "last_30_days",
+  "rollback_plan": "revert commit; restore dynamic imports behind allowlist only with adapter policy"
+}
+```
+
+(After implementation, append `"proof"` with pre-fail/post-pass and complexity delta.)&#x20;
+
+---
+
+## Step 1 — Write/overwrite the files below (idempotent)
+
+> Keep scripts executable. Use strict bash + deterministic sorts (`LC_ALL=C`). No global ignores or “temporary” hacks.&#x20;
+
+### A) `hunt.sh` — Orchestrator with proof-invariant
+
+```bash
+#!/usr/bin/env bash
+# Hunter v2 Orchestrator — Upstream Coach aligned
+set -euo pipefail
+export LC_ALL=C
+
+OUT_DIR="__reports/hunt"
+mkdir -p "$OUT_DIR"
+
+# Basic TTY color handling
+if [[ -t 1 && "${FORCE_COLOR:-}" != "0" ]]; then RED=$'\e[31m'; YEL=$'\e[33m'; GRN=$'\e[32m'; BLU=$'\e[34m'; NC=$'\e[0m'; else RED=""; YEL=""; GRN=""; BLU=""; NC=""; fi
+
+STRICT="${STRICT:-0}"   # STRICT=1 to fail on red classes
+echo "🧭 Hunter v2 — Strict=${STRICT}"
+
+run() {
+  local s="$1"
+  echo "${BLU}▶ ${s}${NC}"
+  if bash "$s"; then
+    echo "${GRN}✔ ${s}${NC}"
+  else
+    echo "${YEL}⚠ ${s} reported issues${NC}"
+  fi
+}
+
+# 1) Runtime/SSR class guard (closes NoAdapterInstalled class)
+run "hunters/runtime_ssr.sh"
+
+# (Hooks for future detectors — keep minimal to avoid tool sprawl)
+# run "hunters/performance.sh"   || true
+# run "hunters/security.sh"      || true
+# run "hunters/a11y.sh"          || true
+# run "hunters/code_quality.sh"  || true
+
+# Aggregate simple roll-up without jq
+node -e '
+  const fs=require("fs");
+  const out="__reports/hunt/summary.json";
+  const entries = fs.readdirSync("__reports/hunt").filter(f=>f.endsWith(".json") && f!=="summary.json");
+  const reports = entries.map(f=>({name:f, data:JSON.parse(fs.readFileSync(`__reports/hunt/${f}`,"utf8"))}));
+  const counts = {};
+  for (const r of reports) if (r.data && r.data.counts) for (const [k,v] of Object.entries(r.data.counts)) counts[k]=(counts[k]||0)+v;
+  fs.writeFileSync(out, JSON.stringify({schemaVersion:1, generatedAt:new Date().toISOString(), counts, reports}, null, 2));
+' || true
+
+# Human summary
+node -e 'const j=require("./__reports/hunt/summary.json"); const c=j.counts||{}; console.log("\n=== Hunter Summary ==="); for (const k of Object.keys(c)) console.log(`${k}: ${c[k]}`);' || true
+
+# Proof-invariant (policy): in STRICT mode, fail on adapter/dynamic-import class
+EXIT=0
+if [[ "$STRICT" == "1" ]]; then
+  node -e '
+    const fs=require("fs");
+    const j=JSON.parse(fs.readFileSync("__reports/hunt/runtime_ssr.json","utf8"));
+    const c=j.counts||{};
+    const red = (c.noAdapter||0) > 0 || (c.dynamicJsonImports||0) > 0;
+    process.exit(red?1:0);
+  ' || EXIT=1
+fi
+
+exit "$EXIT"
+```
+
+### B) `hunters/runtime_ssr.sh` — Build probe + pattern ban (class eliminator)
+
+```bash
+#!/usr/bin/env bash
+# Close the NoAdapterInstalled class by proving adapter state and banning dynamic JSON import patterns.
+set -euo pipefail
+OUT="__reports/hunt/runtime_ssr.json"
+mkdir -p "$(dirname "$OUT")"
+
+RG_EXCL=(--hidden -g '!node_modules/**' -g '!dist/**' -g '!build/**' -g '!__reports/**')
+
+# Detect Astro output mode
+CONFIG=$(rg -n "output:\\s*['\"](static|server)['\"]" astro.config.* 2>/dev/null || true)
+MODE=$(printf "%s" "$CONFIG" | sed -n 's/.*output:\s*["'\'']\([^"'\'' ]*\).*/\1/p' | head -n1)
+[[ -z "${MODE:-}" ]] && MODE="unknown"
+
+# Find SSR-flipping dynamic JSON import patterns
+DYN_JSON=$(rg -n --pcre2 'import\\s*\\([^)]*\\.json[^)]*\\)' src 2>/dev/null || true)
+ASSERT_JSON=$(rg -n --pcre2 'assert\\s*:\\s*\\{\\s*type\\s*:\\s*[\"\\\']json[\"\\\']\\s*\\}' src 2>/dev/null || true)
+VITE_IGNORE=$(rg -n '@vite-ignore' src 2>/dev/null || true)
+dynamicCount=$( (printf "%s\n%s\n%s\n" "$DYN_JSON" "$ASSERT_JSON" "$VITE_IGNORE" | grep -c .) || true)
+
+# Probe build (non-fatal; capture log)
+BUILD_LOG="__reports/hunt/astro-build.log"
+( npx --no-install astro build --verbose || true ) > "$BUILD_LOG" 2>&1 || true
+NO_ADAPTER=$(grep -c "NoAdapterInstalled" "$BUILD_LOG" || true)
+
+# prerender=false (explicit SSR)
+PRERENDER_FALSE=$(rg -n "export\\s+const\\s+prerender\\s*=\\s*false" src 2>/dev/null || true)
+
+# Write machine artifact
+node -e '
+  const fs=require("fs");
+  const out=process.env.OUT;
+  const payload={
+    schemaVersion:1,
+    subject:"runtime_ssr",
+    outputMode: "'$MODE'",
+    counts:{
+      noAdapter: '"$NO_ADAPTER"',
+      dynamicJsonImports: '"$dynamicCount"',
+      prerenderFalse: "'"$(printf "%s" "$PRERENDER_FALSE" | grep -c . || true)"'"
+    },
+    notes:{
+      config:`'"$CONFIG"'`,
+      dynJson:`'"$DYN_JSON"'`,
+      assertJson:`'"$ASSERT_JSON"'`,
+      viteIgnore:`'"$VITE_IGNORE"'`
+    }
+  };
+  fs.writeFileSync(out, JSON.stringify(payload, null, 2));
+' OUT="$OUT"
+
+# Human hints (non-blocking here; policy enforced by hunt.sh STRICT path)
+if [[ "$NO_ADAPTER" -gt 0 ]]; then echo "❌ NoAdapterInstalled observed; choose SSG refactor or install correct adapter."; fi
+if [[ "$dynamicCount" -gt 0 ]]; then echo "⚠ Dynamic JSON/assert/vite-ignore patterns found; prefer static imports or a prebuild step."; fi
+```
+
+---
+
+## Step 2 — Prove the invariant (run)
+
+```bash
+# Strict policy should FAIL while dynamic patterns or NoAdapter remain:
+STRICT=1 bash hunt.sh || true
+cat __reports/hunt/summary.json
+```
+
+**Green path:** After you convert dynamic JSON loads to **static imports (or a tiny prebuild that writes `src/data/*.json` for static import)**, rerun `STRICT=1 bash hunt.sh` and it should pass. If SSR is truly required, **install the correct adapter** and record the decision in the run summary; the invariant keeps you honest either way.&#x20;
+
+---
+
+## Step 3 — Self-score before merging (block if < 10/15)
+
+Evaluate **Class Elimination, Complexity Delta, Ablation Rigor, Invariant Strength, Sibling Coverage**. If <10, revisit: delete more, consolidate truths, strengthen the invariant, sweep siblings.&#x20;
+
+---
+
+### Why this re-answer is different
+
+It doesn’t just “add checks.” It **codifies your coach’s contract** (Box-Closet-Policy + Socratic JSON preflight + proof-invariant + sibling sweep), and the code changes are the smallest possible to **eliminate the class** that produced `NoAdapterInstalled`, not just treat the instance.&#x20;

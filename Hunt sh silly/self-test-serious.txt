@@ -1,0 +1,133 @@
+Yes—100% doable with your current setup (bash + ripgrep + node). Here’s the exact, low-ceremony path to make it work end-to-end.&#x20;
+
+## What “this” consists of (feasible today)
+
+1. **Self-test canary** inside `rg-hunt.sh` that plants a few *known-bad* filenames, proves your detectors fire, then cleans up.
+2. **Static hunt** (your existing ripgrep checks) — unchanged.
+3. **Runtime FS tap** (a tiny Node preloader) that logs real `fs.readFile*`/`fs.readdir*` calls that would have blown up (dirs, globs, trailing slashes).
+4. **Fix-It brief** — a small Node script that turns the hunt/tap outputs into actionable patch notes (`__reports/patches/*`).
+5. **Policy gate** — fail only on the dangerous classes (runtime FS violations, JSON parse errors). Everything else can warn.
+
+## Paste-ready bits (minimal versions)
+
+### A) Add a self-test canary to `rg-hunt.sh`
+
+```bash
+self_test_canary() {
+  hdr "Self-Test Canary"
+  local C="__tmp/rg-canary.$$"
+  mkdir -p "$C/sub(dir)"
+  touch "$C/file with spaces.js" "$C/hash#name.ts" "$C/weird–dash.md" "$C/sub(dir)/readme.md"
+  local found
+  found=$(find "$C" -name "*#*" -o -name "*–*" -o -name "* *" -o -name "*(*" 2>/dev/null)
+  if [[ -n "$found" ]]; then ok "Detectors caught canary filenames"
+  else bad "Detectors FAILED to catch canary filenames"; ISSUES=$((ISSUES+1)); fi
+  rm -rf "$C"
+}
+# call it near the top, before your normal checks:
+self_test_canary
+```
+
+### B) Create `scripts/dev/fs-tap.mjs` (runtime evidence)
+
+```js
+#!/usr/bin/env node
+import fs from "fs"; import path from "path";
+const DIR="__reports"; const LOG=path.join(DIR,"fs-tap.jsonl");
+if (!fs.existsSync(DIR)) fs.mkdirSync(DIR);
+const suspicious=p=> typeof p==="string" && (p.endsWith("/") || /\*|\?|\[.+\]/.test(p) ||
+  (()=>{try{return fs.existsSync(p)&&fs.statSync(p).isDirectory()}catch{return false}})());
+const wr=(ev,p)=>fs.appendFileSync(LOG, JSON.stringify({ts:Date.now(),ev,p})+"\n");
+const wrap1=(fn,ev)=>(p,...r)=>{ if(suspicious(p)) wr(ev,p); return fn(p,...r); };
+const wrap2=(fn,ev)=>(p,o,c)=>{ if(suspicious(p)) wr(ev,p); return fn(p,o,c); };
+fs.readFile     = wrap2(fs.readFile,     "readFile");
+fs.readFileSync = wrap1(fs.readFileSync, "readFileSync");
+fs.readdir      = wrap2(fs.readdir,      "readdir");
+fs.readdirSync  = wrap1(fs.readdirSync,  "readdirSync");
+```
+
+**How to use the tap (when you want runtime proof):**
+
+```bash
+# tap a specific script or your tests
+node -r ./scripts/dev/fs-tap.mjs scripts/some-task.mjs
+# or
+node -r ./scripts/dev/fs-tap.mjs node_modules/.bin/vitest run
+```
+
+### C) Summarize the tap in `rg-hunt.sh`
+
+```bash
+hdr "Runtime Tap Summary"
+if [ -f "__reports/fs-tap.jsonl" ]; then
+  hits=$(wc -l < __reports/fs-tap.jsonl | tr -d ' ')
+  if [ "$hits" -gt 0 ]; then bad "Suspicious fs calls detected ($hits). See __reports/fs-tap.jsonl"; ISSUES=$((ISSUES+1))
+  else ok "No suspicious runtime fs calls recorded"; fi
+else
+  warn "No fs-tap log found (run code with: node -r ./scripts/dev/fs-tap.mjs ...)"
+fi
+```
+
+### D) Optional: Fix-It brief generator `scripts/dev/hunt_fixit.mjs`
+
+```js
+#!/usr/bin/env node
+import fs from "fs"; import path from "path";
+const R="__reports", P=path.join(R,"patches"); if(!fs.existsSync(R))fs.mkdirSync(R); if(!fs.existsSync(P))fs.mkdirSync(P);
+const logs=fs.readdirSync(R).filter(f=>/^rg-hunt\.\d{8}-\d{6}\.log$/.test(f)).sort(); const LOG=logs.length?path.join(R,logs.pop()):null;
+let md = `# Hunt Fix-It Brief (${new Date().toISOString()})\n`;
+if (LOG) {
+  const s=fs.readFileSync(LOG,"utf8");
+  if (/require\(/.test(s)&&/\.mjs/.test(s)) md+=`- \`.mjs\` uses \`require()\`: convert to \`import\` or rename to \`.cjs\`.\n`;
+  if (/module\.exports/.test(s)&&/\.mjs/.test(s)) md+=`- \`.mjs\` uses \`module.exports\`: use \`export default\`/named exports.\n`;
+  if (/export\s/.test(s)&&/\.cjs/.test(s)) md+=`- \`.cjs\` uses \`export\`: switch to \`.mjs\` or \`module.exports\`.\n`;
+  if (/readFile.*\*/.test(s) || /readFile.*\/\)/.test(s)) {
+    md+=`- \`readFile*\` with dir/glob: use \`readdir*\`/globbing then per-file read.\n`;
+    fs.writeFileSync(path.join(P,"readfile-glob-notes.patch"), "# see brief\n");
+  }
+  if (/JSON_ERROR/.test(s)) md+=`- JSON parse errors: remove comments/trailing commas; JSONC only where allowed.\n`;
+}
+if (fs.existsSync(path.join(R,"fs-tap.jsonl"))) {
+  const n = fs.readFileSync(path.join(R,"fs-tap.jsonl"),"utf8").trim().split(/\r?\n/).filter(Boolean).length;
+  if (n>0) md+=`- Runtime suspicious fs calls: ${n}. Review \`__reports/fs-tap.jsonl\` and refactor.\n`;
+}
+fs.writeFileSync(path.join(R,"hunt-fixit.md"), md+"\n"); console.log("Wrote __reports/hunt-fixit.md (+ patches/)");
+```
+
+### E) Tighten the policy gate (only fail on the dangerous stuff)
+
+Add to the end of `rg-hunt.sh`:
+
+```bash
+# Already incrementing ISSUES for JSON/tap/etc.; this keeps the red light honest.
+if [ "$ISSUES" -gt 0 ]; then exit 1; else exit 0; fi
+```
+
+## Runbook (no surprises)
+
+```bash
+# Static hunt (as you run today)
+bash scripts/dev/rg-hunt.sh
+
+# With runtime evidence (when running tests or a task)
+node -r ./scripts/dev/fs-tap.mjs node_modules/.bin/vitest run
+bash scripts/dev/rg-hunt.sh   # will summarize the tap and fail if there were violations
+
+# Generate guidance
+node scripts/dev/hunt_fixit.mjs
+```
+
+## Platform notes
+
+* **Linux/macOS/GitHub Actions:** drop-in.
+* **Windows:** use Git Bash or WSL for the bash script; Node tap is cross-platform.
+* **No extra deps:** only `ripgrep` and Node (plus your existing `tsc` if you already use it).
+
+## What you’ll get after one pass
+
+* A **proved-alive** detector suite (canary).
+* Concrete **runtime evidence** of dangerous FS usage (or a clean bill).
+* A human-readable **Fix-It brief** and optional patch sketches.
+* A **clean gate** that only turns PRs red for real risk classes.
+
+Short answer: **Yes, it’s fully possible and safe to wire in right now** with the snippets above, and it stays additive—you can enable the runtime tap only when you want deeper evidence.&#x20;

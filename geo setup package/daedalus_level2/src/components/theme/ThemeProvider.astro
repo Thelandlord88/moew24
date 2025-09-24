@@ -1,0 +1,19 @@
+---
+// src/components/theme/ThemeProvider.astro
+import type { ThemeTokens } from '../../lib/theme/tokens';
+
+const { theme } = Astro.props as { theme: ThemeTokens };
+const vars = new Map(Object.entries({
+  '--brand-primary': theme.brand.primary,
+  '--brand-onPrimary': theme.brand.onPrimary,
+  '--surface-base': theme.surface.base,
+  '--surface-raised': theme.surface.raised,
+  '--surface-on': theme.surface.on,
+  '--surface-border': theme.surface.border,
+  '--accent-a': theme.accent.a,
+  '--accent-b': theme.accent.b,
+}));
+---
+<div style={Array.from(vars.entries()).map(([k,v]) => `${k}:${v}`).join(';')} class="min-h-full">
+  <slot />
+</div>

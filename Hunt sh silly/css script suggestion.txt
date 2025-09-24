@@ -1,0 +1,365 @@
+Here’s a clear read on what your script does today, where it will bite, and how to turn it into a smarter, CI-grade auditor that understands Tailwind, Astro, and real-world class assembly.
+
+---
+
+# What this script does (today)
+
+1. **Collects custom CSS selectors**
+
+   * Reads `src/styles/input.css`.
+   * Uses a regex to extract `.class` selectors, normalizes escaped `\:` → `:`, drops obvious pseudos (e.g., `::after`), and filters junk (numbers, state tokens).
+   * Produces a `Set<string>` of **custom class names** considered “project-defined”.
+
+2. **Scans source files for classes**
+
+   * Walks `src/**` for `.astro`, `.html`, `.js/.mjs`, `.ts/.tsx/.jsx`.
+   * Uses a regex to find `class`/`className` attributes and splits on whitespace.
+   * Builds a `Set<string>` of **used tokens** (e.g., `md:hover:bg-brand-soft0`, `btn`, `text-sm`, etc.).
+
+3. **Classifies tokens**
+
+   * `looksTailwind(token)`: heuristic regex that recognizes many Tailwind utilities (with variants, negatives, arbitrary values in `[]`, etc.).
+   * `looksSemantic(token)`: recognizes a handful of project “semantic” prefixes like `btn`, `badge`, `text-brand`, etc.
+
+4. **Reports**
+
+   * **unusedCustom**: defined in CSS but nowhere used.
+   * **missingDefinitions**: “semantic-looking” tokens that aren’t defined in CSS.
+   * **suspiciousTokens**: tokens not Tailwind, not semantic, and not defined in CSS.
+   * Writes JSON to `__reports/css-usage-report.json` and a Markdown summary to `__reports/css-usage-report.md`, plus console snippets.
+
+**Strengths**
+
+* Fast, zero-dependency, and idempotent.
+* Good first-pass coverage of common Tailwind shapes and variant chains.
+* Emits both machine-readable (JSON) and human (MD) formats.
+
+---
+
+# Where it will miss (and why)
+
+1. **Regex-only extraction under-reads real usage**
+
+   * **Astro specifics:** `class:list={...}` object/array syntax, conditional expressions, spread props, and `set:html` fragments can embed classes your regex won’t see.
+   * **Template literals:** you skip tokens containing `${…}`, which loses static chunks in strings like `` `px-4 ${isHot ? 'bg-red-500' : 'bg-blue-500'}` ``—those *do* contain recoverable static tokens.
+   * **Utility helpers:** calls like `clsx()`, `classnames()`, `twJoin()/twMerge()`, `cva()`/`tv()` (class-variance-authority / tailwind-variants) hide class strings inside function args.
+
+2. **CSS extraction under-reads project definitions**
+
+   * Many projects split custom classes across multiple files and layers (e.g., `@layer components` in `*.css`), not just `src/styles/input.css`.
+   * PostCSS nesting, `@apply`, and mixins can confuse a regex selector grabber.
+
+3. **Tailwind awareness is partial**
+
+   * Tailwind *prefix* (`prefix: 'tw-'`), **custom variants** (`aria-selected:`, `data-[state=open]`, `rtl:`, `supports-[...]`), and **arbitrary values** (`bg-[rgb(0_0_0/.5)]`, `max-w-[calc(100%-2rem)]`) can slip past.
+   * Safelisted classes in `tailwind.config.{js,ts}` should not be flagged as “suspicious,” even if they’re not found in source.
+
+4. **No occurrences map**
+
+   * You output unique tokens, but not *where* they came from (file/line). That limits fix-time velocity.
+
+5. **No CI gating & diff**
+
+   * The report is informative but doesn’t fail builds when regressions appear, nor highlight *new* problems vs. previous runs.
+
+---
+
+# Make it smarter (concrete upgrades)
+
+## 1) Add an **AST pass** for JS/TS/JSX/Astro
+
+Use Babel to parse and recursively extract class tokens from:
+
+* `JSXAttribute` named `class` / `className`
+* `StringLiteral` / `TemplateLiteral` parts (string quasis)
+* `ArrayExpression`/`ObjectExpression` (Astro `class:list`)
+* `ConditionalExpression`, `LogicalExpression`
+* `CallExpression` for helpers: `clsx`, `classnames`, `twJoin`, `twMerge`, `cva`, `tv` (extract static strings within args)
+
+```js
+// install: @babel/parser @babel/traverse
+import { parse } from '@babel/parser';
+import traverse from '@babel/traverse';
+
+function extractStrings(node, out) {
+  // Collect strings from statically known constructs without executing code
+  if (!node) return;
+  switch (node.type) {
+    case 'StringLiteral':
+      out.add(node.value);
+      break;
+    case 'TemplateLiteral':
+      node.quasis.forEach(q => out.add(q.value.cooked ?? q.value.raw ?? ''));
+      // ignore expressions for safety; optionally mine Conditional or array literals below
+      break;
+    case 'ArrayExpression':
+      node.elements.forEach(el => extractStrings(el, out));
+      break;
+    case 'ObjectExpression':
+      // Astro class:list style: { 'px-4': true, btn: isPrimary }
+      node.properties.forEach(p => {
+        if (p.type === 'ObjectProperty') {
+          if (p.key.type === 'StringLiteral') out.add(p.key.value);
+          if (p.key.type === 'Identifier') out.add(p.key.name);
+        }
+      });
+      break;
+    case 'ConditionalExpression':
+      extractStrings(node.consequent, out);
+      extractStrings(node.alternate, out);
+      break;
+    case 'LogicalExpression':
+      extractStrings(node.left, out);
+      extractStrings(node.right, out);
+      break;
+    case 'CallExpression': {
+      const callee = node.callee.type === 'Identifier' ? node.callee.name : '';
+      if (['clsx','classnames','twJoin','twMerge','cva','tv','cx'].includes(callee)) {
+        node.arguments.forEach(arg => extractStrings(arg, out));
+      }
+      break;
+    }
+  }
+}
+
+function extractClassTokensFromJS(code) {
+  const ast = parse(code, {
+    sourceType: 'module',
+    plugins: ['jsx','typescript']
+  });
+  const tokens = new Set();
+  traverse(ast, {
+    JSXAttribute(path) {
+      const name = path.node.name.name;
+      if (name !== 'class' && name !== 'className') return;
+      const v = path.node.value;
+      if (!v) return;
+      if (v.type === 'StringLiteral') {
+        v.value.split(/\s+/).forEach(s => tokens.add(s));
+      } else if (v.type === 'JSXExpressionContainer') {
+        const scratch = new Set();
+        extractStrings(v.expression, scratch);
+        [...scratch].flatMap(s => s.split(/\s+/)).forEach(t => tokens.add(t));
+      }
+    }
+  });
+  return tokens;
+}
+```
+
+> Keep your existing regex extractor as a **fast mode**, and enable AST analysis under a `--deep` flag for accuracy in CI.
+
+## 2) Parse **Astro** files more accurately
+
+* Run the Astro compiler to TS/JS (if feasible), then feed to the same AST walker; or at minimum, add dedicated patterns for:
+
+  * `class:list={ { 'foo': cond, 'bar': true } }`
+  * `class={[cond && 'foo', 'bar'].filter(Boolean).join(' ')}`
+
+## 3) Extract custom selectors with **PostCSS + selector parser**
+
+Stop regexing CSS. Parse selectors robustly, honor nesting, and ignore pseudos correctly.
+
+```js
+// install: postcss postcss-selector-parser
+import postcss from 'postcss';
+import selectorParser from 'postcss-selector-parser';
+import fs from 'node:fs';
+
+async function extractCustomSelectorsFromCssFiles(paths) {
+  const classes = new Set();
+  const add = (name) => { if (name && !/^\d/.test(name)) classes.add(name); };
+  for (const p of paths) {
+    const css = fs.readFileSync(p,'utf8');
+    const root = postcss.parse(css);
+    root.walkRules(rule => {
+      selectorParser(selectors => {
+        selectors.walkClasses(c => add(c.value)); // `.foo` → "foo"
+      }).processSync(rule.selector);
+    });
+  }
+  return classes;
+}
+```
+
+Also:
+
+* Scan **all** CSS files: `src/**/*.css` (and optionally `*.pcss`/`*.scss` if you use them), not just `input.css`.
+* Optionally detect `@apply` to chase semantic classes that are *only referenced by other custom classes*.
+
+## 4) Become **Tailwind-aware**
+
+* Load `tailwind.config.{js,ts}` via `import()` and `resolveConfig` from `tailwindcss/resolveConfig`.
+* Respect:
+
+  * `prefix` (e.g., `tw-`)
+  * `safelist` (do not flag as suspicious)
+  * Common plugin variants: `group-*`, `peer-*`, `aria-*`, `data-*`, `supports-*`, `rtl/ltr`, `open/closed`, etc.
+* Improve `looksTailwind()`:
+
+  * Accept arbitrary values with nested brackets and slashes: `*-\\[.+\\]`, `bg-gradient-to-*`, `from-*/via-*/to-*`, `shadow-[...]`, `filter drop-shadow`, `outline-*`.
+  * Recognize `container`, `prose` families, and typography plugin scopes (`prose`, `not-prose`, `prose-headings`, etc.).
+  * Honor configured screens: `sm|md|lg|xl|2xl`, or any custom keys from `theme.screens`.
+
+> You don’t need to enumerate *all* generated utilities—just expand recognition so legitimate utilities aren’t mislabeled “suspicious”.
+
+## 5) Add **occurrence maps** (file + line)
+
+Index tokens to locations for faster cleanup.
+
+```js
+// { token: [{ file, line, column, context }] }
+const occurrences = new Map();
+function record(token, file, line, column, snippet) {
+  if (!occurrences.has(token)) occurrences.set(token, []);
+  occurrences.get(token).push({ file, line, column, context: snippet });
+}
+```
+
+In the AST pass, use `node.loc` to capture positions and include a short code frame in the Markdown (first 5–10 offenders).
+
+## 6) Project config & semantics
+
+Add `scripts/css-audit.config.json` to customize behavior per repo:
+
+```json
+{
+  "srcGlobs": ["src/**/*.{astro,html,js,mjs,ts,tsx,jsx}"],
+  "cssGlobs": ["src/**/*.css"],
+  "semanticPrefixes": ["btn", "badge", "label", "card", "nav", "pill", "chip", "link-brand", "text-brand", "bg-brand"],
+  "allowlist": ["third-party-widget-*", "grecaptcha-badge"],
+  "denylist": ["todo-", "tmp-"],
+  "helperFunctions": ["clsx","classnames","twJoin","twMerge","cva","tv","cx"],
+  "ciThresholds": { "suspicious": 0, "missingDefinitions": 0, "unusedCustom": 50 }
+}
+```
+
+* Treat **semanticPrefixes** as first-class: anything starting with them counts as “semantic usage” and must be defined somewhere in CSS (or an allowlist).
+* **Allowlist** known third-party tokens.
+* **Thresholds** let CI fail only when new debt breaches your budget.
+
+## 7) Better outputs (SARIF, JUnit, diff)
+
+* **SARIF**: surface suspicious/missing tokens in code scanning dashboards.
+* **JUnit XML**: simple pass/fail with counts for CI.
+* **Diff mode**: compare with `__reports/css-usage-report.json` from `main` to show *new* suspicious tokens introduced by the branch.
+
+## 8) Performance & hygiene
+
+* Use `fast-glob` for file discovery and ignore patterns (`!**/node_modules/**`, `!**/__reports/**`, etc.).
+* Parallelize reads via `fs.promises`.
+* Hash inputs (CSS files + source list) and include `inputHashes` and `schemaVersion` in the report for traceability.
+
+## 9) Self-test canary (prevents silent rot)
+
+Add a `--self-test` that:
+
+* Writes a tiny temp component using a known fake class (`.audit-canary`) and ensures it is detected as **missingDefinitions**.
+* Adds a fake rule `.audit-unused {}` to a temp CSS file and ensures it lands in **unusedCustom**.
+* Cleans up afterwards. This assures the auditor is “alive.”
+
+## 10) Optional: **Auto-fix helpers**
+
+* `--write-unused-csv`: dumps unused custom selectors + occurrence counts.
+* `--prune-unused [--dry-run]`: removes clearly-dead custom blocks from CSS (guarded by a min “age” or occurrences=0).
+* `--generate-safelist`: emits a suggested Tailwind `safelist` for tokens found only in dynamic contexts.
+
+---
+
+# Example: upgraded “deep mode” flow (high-level)
+
+```bash
+# fast scan
+node scripts/css-audit.mjs
+
+# deep scan with AST + Tailwind config awareness + SARIF
+node scripts/css-audit.mjs \
+  --deep \
+  --config scripts/css-audit.config.json \
+  --sarif __reports/css-usage-report.sarif \
+  --fail-on suspicious>0,missingDefinitions>0
+```
+
+---
+
+# Target report shape (richer, CI-friendly)
+
+```json
+{
+  "schemaVersion": 2,
+  "timestamp": "2025-09-17T07:45:10.123Z",
+  "input": {
+    "cssFiles": ["src/styles/input.css", "src/styles/components/buttons.css"],
+    "srcFiles": 412,
+    "tailwind": { "prefix": "", "screens": ["sm","md","lg","xl","2xl"], "safelistCount": 8 },
+    "hash": "sha256-…"
+  },
+  "counts": {
+    "customDefined": 96,
+    "tokensUsed": 1342,
+    "unusedCustom": 18,
+    "missingDefinitions": 2,
+    "suspiciousTokens": 5
+  },
+  "unusedCustom": [
+    { "class": "label-ghost", "occurrences": 0, "definedIn": ["src/styles/components/forms.css:12"] }
+  ],
+  "missingDefinitions": [
+    { "token": "btn-secondary", "samples": [{ "file": "src/components/Hero.tsx", "line": 22 }] }
+  ],
+  "suspiciousTokens": [
+    { "token": "text_priamry", "samples": [{ "file": "src/pages/index.astro", "line": 19, "context": "class=\"text_priamry px-4\"" }] }
+  ],
+  "diff": { "newSuspicious": 3, "resolvedSuspicious": 7 }
+}
+```
+
+---
+
+# Small but high-leverage code tweaks (if you keep regex mode)
+
+* **Improve the attribute regex** to catch multiline attributes and JSX expressions:
+
+  ```js
+  // before: /(class(?:Name)?(?:[:=]))\s*['"`]{1}([^'"`]+)['"`]/g
+  // after:
+  const attrRegex = /\bclass(?:Name)?\s*=\s*(?:"([^"]+)"|'([^']+)'|`([^`]+)`)/gms;
+  ```
+
+  Then pick the non-undefined capture group.
+
+* **Token clean-up**: allow `[]` and `/` inside utilities; do not strip `-` or `:`; keep bracket contents:
+
+  ```js
+  const clean = tok.replace(/[^\w:!\-\[\]\/.%()#]/g, '');
+  ```
+
+* **Variants**: when splitting `a:b:c:utility`, preserve the *full* token for reporting, but classify on the tail segment.
+
+* **Tailwind arbitrary values**: treat any `*-\\[.*\\]` suffix as Tailwind-valid (after variant split).
+
+* **Recognize more built-ins**: `prose(-.*)?`, `container`, `sr-only`, `not-sr-only`, `isolate`, `isolation-*`, `will-change-*`, `place-*`.
+
+---
+
+# Rollout plan
+
+1. **Add config file** and globs → immediate flexibility.
+2. **Occurrences map** + richer MD/JSON output → faster fixes this week.
+3. **AST pass (deep mode)** for JSX/TSX/Astro + helper calls → drastically fewer false negatives.
+4. **PostCSS selector parse** for all CSS files → accurate custom class universe.
+5. **Tailwind awareness** (prefix, safelist, common variants) → fewer false positives.
+6. **CI thresholds + SARIF** → actionable in PRs.
+7. **Self-test canary** → keeps the auditor honest over time.
+8. **Optional auto-fix/safelist generator** → faster cleanup sprints.
+
+---
+
+## Net effect
+
+With these upgrades, your auditor stops being a regex linter and becomes a **project-aware CSS intelligence**:
+
+* Understands how your components actually assemble classes.
+* Respects Tailwind config and Astro quirks.
+* Gives precise, file-level evidence (and diffs) your team can act on.
+* Scales to CI reliably with thresholds and self-tests.

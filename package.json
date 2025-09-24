@@ -49,6 +49,7 @@
     "@astrojs/netlify": "^6.5.10",
     "@babel/parser": "^7.28.4",
     "@babel/traverse": "^7.28.4",
+    "@biomejs/biome": "^2.2.4",
     "@playwright/test": "^1.55.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^20.14.0",

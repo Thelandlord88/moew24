@@ -1,0 +1,273 @@
+Great question. Think of `.github/copilot-instructions.md` as the **compiled playbook** your next agent reads every time—so the trick is to **generate it** from your current session’s “learning artifacts” (notes, rules, fixes you discovered), rather than hoping a long chat carries over.
+
+Here’s a clean, repo-friendly way to do it today:
+
+# The pattern: “Compile” your instructions from parts
+
+**Inputs (you edit/append):**
+
+* `prompts/base.persona.md` — your timeless doctrine (Upstream Thinking, think-before-acting, fail-closed, evidence tables, PR hygiene, AU English, etc.)
+* `prompts/guardrails.md` — never/always rules (don’t invent suburbs; SoT files; JSON-LD; performance budgets; CI gates).
+* `prompts/playbooks/*.md` — repeatable workflows (e.g., “Geo Doctor & Gate,” “Fix-It Brief generator,” “Readiness Review”).
+* `prompts/lessons/YYYY-MM-DD.lessons.md` — a small file you (or the agent) write after each big session: “what we changed, why, new rules, anti-patterns.”
+
+**Output (auto-generated):**
+
+* `.github/copilot-instructions.md` — deterministic, de-duplicated, length-capped, and marked with BEGIN/END so it’s safe to regenerate.
+
+---
+
+# Drop-in builder script (Node, no deps)
+
+Save as: `scripts/build_copilot_instructions.mjs`
+
+````js
+#!/usr/bin/env node
+/**
+ * Build .github/copilot-instructions.md from prompt fragments.
+ * - Deterministic: stable ordering via optional front-matter "weight:"
+ * - Idempotent: replaces content between markers only
+ * - Dedupe: collapses repeated bullets/lines
+ * - Budget: trims to a max char length without cutting sections mid-way
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+const ROOT = process.cwd();
+const SRC_DIRS = [
+  'prompts/base.persona.md',
+  'prompts/guardrails.md',
+  'prompts/repo-facts.md',                   // optional
+  ...glob('prompts/playbooks', '.md'),
+  ...glob('prompts/lessons', '.md'),
+];
+
+const OUT_PATH = path.join(ROOT, '.github/copilot-instructions.md');
+const MARK_START = '<!-- BEGIN: GENERATED-COPILOT-INSTRUCTIONS -->';
+const MARK_END   = '<!-- END: GENERATED-COPILOT-INSTRUCTIONS -->';
+const MAX_CHARS = 12000; // keep under typical attachment limits
+
+function glob(dir, ext) {
+  const abs = path.join(ROOT, dir);
+  if (!fs.existsSync(abs)) return [];
+  const out = [];
+  const walk = (d) => {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (p.endsWith(ext)) out.push(path.relative(ROOT, p));
+    }
+  };
+  walk(abs);
+  return out.sort();
+}
+
+function parseFrontMatter(txt) {
+  // very small front-matter: ---\nkey: value\n--- (optional)
+  if (!txt.startsWith('---\n')) return [{}, txt];
+  const end = txt.indexOf('\n---', 4);
+  if (end === -1) return [{}, txt];
+  const fmRaw = txt.slice(4, end).trim();
+  const body = txt.slice(end + 4).replace(/^\s*\n/, '');
+  const fm = {};
+  for (const line of fmRaw.split('\n')) {
+    const m = line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
+    if (m) fm[m[1]] = m[2];
+  }
+  return [fm, body];
+}
+
+function readParts() {
+  const parts = [];
+  for (const rel of SRC_DIRS) {
+    const p = path.join(ROOT, rel);
+    if (!fs.existsSync(p)) continue;
+    const raw = fs.readFileSync(p, 'utf8');
+    const [fm, body] = parseFrontMatter(raw);
+    const weight = Number(fm.weight ?? 100);
+    const title = fm.title ?? rel;
+    parts.push({ rel, weight, title, body: body.trim() });
+  }
+  // stable sort by weight then path
+  parts.sort((a, b) => (a.weight - b.weight) || a.rel.localeCompare(b.rel));
+  return parts;
+}
+
+function dedupeLines(text) {
+  const seen = new Set();
+  const out = [];
+  for (const line of text.split('\n')) {
+    const norm = line.replace(/\s+/g, ' ').trim().toLowerCase();
+    if (!norm) { out.push(line); continue; } // keep blank lines
+    // only dedupe “content-ish” lines; keep headings and fenced blocks intact
+    const isHeading = /^#{1,6}\s/.test(line);
+    const isFence = /^```/.test(line);
+    if (isHeading || isFence) { out.push(line); continue; }
+    if (seen.has(norm)) continue;
+    seen.add(norm);
+    out.push(line);
+  }
+  return out.join('\n').replace(/\n{3,}/g, '\n\n');
+}
+
+function capLength(text, max) {
+  if (text.length <= max) return text;
+  // Trim at section boundaries (## or #). Keep header and as many sections as fit.
+  const sections = text.split(/\n(?=##\s|#\s)/g);
+  let acc = '';
+  for (const s of sections) {
+    if ((acc + '\n' + s).length > max) break;
+    acc += (acc ? '\n' : '') + s;
+  }
+  return acc.trim() + '\n\n> Note: trimmed for length; see `prompts/` for full content.';
+}
+
+function build() {
+  const parts = readParts();
+
+  const header = `# Copilot Instructions (Repo-wide)
+_This file is generated. Edit sources in \`/prompts\`, then re-run \`npm run build:copilot\`._
+`;
+
+  const joined = parts.map(p => {
+    const nice = p.title ? `\n## ${p.title}\n` : '\n';
+    return `${nice}${p.body.trim()}\n`;
+  }).join('\n');
+
+  const body = dedupeLines(header + '\n' + joined);
+  const final = capLength(body, MAX_CHARS);
+
+  // insert into OUT_PATH between markers (create file if missing)
+  let existing = fs.existsSync(OUT_PATH) ? fs.readFileSync(OUT_PATH, 'utf8') : '';
+  if (!existing.includes(MARK_START) || !existing.includes(MARK_END)) {
+    existing = `${MARK_START}\n${final}\n${MARK_END}\n`;
+  } else {
+    const re = new RegExp(`${MARK_START}[\\s\\S]*?${MARK_END}`);
+    existing = existing.replace(re, `${MARK_START}\n${final}\n${MARK_END}`);
+  }
+  fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
+  fs.writeFileSync(OUT_PATH, existing, 'utf8');
+  console.log(`Wrote ${OUT_PATH}`);
+}
+
+build();
+````
+
+**package.json scripts**
+
+```json
+{
+  "scripts": {
+    "build:copilot": "node scripts/build_copilot_instructions.mjs"
+  }
+}
+```
+
+---
+
+# Minimal source files to start with
+
+`prompts/base.persona.md`
+
+```md
+---
+title: Persona & Doctrine
+weight: 10
+---
+- Practice **Upstream Thinking**: remove failure classes; prefer “move box / label shelf / write rule”.
+- **Think before acting**: outline plan, risks, guardrails, rollback, tests.
+- **Fail-closed on uncertainty**; ask for the SoT or emit a Fix-It brief.
+- Output style: concise; AU English; show diffs/patches for code edits.
+```
+
+`prompts/guardrails.md`
+
+```md
+---
+title: Guardrails (Never/Always)
+weight: 20
+---
+**Always**
+- Treat `src/data/**` and `__reports/**` as SoT; keep builds deterministic.
+- Provide evidence tables and runnable steps; wire CI gates when possible.
+
+**Never**
+- Invent suburbs or coordinates; don’t bypass gates to “get it green”.
+- Introduce non-determinism (unordered maps, unstable JSON) into artifacts.
+```
+
+`prompts/playbooks/upstream-playbook.md`
+
+```md
+---
+title: Playbook — Upstream Fix-It
+weight: 40
+---
+1) Identify symptom → collect evidence (paths, logs, diffs).
+2) Ask “what class of problems creates this?”; propose 3 options to remove the class.
+3) Choose lowest-blast-radius upstream change; add guardrail/test.
+4) Write brief: Before → After, Risks, Rollback, Test plan, Owner.
+```
+
+`prompts/lessons/2025-09-17.lessons.md` (you append one of these per “big session”)
+
+```md
+---
+title: Lessons — 2025-09-17
+weight: 90
+---
+**New rules:** Prefer `gate` reading `__reports/geo-doctor.json` as SoT; add `.max(1)` for `cross_cluster_ratio`.
+**Anti-patterns spotted:** Grep-only hunts; silent drift without canary; non-sorted adjacency outputs.
+**Decisions:** Keep `module=ESNext` + `moduleResolution=Bundler` for Astro; don’t switch to NodeNext without cause.
+```
+
+*(Optional)* `prompts/repo-facts.md` can list stable facts (frameworks, Node version, important paths) so Copilot doesn’t “guess”.
+
+---
+
+# How to use it (your workflow)
+
+1. **At the end of a heavy chat**: write a tiny `prompts/lessons/YYYY-MM-DD.lessons.md` capturing the new rules/decisions.
+2. Run: `npm run build:copilot`
+   → This regenerates `.github/copilot-instructions.md` between the markers.
+3. Commit + push. Every **new chat** in VS Code/Codespaces now starts with the updated playbook.
+
+---
+
+# (Optional) “Autobuild on change” GitHub Action
+
+`.github/workflows/copilot-instructions.yml`
+
+```yaml
+name: Build Copilot Instructions
+on:
+  push:
+    paths:
+      - 'prompts/**'
+      - 'scripts/build_copilot_instructions.mjs'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: node scripts/build_copilot_instructions.mjs
+      - run: |
+          if git status --porcelain | grep -q copilot-instructions.md; then
+            git config user.name "bot"
+            git config user.email "bot@users.noreply.github.com"
+            git add .github/copilot-instructions.md
+            git commit -m "chore: rebuild copilot instructions"
+            git push
+          fi
+```
+
+---
+
+## TL;DR
+
+* Your current agent doesn’t “learn” into the model; it **produces knowledge** during the session.
+* Capture that knowledge in small `prompts/lessons/*.md` files.
+* **Compile** them (plus your base persona/guardrails/playbooks) into `.github/copilot-instructions.md` with the script above.
+* Now every **new** agent/chat starts with the same brain + the latest lessons—predictable and portable.

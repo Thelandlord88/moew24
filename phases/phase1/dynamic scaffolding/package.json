@@ -1,0 +1,37 @@
+{
+  "name": "onedone-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "test:e2e": "playwright test",
+    "test:smoke": "playwright test --project=smoke",
+    "prebuild": "node scripts/geo/prebuild-gate.mjs",
+    "doctor:geo": "node scripts/geo/doctor.mjs",
+    "verify:geo": "npm run prebuild && npm run doctor:geo",
+    "smoke:geo": "node scripts/geo/smoke.mjs",
+    "bootstrap:geo": "bash scripts/geo/bootstrap_max.sh",
+    "links:generate": "node scripts/geo/internal-linking.mjs",
+    "sitemap:generate": "node scripts/geo/enhanced-sitemap.mjs",
+    "perf:monitor": "node scripts/geo/performance-monitor.mjs",
+    "phase3:full": "npm run links:generate && npm run sitemap:generate && npm run perf:monitor"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@tailwindcss/postcss": "^4.1.13",
+    "astro": "^5.13.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "eslint": "^9.10.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.3.3",
+    "typescript": "^5.9.2"
+  }
+}

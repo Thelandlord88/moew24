@@ -1,0 +1,237 @@
+Perfect—time to arm your hunt with the missing runtime probe. Below is a **drop-in preloader** that your `rg-hunt.sh` already knows how to summarize. Save it, run tests or your app *with the preloader enabled*, and your hunt will promote any suspicious reads into a red/yellow/green signal.&#x20;
+
+# 1) Runtime FS tap (preloader)
+
+Create `scripts/dev/fs-tap.cjs` (CommonJS so it works with `node -r`):
+
+```js
+// scripts/dev/fs-tap.cjs
+// Runtime FS tap: logs suspicious fs.* calls to __reports/fs-tap.jsonl
+// Use with: node -r ./scripts/dev/fs-tap.cjs <your command>
+
+// ----- config (env-tunable) -----
+const REPORT = process.env.FS_TAP_OUT || "__reports/fs-tap.jsonl";
+const ALLOW  = (process.env.FS_TAP_ALLOW || "")
+  .split(",")
+  .map(s => s.trim())
+  .filter(Boolean)
+  .map(s => new RegExp(s));
+const THROTTLE_MS = Number(process.env.FS_TAP_THROTTLE_MS || 30000); // de-dupe by event key
+const MAX_LINES   = Number(process.env.FS_TAP_MAX || 20000);         // safety cap
+
+// “Suspicious” heuristics:
+//  - path ends with "/" (likely directory passed to readFile*)
+//  - path contains wildcards (*, ?, [, ])
+//  - path resolves to an existing directory
+//  - non-string path given to readFile* (ignore Buffers/URL for now—only warn on strings)
+const isWildcard = (p) => /[*?\[\]]/.test(p);
+const endsSlash  = (p) => /\/$/.test(p);
+
+const fs = require("fs");
+const path = require("path");
+
+// Ensure report directory exists
+try {
+  const dir = path.dirname(REPORT);
+  if (dir && dir !== ".") fs.mkdirSync(dir, { recursive: true });
+} catch {}
+
+let linesWritten = 0;
+const seen = new Map(); // key -> ts (for throttling)
+
+// minimal, fast logger
+function log(ev, p, verdict, detail, stack) {
+  if (linesWritten >= MAX_LINES) return;
+  const key = `${ev}|${p}|${verdict}|${detail ? detail.code || detail : ""}|${(stack && stack[0]) || ""}`;
+  const now = Date.now();
+  const last = seen.get(key) || 0;
+  if (now - last < THROTTLE_MS) return;
+  seen.set(key, now);
+
+  const row = {
+    ts: new Date(now).toISOString(),
+    pid: process.pid,
+    ev, p, verdict, detail,
+    cwd: process.cwd(),
+    callsite: topFrame(stack),
+  };
+  try {
+    fs.appendFileSync(REPORT, JSON.stringify(row) + "\n");
+    linesWritten++;
+  } catch {}
+}
+
+function topFrame(stack) {
+  if (!stack) return null;
+  // best-effort: first frame outside Node internals and this file
+  for (const s of stack) {
+    const f = String(s);
+    if (f.includes("internal/") || f.includes("node:")) continue;
+    if (f.includes("fs-tap.cjs")) continue;
+    return f.replace(process.cwd() + path.sep, "");
+  }
+  return stack[0] ? String(stack[0]) : null;
+}
+
+function verdictFor(ev, p) {
+  try {
+    if (typeof p !== "string") return null; // ignore non-strings; too noisy
+    if (ALLOW.some(rx => rx.test(p))) return { v: "allow", reason: "allowlist" };
+    if (endsSlash(p)) return { v: "suspect", reason: "ends-with-slash" };
+    if (isWildcard(p)) return { v: "suspect", reason: "wildcard-in-path" };
+    try {
+      const st = fs.statSync(p);
+      if (st && st.isDirectory()) return { v: "suspect", reason: "is-directory" };
+    } catch {/* stat may throw if not exists */}
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function captureStack() {
+  const e = {};
+  Error.captureStackTrace(e, captureStack);
+  return (e.stack || "").split("\n").slice(1);
+}
+
+// ---------- wrap targets ----------
+// We instrument the “read a single file” primitives and directory readers.
+const wrapRead = (name) => {
+  const orig = fs[name];
+  fs[name] = function (p, ...rest) {
+    const v = verdictFor(name, p);
+    if (v && v.v !== "allow") log(name, p, v.v, { code: v.reason }, captureStack());
+    // async methods: last arg may be callback; make sure we don't break signature
+    return orig.apply(this, [p, ...rest]);
+  };
+};
+
+const wrapReadSync = (name) => {
+  const orig = fs[name];
+  fs[name] = function (p, ...rest) {
+    const v = verdictFor(name, p);
+    if (v && v.v !== "allow") log(name, p, v.v, { code: v.reason }, captureStack());
+    return orig.apply(this, [p, ...rest]);
+  };
+};
+
+wrapRead("readFile");
+wrapReadSync("readFileSync");
+wrapRead("createReadStream"); // common pattern that receives directories by mistake
+wrapReadSync("openSync");     // some libs accidentally open directories
+
+// You may also wrap readdir to catch “fix suggestions”
+const wrapReaddir = (name) => {
+  const orig = fs[name];
+  fs[name] = function (p, ...rest) {
+    // readdir on directories is fine; but if caller *expected* a file, our tap won't see it.
+    // We still log as info if the path has wildcards (improper usage).
+    const v = typeof p === "string" && isWildcard(p)
+      ? { v: "info", reason: "wildcard-readdir" }
+      : null;
+    if (v) log(name, p, v.v, { code: v.reason }, captureStack());
+    return orig.apply(this, [p, ...rest]);
+  };
+};
+wrapReaddir("readdir");
+wrapReaddir("readdirSync");
+
+// First breadcrumb row (helps prove the tap is loaded)
+log("tap:init", "-", "info", { code: "fs-tap-loaded" }, captureStack());
+```
+
+### Why CJS?
+
+`node -r` only preloads **CommonJS** modules. Naming it `.cjs` avoids ESM headaches and “Cannot use import statement outside a module” errors.
+
+---
+
+# 2) How to run it (two quick ways)
+
+### A) Ad-hoc
+
+```bash
+# Run your unit tests with the tap enabled
+node -r ./scripts/dev/fs-tap.cjs node ./node_modules/.bin/vitest run
+
+# Or wrap a dev server / script
+node -r ./scripts/dev/fs-tap.cjs node scripts/dev/some-runner.mjs
+```
+
+### B) Via npm scripts
+
+```json
+{
+  "scripts": {
+    "tap:test": "node -r ./scripts/dev/fs-tap.cjs vitest run",
+    "tap:play": "node -r ./scripts/dev/fs-tap.cjs node play.mjs"
+  }
+}
+```
+
+Your hunt will automatically look for `__reports/fs-tap.jsonl` and summarize counts; suspicious reads make the hunt fail under the “danger classes” policy. You don’t have to change the hunt at all.&#x20;
+
+---
+
+# 3) Optional allowlist & tuning
+
+* **Allowlist** noisy paths (kept as *info* but not *suspect*):
+
+  ```bash
+  FS_TAP_ALLOW="^node_modules/|^dist/|^build/" \
+  node -r ./scripts/dev/fs-tap.cjs vitest run
+  ```
+* **Throttle** duplicates (default 30s): `FS_TAP_THROTTLE_MS=10000`
+* **Cap** log volume: `FS_TAP_MAX=5000`
+* **Custom output**: `FS_TAP_OUT="__reports/my-fs-tap.jsonl"`
+
+---
+
+# 4) Tiny self-test (proves the tap barks)
+
+Create `scripts/dev/fs-tap.selftest.mjs`:
+
+```js
+import fs from "fs";
+try { fs.mkdirSync("__tmp", { recursive: true }); } catch {}
+fs.writeFileSync("__tmp/file.txt", "ok", "utf8");
+fs.readFileSync("__tmp/");              // should be flagged (directory)
+fs.readFileSync("__tmp/*.json");        // should be flagged (glob)
+fs.createReadStream("__tmp/");          // should be flagged (directory)
+console.log("selftest done");
+```
+
+Run:
+
+```bash
+node -r ./scripts/dev/fs-tap.cjs node scripts/dev/fs-tap.selftest.mjs
+# then inspect:
+bat __reports/fs-tap.jsonl
+```
+
+You should see `ends-with-slash`, `wildcard-in-path`, etc.
+
+---
+
+# 5) Wire it into CI (example step)
+
+```yaml
+- name: Run tests with FS tap
+  run: node -r ./scripts/dev/fs-tap.cjs npm test
+
+- name: Repo Hunt
+  run: bash scripts/hunt/rg-hunt.sh .
+```
+
+---
+
+# 6) “New sandwich” you can flip on now
+
+With this tap + your hunt:
+
+* **Top bread:** your hunt’s static checks (JSON, ESM/CJS, script hazards).
+* **Filling:** **runtime evidence** of bad FS usage (now captured in `fs-tap.jsonl`) *and* your Fix-It brief that prints copy-paste recipes.&#x20;
+* **Bottom bread:** policy gate—JSON parse errors or runtime FS suspects ⇒ non-zero exit.
+
+That’s a weird-but-practical sandwich: **static grep + live telemetry + copy-pasteable fixes**. It’s not sci-fi; it’s one preloader and one bash script you already have.

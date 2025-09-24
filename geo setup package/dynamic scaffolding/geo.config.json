@@ -1,0 +1,15 @@
+{
+  "site": "https://onedone.com.au",
+  "brand": "OneDone Cleaning",
+  "services": [
+    "bond-cleaning",
+    "carpet-cleaning", 
+    "oven-cleaning",
+    "house-cleaning"
+  ],
+  "proximity": {
+    "biasKm": 15,
+    "clusterBoost": 1.5,
+    "crossPenalty": 0.8
+  }
+}

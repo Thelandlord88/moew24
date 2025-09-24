@@ -1,0 +1,62 @@
+---
+// src/pages/service-areas/index.astro
+import { readFile } from 'node:fs/promises';
+import PageLayout from '../../layouts/PageLayout.astro';
+
+function titleCase(s) { return s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()); }
+
+const siteUrl = Astro.site?.toString().replace(/\/+$/,'') || 'https://example.com';
+
+const clusters = JSON.parse(await readFile(new URL('../../data/areas.clusters.json', import.meta.url), 'utf8'));
+const clusterOf = clusters.clusterOf || {};
+const suburbKeys = clusters.suburbs ? Object.keys(clusters.suburbs) : Object.keys(clusters);
+
+// Build cluster map
+const clusterMap = {};
+for (const s of suburbKeys) {
+  const c = clusterOf[s] || 'default';
+  (clusterMap[c] ||= []).push(s);
+}
+for (const c of Object.keys(clusterMap)) clusterMap[c].sort();
+
+const pageTitle = 'Service Areas — Clusters & Suburbs';
+const subtitle = 'Explore our coverage by cluster. All links are machine-readable in /api/agents/.';
+
+// JSON-LD: CollectionPage + ItemList of clusters
+const clustersList = Object.keys(clusterMap).sort().map((cid, i) => ({
+  "@type": "ListItem",
+  "position": i+1,
+  "item": {
+    "@type": "Place",
+    "@id": `${siteUrl}/areas/${cid}#place`,
+    "name": titleCase(cid)
+  }
+}));
+---
+<PageLayout title={pageTitle} subtitle={subtitle} theme={{brand:{primary:'#0ea5e9',onPrimary:'white'},surface:{base:'white',raised:'#0b1220',on:'#0b1220',border:'rgba(2,6,23,.08)'},accent:{a:'#22c55e',b:'#a855f7'}}}>
+  <section class="mt-8 space-y-10">
+    {Object.entries(clusterMap).sort(([a],[b]) => a.localeCompare(b)).map(([cid, subs]) => (
+      <div class="rounded-2xl border p-6" style="border-color: var(--surface-border)">
+        <h2 class="text-2xl font-semibold">{titleCase(cid)}</h2>
+        <ul class="mt-4 grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+          {subs.map(s => (
+            <li><a class="block rounded-lg p-3 border hover:shadow-sm transition"
+                   style="border-color: var(--surface-border)"
+                   href={`/services/bond-cleaning/${s}/`}>{titleCase(s)}</a></li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context":"https://schema.org",
+    "@type":"CollectionPage",
+    "name": pageTitle,
+    "mainEntity": {
+      "@type": "ItemList",
+      "name": "Service area clusters",
+      "itemListElement": clustersList
+    }
+  })}></script>
+</PageLayout>

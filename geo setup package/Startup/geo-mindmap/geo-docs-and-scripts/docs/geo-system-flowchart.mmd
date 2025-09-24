@@ -1,0 +1,43 @@
+%% docs/geo-system-flowchart.mmd
+%% Mermaid flowchart showing end-to-end pipeline
+flowchart TB
+  subgraph Sources
+    CSV[Suburbs CSV]<br/>(optional)
+    GJ[GeoJSON enriched]<br/>(preferred)
+    GJb[GeoJSON basic]<br/>(fallback)
+    ADJCSV[Adjacency CSV]<br/>(optional)
+    REGMAP[region-map.json]<br/>(optional)
+  end
+
+  subgraph Converters
+    C1[csv-to-geojson.mjs]
+    C2[geojson-to-clusters.mjs]
+    C3[adjacency-from-csv.mjs<br/>--symmetric]
+  end
+
+  subgraph Validators
+    V1[validate-suburbs.mjs]
+    V2[validate-adj.mjs]
+  end
+
+  subgraph Build
+    P1[geo:prebuild]
+    B1[astro build (SSG)]
+  end
+
+  subgraph Outputs
+    O1[areas.clusters.json]
+    O2[areas.adj.json]
+    D[(dist/)]
+  end
+
+  CSV --> C1 --> GJ
+  GJ --> C2 --> O1
+  GJb --> C2
+  REGMAP --> C2
+  ADJCSV --> C3 --> O2
+  O1 --> V1 --> P1
+  O2 --> V2 --> P1
+  P1 --> B1 --> D
+  B1 --> PAGES[/areas/[lga]/[suburb]/]
+  B1 -. optional .-> PAGES2[/services/[service]/[suburb]/]

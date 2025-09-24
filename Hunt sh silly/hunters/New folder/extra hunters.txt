@@ -1,0 +1,322 @@
+Love it — I read your two docs and built the **missing hunters** exactly as your action plan prescribes, aligned with the upstream-curious approach and exit-code policy. Below is a ready-to-commit bundle (six scripts) + orchestrator patch + optional policy knobs. This implements the “Environment, Component size, Image optimization, Type safety, Magic numbers, Unused code” hunters you called out.  It also targets the critical exposures and a11y/quality patterns called out in your comprehensive analysis.&#x20;
+
+---
+
+# 0) Conventions (shared across all hunters)
+
+* **Outputs:** each hunter writes `__reports/hunt/<hunter>.json` (counts + samples).
+* **Exit codes:** `0=pass`, `1=warnings`, `2=critical` (blocks CI).
+* **Policy:** optional `.huntrc.json` overrides (see defaults in each script).
+
+Create the directory:
+
+```bash
+mkdir -p hunters __reports/hunt
+```
+
+---
+
+# 1) `hunters/environment_security.sh` (CRITICAL)
+
+Detects client-side env leaks (`process.env` in client code; `import.meta.env` without `PUBLIC_`), writes machine facts, exits **2** if found. (Matches your plan to eliminate env exposure class.)&#x20;
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail; IFS=$'\n\t'
+OUT="__reports/hunt/environment_security.json"; mkdir -p "$(dirname "$OUT")"
+
+have(){ command -v "$1" >/dev/null 2>&1; }
+
+# Policy (overridden by .huntrc.json: { "security": { "forbid_client_env": true } })
+POLICY=$(node -e 'const fs=require("fs"); let p={security:{forbid_client_env:true}}; try{p=Object.assign(p,JSON.parse(fs.readFileSync(".huntrc.json","utf8")).security||{});}catch{} console.log(JSON.stringify(p))')
+FORBID=$(node -e 'console.log(JSON.parse(process.argv[1]).forbid_client_env?"1":"0")' "$POLICY")
+
+scan(){
+  if have rg; then
+    rg -n --hidden --glob '!node_modules/**' --glob '!**/*.server.*' --glob '!**/server/**' -e 'process\.env' -e 'import\.meta\.env' src 2>/dev/null || true
+  else
+    grep -RInE --exclude-dir=node_modules --exclude='*.server.*' -e 'process\.env' -e 'import\.meta\.env' src 2>/dev/null || true
+  fi
+}
+matches="$(scan)"
+
+# Classify: import.meta.env.* that are NOT PUBLIC_* (client-safe) are violations
+violations="$(printf "%s" "$matches" | awk '
+/import\.meta\.env/ && $0 !~ /PUBLIC_/ {print}
+#/process\.env/ is always server-only; client usage is a violation when in non-server paths
+/process\.env/ {print}
+')"
+
+count=$(printf "%s" "$violations" | sed '/^$/d' | wc -l | awk '{print $1}')
+
+node -e '
+  const fs=require("fs");
+  const lines=(process.env.VIOL||"").split(/\n/).filter(Boolean);
+  const out={schemaVersion:1, subject:"environment_security", forbid_client_env: process.env.FORBID==="1", count: lines.length, samples: lines.slice(0,50)};
+  fs.writeFileSync(process.env.OUT, JSON.stringify(out,null,2));
+' OUT="$OUT" FORBID="$FORBID" VIOL="$violations"
+
+if [[ "$FORBID" == "1" && "$count" -gt 0 ]]; then
+  echo "❌ environment security: $count client-side env exposures"
+  exit 2
+fi
+echo "✅ environment security: no exposures"
+exit 0
+```
+
+---
+
+# 2) `hunters/component_size.sh`
+
+Flags oversized components (default **200** lines) and suggests decomposition. Mirrors your action plan.&#x20;
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail; IFS=$'\n\t'
+OUT="__reports/hunt/component_size.json"; mkdir -p "$(dirname "$OUT")"
+
+POLICY=$(node -e 'const fs=require("fs");let p={component_quality:{max_component_lines:200}};try{const j=JSON.parse(fs.readFileSync(".huntrc.json","utf8"));p.component_quality=Object.assign(p.component_quality,j.component_quality||{});}catch{}console.log(JSON.stringify(p))')
+MAX=$(node -e 'console.log(JSON.parse(process.argv[1]).component_quality.max_component_lines||200)' "$POLICY")
+
+list(){ find src/components -type f \( -name "*.astro" -o -name "*.tsx" \) 2>/dev/null | sort; }
+rows=""
+warn=0
+while read -r f; do
+  [ -f "$f" ] || continue
+  lines=$(wc -l < "$f" | awk '{print $1}')
+  if [ "$lines" -gt "$MAX" ]; then
+    warn=$((warn+1))
+    rows="${rows}{\"file\":\"$f\",\"lines\":$lines},"
+  fi
+done < <(list)
+
+rows="${rows%,}"
+node -e '
+  const fs=require("fs");
+  const rows=process.env.ROWS?JSON.parse("["+process.env.ROWS+"]"):[];
+  const out={schemaVersion:1, subject:"component_size", max: Number(process.env.MAX), offenders: rows};
+  fs.writeFileSync(process.env.OUT, JSON.stringify(out,null,2));
+' OUT="$OUT" MAX="$MAX" ROWS="$rows"
+
+if [ "$warn" -gt 0 ]; then echo "⚠️ component size: $warn oversized"; exit 1; fi
+echo "✅ component size: OK"; exit 0
+```
+
+---
+
+# 3) `hunters/image_optimization.sh`
+
+Finds big images (default **500 KB**), notes WebP/AVIF alternatives if present, and suggests optimizations.&#x20;
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail; IFS=$'\n\t'
+OUT="__reports/hunt/image_optimization.json"; mkdir -p "$(dirname "$OUT")"
+
+POLICY=$(node -e 'const fs=require("fs");let p={performance:{max_image_size_kb:500}};try{const j=JSON.parse(fs.readFileSync(".huntrc.json","utf8"));p.performance=Object.assign(p.performance,j.performance||{});}catch{}console.log(JSON.stringify(p))')
+MAXKB=$(node -e 'console.log(JSON.parse(process.argv[1]).performance.max_image_size_kb||500)' "$POLICY")
+
+off=""
+count=0
+while IFS= read -r -d '' img; do
+  sz=$(du -k "$img" | cut -f1)
+  if [ "$sz" -gt "$MAXKB" ]; then
+    count=$((count+1))
+    base="${img%.*}"
+    alt="[]"
+    [ -f "${base}.webp" ] && alt='["webp"]'
+    [ -f "${base}.avif" ] && alt=$(node -e 'let a=JSON.parse(process.argv[1]);a.push("avif");console.log(JSON.stringify(a))' "$alt")
+    off="${off}{\"file\":\"$img\",\"kb\":$sz,\"alts\":$alt},"
+  fi
+done < <(find src -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -print0)
+
+off="${off%,}"
+node -e '
+  const fs=require("fs");
+  const offenders=process.env.OFF?JSON.parse("["+process.env.OFF+"]"):[];
+  const out={schemaVersion:1, subject:"image_optimization", maxKB:Number(process.env.MAXKB), offenders};
+  fs.writeFileSync(process.env.OUT, JSON.stringify(out,null,2));
+' OUT="$OUT" MAXKB="$MAXKB" OFF="$off"
+
+if [ "$count" -gt 0 ]; then echo "⚠️ image optimization: $count large"; exit 1; fi
+echo "✅ image optimization: OK"; exit 0
+```
+
+---
+
+# 4) `hunters/type_safety.sh`
+
+Counts **any**-type usage and exits **1** when over threshold (default tolerate ≤5). Tracks the class of failure you noted.&#x20;
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail; IFS=$'\n\t'
+OUT="__reports/hunt/type_safety.json"; mkdir -p "$(dirname "$OUT")"
+
+POLICY=$(node -e 'const fs=require("fs");let p={type_safety:{max_any_types:5}};try{const j=JSON.parse(fs.readFileSync(".huntrc.json","utf8"));p.type_safety=Object.assign(p.type_safety,j.type_safety||{});}catch{}console.log(JSON.stringify(p))')
+MAX=$(node -e 'console.log(JSON.parse(process.argv[1]).type_safety.max_any_types||5)' "$POLICY")
+
+have(){ command -v "$1" >/dev/null 2>&1; }
+scan(){
+  if have rg; then
+    rg -n --hidden --glob '!node_modules/**' -e ':\s*any\b' -e '<\s*any\s*>' -e '\bas\s+any\b' -e '\bany\[\]' src 2>/dev/null || true
+  else
+    grep -RInE --exclude-dir=node_modules ':\s*any\b|<\s*any\s*>|\bas\s+any\b|\bany\[\]' src 2>/dev/null || true
+  fi
+}
+matches="$(scan)"
+count=$(printf "%s" "$matches" | sed '/^$/d' | wc -l | awk '{print $1}')
+
+node -e '
+  const fs=require("fs");
+  const lines=(process.env.M||"").split(/\n/).filter(Boolean);
+  const out={schemaVersion:1, subject:"type_safety", maxAny:Number(process.env.MAX), count:lines.length, samples:lines.slice(0,50)};
+  fs.writeFileSync(process.env.OUT, JSON.stringify(out,null,2));
+' OUT="$OUT" MAX="$MAX" M="$matches"
+
+if [ "$count" -gt "$MAX" ]; then echo "⚠️ type safety: $count any-types (max $MAX)"; exit 1; fi
+echo "✅ type safety: OK"; exit 0
+```
+
+---
+
+# 5) `hunters/magic_numbers.sh`
+
+Detects configurable patterns (cache TTLs, dimensions, timeouts, pricing literals). Encourages central constants (as in your report).&#x20;
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail; IFS=$'\n\t'
+OUT="__reports/hunt/magic_numbers.json"; mkdir -p "$(dirname "$OUT")"
+
+# Policy allows tuning and allowlists later
+PATTERNS=(
+  'max-age=[0-9]+'
+  'width="([0-9]{3,})"'
+  'height="([0-9]{3,})"'
+  'setTimeout\\s*\\(\\s*[0-9]{3,}'
+  'price[^\\n]{0,40}[0-9]+(\\.[0-9]+)?'
+)
+have(){ command -v "$1" >/dev/null 2>&1; }
+
+collect=""
+total=0
+for p in "${PATTERNS[@]}"; do
+  if have rg; then out=$(rg -n --hidden --glob '!node_modules/**' -e "$p" src 2>/dev/null || true)
+  else out=$(grep -RInE --exclude-dir=node_modules "$p" src 2>/dev/null || true)
+  fi
+  c=$(printf "%s" "$out" | sed '/^$/d' | wc -l | awk '{print $1}')
+  total=$((total+c))
+  if [ "$c" -gt 0 ]; then
+    collect="${collect}{\"pattern\":\"$p\",\"count\":$c,\"samples\":[\"$(printf "%s" "$out" | head -5 | tr '\n' ' ' | sed 's/"/\\"/g')\"]},"
+  fi
+done
+collect="${collect%,}"
+
+node -e '
+  const fs=require("fs");
+  const items=process.env.COLLECT?JSON.parse("["+process.env.COLLECT+"]"):[];
+  const out={schemaVersion:1, subject:"magic_numbers", total:Number(process.env.TOTAL), patterns:items};
+  fs.writeFileSync(process.env.OUT, JSON.stringify(out,null,2));
+' OUT="$OUT" TOTAL="$total" COLLECT="$collect"
+
+if [ "$total" -gt 0 ]; then echo "⚠️ magic numbers: $total hits"; exit 1; fi
+echo "✅ magic numbers: OK"; exit 0
+```
+
+---
+
+# 6) `hunters/unused_code.sh`
+
+Lightweight unused-import/TODO detector (keeps it simple/portable). Mirrors your action plan’s intent.&#x20;
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail; IFS=$'\n\t'
+OUT="__reports/hunt/unused_code.json"; mkdir -p "$(dirname "$OUT")"
+
+unused=0; todo=0; rows=""
+
+# Naive per-file import check (fast, surfaces obvious cases)
+while IFS= read -r -d '' f; do
+  imports=$(grep -E '^import\b.*from\b' "$f" | sed -E 's/^import\s+(.*)\s+from.*/\1/' | tr ',' '\n' | sed -E 's/[{}*]//g;s/as\s+[A-Za-z0-9_]+//g;s/^ +| +$//g' | awk 'NF')
+  [ -z "$imports" ] && continue
+  while read -r name; do
+    [ -z "$name" ] && continue
+    if ! grep -q "\\b${name}\\b" "$f"; then
+      rows="${rows}{\"file\":\"$f\",\"symbol\":\"$name\"},"
+      unused=$((unused+1))
+    fi
+  done <<< "$imports"
+done < <(find src -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" \) -print0)
+
+# TODO/FIXME
+todo=$(grep -RInE --exclude-dir=node_modules 'TODO|FIXME|XXX|HACK' src 2>/dev/null | wc -l | awk '{print $1}')
+
+rows="${rows%,}"
+node -e '
+  const fs=require("fs");
+  const items=process.env.ROWS?JSON.parse("["+process.env.ROWS+"]"):[];
+  const out={schemaVersion:1, subject:"unused_code", unused:items.length, todos:Number(process.env.TODO), samples:items.slice(0,50)};
+  fs.writeFileSync(process.env.OUT, JSON.stringify(out,null,2));
+' OUT="$OUT" ROWS="$rows" TODO="$todo"
+
+if [ "$unused" -gt 0 ] || [ "$todo" -gt 0 ]; then
+  echo "⚠️ unused imports: $unused · TODOs: $todo"; exit 1;
+fi
+echo "✅ unused code: OK"; exit 0
+```
+
+---
+
+# 7) Orchestrator patch (`hunt.sh`)
+
+Wire them in **verbatim** as your plan suggested (preserving exit codes → counters).&#x20;
+
+```bash
+# ==== New Hunters ====
+echo "== Environment Security ==";   bash hunters/environment_security.sh; [ $? -eq 2 ] && CRITICAL_ISSUES=$((CRITICAL_ISSUES+1)) || true
+echo "== Component Size ==";         bash hunters/component_size.sh;       [ $? -eq 1 ] && ISSUES=$((ISSUES+1)) || true
+echo "== Image Optimization ==";     bash hunters/image_optimization.sh;   [ $? -eq 1 ] && ISSUES=$((ISSUES+1)) || true
+echo "== Type Safety ==";            bash hunters/type_safety.sh;          [ $? -eq 1 ] && ISSUES=$((ISSUES+1)) || true
+echo "== Magic Numbers ==";          bash hunters/magic_numbers.sh;        [ $? -eq 1 ] && ISSUES=$((ISSUES+1)) || true
+echo "== Unused Code ==";            bash hunters/unused_code.sh;          [ $? -eq 1 ] && ISSUES=$((ISSUES+1)) || true
+```
+
+(Optional) add npm scripts for Codespaces convenience:
+
+```json
+"scripts": {
+  "hunter:env": "bash hunters/environment_security.sh",
+  "hunter:cmp": "bash hunters/component_size.sh",
+  "hunter:img": "bash hunters/image_optimization.sh",
+  "hunter:types": "bash hunters/type_safety.sh",
+  "hunter:magic": "bash hunters/magic_numbers.sh",
+  "hunter:unused": "bash hunters/unused_code.sh"
+}
+```
+
+---
+
+# 8) Optional policy knobs (`.huntrc.json`)
+
+Drop this to tune thresholds without editing scripts (keeps Thinker policy-driven):
+
+```json
+{
+  "security": { "forbid_client_env": true },
+  "component_quality": { "max_component_lines": 200 },
+  "performance": { "max_image_size_kb": 500 },
+  "type_safety": { "max_any_types": 5 }
+}
+```
+
+---
+
+## Why this matches your plan (and the analysis)
+
+* **Implements the exact “missing hunters”** you listed, with actionable outputs, exit codes, and orchestrator wiring.&#x20;
+* **Targets the critical classes** (env exposure, a11y/quality patterns, magic numbers, bloat) surfaced by your comprehensive report.&#x20;
+* **Policy-driven + portable** (rg if present, otherwise grep), and every hunter emits machine-readable JSON for your agent to act on.
+
+If you want, I can also add a tiny **SARIF aggregator** so these show up as inline PR annotations in Codespaces/GitHub, and a **pre-commit** that runs just the fast hunters (types/magic/unused) for snappy dev flow.

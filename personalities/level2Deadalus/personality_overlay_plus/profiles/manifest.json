@@ -1,0 +1,16 @@
+{
+  "version": "1.0.1",
+  "generatedAt": "2025-09-24T00:13:23.704043Z",
+  "systems": [
+    {
+      "name": "Daedalus",
+      "path": "/api/systems/daedalus.json",
+      "priority": "lead"
+    },
+    {
+      "name": "Hunter",
+      "path": "/api/systems/hunter.json",
+      "priority": "follow-up"
+    }
+  ]
+}

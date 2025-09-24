@@ -1,0 +1,12 @@
+---
+// src/components/ui/Accordion.astro
+const { items } = Astro.props as { items: { heading: string; content: string }[] };
+---
+<div class="divide-y rounded-2xl border" style="border-color: var(--surface-border)">
+  {items.map((it, i) => (
+    <details class="group p-4">
+      <summary class="cursor-pointer font-medium">{it.heading}</summary>
+      <div class="pt-2 opacity-90" set:html={it.content}></div>
+    </details>
+  ))}
+</div>

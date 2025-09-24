@@ -1,0 +1,4 @@
+# Copy/merge into your repo's netlify.toml if desired
+[build]
+command = "node scripts/daedalus/cli.mjs build && npm run build"
+publish = "dist"

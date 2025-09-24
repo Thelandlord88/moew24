@@ -1,0 +1,325 @@
+Integrating the Geo Design System Scaffolding
+
+To fully integrate the geo-targeted design system into the Augest26testerr repo, we will add new theming modules, UI components, adjacency logic, and update layouts. All new files will use the exact paths from the provided patch. Below are the steps and details for each part of the scaffolding, organized by category:
+
+1. Design Tokens and Theme Modules
+
+Create core theme modules under src/lib/ to centralize styling and theming information:
+
+src/lib/designTokens.js: Define the base design tokens for the project’s design system. This includes global color palette, font sizes, spacing scale, border radius, etc. These tokens provide consistent values used across components. For example, you might export an object of colors and spacing like:
+
+// src/lib/designTokens.js
+const colors = {
+  primary: "#1e3a8a",
+  secondary: "#9333ea",
+  accent: "#22c55e",
+  neutral: "#64748b",
+  // ...other base colors
+};
+
+const spacing = {
+  xs: "4px",
+  sm: "8px",
+  md: "16px",
+  lg: "24px",
+  xl: "48px",
+  // ...etc
+};
+
+export { colors, spacing /*, other tokens like fonts, shadows */ };
+
+
+All components will refer to these token values (either directly or via Tailwind config). Using a central designTokens module makes it easy to adjust branding in one place.
+
+src/lib/suburbThemes.js: Provide theme overrides or specifics for individual suburbs (or clusters of suburbs). This module exports an object mapping suburb slugs to any custom styling tokens. For example, certain suburbs might have a featured image or a unique color accent. For instance:
+
+// src/lib/suburbThemes.js
+import { colors } from "./designTokens.js";
+
+export const suburbThemes = {
+  "springfield-lakes": {
+    // Springfield Lakes might use a special accent color or banner image
+    accentColor: "#14b8a6",  // e.g., teal accent for Springfield Lakes
+    bannerImage: "/images/banners/springfield-lakes.jpg"
+  },
+  "ipswich": {
+    accentColor: colors.primary,  // use default primary for Ipswich
+    bannerImage: "/images/banners/ipswich.jpg"
+  },
+  // ...other suburbs as needed
+};
+
+
+In general, most suburbs will default to base design tokens, but this allows highlighting specific locations with unique styles if desired.
+
+src/lib/serviceThemes.js: Similarly, define theme customizations per service type. Each service (e.g., bond cleaning, spring cleaning, etc.) can have its own brand color, icon, or imagery. This module exports an object mapping service slugs to theme properties. For example:
+
+// src/lib/serviceThemes.js
+import { colors } from "./designTokens.js";
+
+export const serviceThemes = {
+  "bond-cleaning": {
+    primaryColor: "#0ea5e9",      // blue for bond cleaning
+    serviceIcon: "/icons/bond-clean.svg"
+  },
+  "spring-cleaning": {
+    primaryColor: "#16a34a",      // green for spring cleaning
+    serviceIcon: "/icons/spring-clean.svg"
+  },
+  "bathroom-deep-clean": {
+    primaryColor: "#9333ea",      // purple for bathroom deep cleaning
+    serviceIcon: "/icons/bathroom-clean.svg"
+  },
+  // ...other services
+};
+
+
+These can override or extend the base design tokens for each service. For instance, setting a distinct primaryColor means buttons or highlights for that service will use that color.
+
+src/lib/themeProvider.js: This module will combine the base tokens with any suburb/service-specific themes to produce the final theme for a given page. Export a function (e.g., getTheme(serviceSlug, suburbSlug)) that returns a unified theme object. For example:
+
+// src/lib/themeProvider.js
+import * as tokens from "./designTokens.js";
+import { suburbThemes } from "./suburbThemes.js";
+import { serviceThemes } from "./serviceThemes.js";
+
+export function getTheme(serviceSlug, suburbSlug) {
+  const base = { ...tokens };
+  const serviceOverrides = serviceThemes[serviceSlug] || {};
+  const suburbOverrides = suburbThemes[suburbSlug] || {};
+  // Merge: suburb overrides take precedence over service, which override base
+  return {
+    ...base,
+    ...serviceOverrides,
+    ...suburbOverrides
+  };
+}
+
+
+This ensures that if a suburb has a custom accent color, it will supersede the service’s default, which in turn supersedes the global default. The theme object can be used by components (via props or context) to apply styles.
+
+2. Reusable UI Components (src/components/ui/)
+
+Next, add a suite of presentational UI components in src/components/ui/ to standardize common UI patterns. These components use the design tokens and themes for consistent styling. The provided patch includes the following files (some of which may already exist as placeholders):
+
+src/components/ui/Button.astro: A themed button component. This Astro component should render a <button> or <a> element with styling from the design tokens (e.g. using Tailwind classes or CSS variables for colors, padding, rounded corners, etc.). It can accept props like variant (primary/secondary), size, and slots for content. For example, a primary button might use the service’s primary color. The component might look like:
+
+---
+
+// src/components/ui/Button.astro
+import { colors } from '~/lib/designTokens.js';
+const { variant = 'primary', href } = Astro.props;
+const baseClasses = "inline-flex items-center font-semibold px-5 py-3 rounded-full transition";
+const variantClass = variant === 'secondary'
+? 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+: 'bg-[var(--primaryColor)] text-white hover:opacity-90';
+// using CSS variable --primaryColor set by theme
+
+{href ? (
+<a class={${baseClasses} ${variantClass}} href={href}><slot /></a>
+) : (
+<button class={${baseClasses} ${variantClass}}><slot /></button>
+)}
+
+In the above snippet, we use a CSS custom property `--primaryColor` which would be provided by the theme (e.g., set on the page or a parent container). The patch likely uses Tailwind utility classes referencing theme colors as well. The key is that all buttons use consistent styling and respond to the current theme (primary color, etc.).
+
+- **`src/components/ui/Card.astro`:** A flexible card container component for grouping content with a white background and slight shadow/border. This could wrap content in a `<div>` with padding and rounded corners. For example, used for list items or highlights (like the “What’s Included” checklist items). It may accept props for hover effects or styling variants. Typically, it would apply classes like `bg-white rounded-xl shadow p-4 border border-gray-200 hover:shadow-md` to match the design system’s card style.
+
+- **`src/components/ui/Banner.astro`:** A full-width banner or hero section component. This can display a title, subtitle, or background image. It will likely use the service/suburb theme for its background or accent. For instance, the banner could set a background color to the current service’s primary color or use a suburb-specific banner image. The component might include an `<h1>` for the page title and optional descriptive text or image, all styled according to theme. Example usage: on a suburb service page, the banner shows “<Service Name> in <Suburb>” as a prominent heading with themed styling.
+
+- **`src/components/ui/Badge.astro`:** A small badge/pill component for labeling content (e.g., “Popular”, “New”, or indicating suburb clusters). This would render a span or div with a tiny, stylized label. Badges often have a background color and text color (perhaps using an accent from the theme, or a neutral gray). The file was created in a previous commit:contentReference[oaicite:0]{index=0}, so we will fill it in with design token based styles. For example, a badge might use classes like `px-2 py-1 text-xs font-bold rounded bg-fresh-sky text-white` (if `fresh-sky` is one of the design token colors) to create a colored pill.
+
+- **`src/components/ui/Accordion.astro`:** A collapsible accordion component, useful for FAQs or any content that expands/collapses. Each accordion item likely has a title that can be clicked to reveal content. We’ll implement it to accept a list of items (each with a question/title and answer/content). The component will manage open/closed state (possibly with some simple JavaScript for toggling classes). It will apply theme styles, e.g. using the primary color for active states or icons. This will replace or augment existing FAQ sections with a more reusable approach. For instance, instead of hardcoding FAQ lists, the pages can use `<Accordion items={faqs} />` where `faqs` is an array of Q&A pairs.
+
+- **`src/components/ui/Tabs.astro`:** A tabbed interface component to switch between content panels. If any part of the site (or future plans) requires tabs (perhaps for switching between service categories or data views), this component provides the UI for it. It will render a row of tab buttons and show the active tab’s content. The styling will again use design tokens (e.g., highlight the active tab with the primary color underline or background). Even if not immediately used, including it in the design system scaffolding ensures a complete set of common components.
+
+All these UI components should be documented and demonstrate usage of the theme. They will reside in the `src/components/ui/` directory (alongside existing ones like **Badge, Button, Card, Section** which were introduced on Aug 15:contentReference[oaicite:1]{index=1}). By centralizing styles in these components, pages become simpler and more consistent.
+
+## 3. Adjacency Logic and Dynamic Data Handling
+
+**Add the geo adjacency module** to handle suburb relationships dynamically:
+
+- **`src/lib/geo/adjacency.js`:** This module will load and expose adjacency (neighboring suburbs) and cluster data from JSON files. We will use the existing `areas.clusters.json` (which defines suburb groupings/clusters) and a new adjacency JSON for neighbors. In the patch, a consolidated adjacency file is expected (e.g., `areas.adj.json`) containing which suburbs border or are near each other. We will assume such a JSON exists (or will be added) under `src/content/` with a structure mapping each suburb to a list of adjacent suburbs.
+
+This JavaScript module will likely do the following:
+- Import the cluster definitions: 
+
+  ```js
+  import clustersData from "~/content/areas.clusters.json";
+  ```
+  (We know this file exists and contains cluster info:contentReference[oaicite:2]{index=2}).
+
+- Import adjacency data:
+
+  ```js
+  import adjacencyData from "~/content/areas.adj.json";
+  ```
+  (This `areas.adj.json` should combine the neighbor info that was previously split among files like `geo.neighbors.ipswich.json`, `geo.neighbors.brisbane-west.json`, etc.:contentReference[oaicite:3]{index=3}.)
+
+- Provide helper functions such as:
+  - `getAdjacentSuburbs(suburbSlug)`: return an array of nearby suburb slugs or names for a given suburb, using `adjacencyData`. This finds the entry in the JSON and returns its neighbors (or an empty array if none).
+  - `getClusterForSuburb(suburbSlug)`: find which cluster a suburb belongs to, using the clusters data.
+  - `getNearbyClusters(clusterName)`: possibly return adjacent clusters (if needed for higher-level navigation).
+  - Any other logic needed to support dynamic linking between suburbs.
+
+For example, a simplified adjacency JSON might look like:
+```json
+{
+  "springfield-lakes": ["springfield", "camira", "brookwater"],
+  "springfield": ["springfield-lakes", "camira"],
+  // ... etc for each suburb
+}
+
+
+And in adjacency.js we could implement:
+
+export function getAdjacentSuburbs(suburbSlug) {
+  const neighbors = adjacencyData[suburbSlug];
+  if (!neighbors) return [];
+  return neighbors;
+}
+
+
+along with functions to utilize cluster data (perhaps clustersData has a list of suburbs per cluster for reference).
+
+This module allows the site to query which areas are “nearby” dynamically, instead of relying on hard-coded lists. It will be used by layouts or pages to show “Other nearby areas” sections based on the current suburb.
+
+4. Layout Enhancements with Theming and Adjacency
+
+We will introduce a new layout component (as per the patch) and update an existing layout to use adjacency data:
+
+src/layouts/PageLayout.astro: Create a new layout component that wraps the page content with the main site chrome (header, footer via MainLayout) and also injects theming and adjacency-aware elements. This can be thought of as an enhanced version of ServiceLayout that is theme-aware. Key features of PageLayout:
+
+Props: likely accepts service and suburb objects (or at least their slugs/names), and possibly a precomputed theme or adjacency list. For flexibility, the component can compute these if not provided:
+
+--- 
+import MainLayout from '~/layouts/MainLayout.astro';
+import { getTheme } from '~/lib/themeProvider.js';
+import { getAdjacentSuburbs } from '~/lib/geo/adjacency.js';
+const { service, suburb, theme = getTheme(service.slug, suburb.slug), neighbors = getAdjacentSuburbs(suburb.slug) } = Astro.props;
+---
+
+
+In the above pseudocode, PageLayout uses the themeProvider to derive the theme if one isn’t passed in, and similarly uses the adjacency module to find neighbor suburbs if none are passed. This is the “fallback to adjacency when not passed” – i.e., if the page doesn’t explicitly specify what adjacent areas to show, the layout will look them up automatically.
+
+Theming: Using the theme object (from getTheme), PageLayout can set CSS variables or classes on the page. For example, it might add a style block or set attributes on the <body> or a wrapping <div>:
+
+<MainLayout title={title} description={description}>
+  <div style={`--primaryColor: ${theme.primaryColor}; --accentColor: ${theme.accentColor};`}>
+    ... page content ...
+  </div>
+</MainLayout>
+
+
+This ensures that inside PageLayout, all UI components can access CSS custom properties like --primaryColor (which we used in the Button example) to theme themselves. Alternatively, if using Tailwind CSS, the theme might correspond to Tailwind classes (for example, a specific body class per service or suburb that Tailwind recognizes via config).
+
+Adjacency UI: PageLayout should also include a section to display related areas using the adjacency data. In the current code, the ServiceLayout was manually rendering a RelatedGrid for “Other nearby areas”
+GitHub
+. We will move that logic into PageLayout so it’s always present for suburb pages. For instance, at the bottom of PageLayout’s template, include:
+
+{neighbors.length > 0 && (
+  <section class="bg-gray-50 py-8 mt-12">
+    <h2 class="text-xl font-semibold mb-4 text-center">Nearby Areas</h2>
+    <ul class="flex flex-wrap justify-center gap-3">
+      {neighbors.map(n => (
+        <li><a href={`/services/${service.slug}/${n}/`} class="text-blue-600 hover:underline">{n.replace('-', ' ')}</a></li>
+      ))}
+    </ul>
+  </section>
+)}
+
+
+In this snippet, if the adjacency module found any neighboring suburbs, we output a list of links to those suburb pages (under the same service) with a heading. This dynamic generation uses the neighbors computed via getAdjacentSuburbs. By including it in the layout, every suburb page will automatically list nearby suburbs for better internal linking, without each page needing to implement it manually.
+
+Fallback Behavior: The phrase “fallback to adjacency when not passed” means that if a page for some reason passes a custom list of neighbors (perhaps to override the default), PageLayout will use that. Otherwise, it defaults to the adjacency logic above. This makes the system flexible (e.g., you could manually specify related suburbs in rare cases, but by default it uses data-driven adjacency).
+
+Using MainLayout: PageLayout should wrap everything inside the existing MainLayout (which includes header, footer, etc.). The MainLayout is already present and used by pages
+GitHub
+. We continue to use it to maintain site structure and SEO tags, but now PageLayout is an intermediary that adds theme context and adjacency info around the page content.
+
+Update MainLayout.astro if needed: We likely do not need to modify MainLayout’s internals, but ensure it can accept any new context. MainLayout already takes a title and description and renders the base HTML structure
+GitHub
+GitHub
+. If necessary, we might add a class or data attribute on the <body> or <html> from PageLayout to indicate the current theme (for example, a class like service-bond-cleaning on the body tag to allow service-specific Tailwind styles). This could be done by passing a className or similar prop through MainLayout. However, since Astro layouts can simply wrap content, an alternative is to output a <style> tag in PageLayout’s <Fragment slot="head"> to set the CSS variables for the theme.
+
+In summary, PageLayout.astro will serve as the primary layout for all dynamic suburb pages, injecting the appropriate theme and a “nearby suburbs” section using the adjacency data (when the page itself doesn’t supply one).
+
+5. Dynamic Page Integration ([service]/[suburb] route)
+
+Finally, connect the new layout and components into the actual dynamic route for service pages:
+
+Modify src/pages/services/[service]/[suburb].astro: This page route will be updated to use the new PageLayout. Currently, pages might have been using ServiceLayout or similar to structure content. We will replace that with PageLayout (and likely simplify the page content since PageLayout now handles a lot of logic). For example, the page script can load the relevant data:
+
+---
+
+
+// src/pages/services/[service]/[suburb].astro
+import PageLayout from '~/layouts/PageLayout.astro';
+import services from '~/data/services.json';
+import suburbs from '~/data/suburbs.json';
+
+const { service: serviceSlug, suburb: suburbSlug } = Astro.params;
+const service = services.find(s => s.slug === serviceSlug);
+const suburb = suburbs.find(s => s.slug === suburbSlug);
+const pageTitle = ${service.title} in ${suburb.name};
+const pageDesc = ${service.description} – Serving ${suburb.name} and nearby areas with quality service.;
+<PageLayout service={service} suburb={suburb} title={pageTitle} description={pageDesc}> <!-- Banner / Hero section --> <Banner title={pageTitle} subtitle={service.tagline} bgImage={suburb.bannerImage || service.bannerImage} />
+<!-- Main content sections -->
+<Section>
+  <h2 class="text-2xl font-bold mb-4">What’s Included</h2>
+  <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {service.checklist.map(item => (
+      <Card><span class="font-medium text-gray-800">{item}</span></Card>
+    ))}
+  </ul>
+</Section>
+
+<!-- FAQ Accordion -->
+{service.faqs && <Accordion items={service.faqs} />}
+
+<!-- Call-to-Action Banner -->
+<Banner variant="secondary" title="Ready to book your clean?" 
+        subtitle="Get a free quote now. Satisfaction guaranteed!"
+        ctaText="Get a Quote" ctaHref="/quote" />
+
+<!-- Quote Form or Quote CTA -->
+<QuoteForm id="quote" />
+
+</PageLayout> ``` In this illustrative example: - We import the new `PageLayout` and use it to wrap the entire page content, passing in the `service` and `suburb` data as props, along with a `title` and `description` for SEO. PageLayout will forward these to MainLayout internally. - We utilize the new UI components: `<Banner>` for a hero section, `<Section>` as a container for the checklist, `<Card>` for each checklist item, `<Accordion>` for FAQs, etc. The page becomes a composition of design system components rather than custom HTML. This dramatically improves consistency and maintainability. - We still include domain-specific components like `<QuoteForm>` (which presumably already exists for the booking form) and possibly a call-to-action Banner. The design system components (Button, Banner, etc.) can be used inside these sections as needed. For instance, the Quote CTA button could be an instance of `<Button>` or styled accordingly. - **No separate branch:** These changes are applied directly to the main codebase as a cohesive update, ready for live deployment.
+
+By wiring the dynamic route to PageLayout, we ensure the theming and adjacency features are active. As a result, the site will automatically show neighbors (via PageLayout’s adjacency fallback) and use the correct theme (colors, images, etc.) for the given service and suburb without additional effort on each page. This addresses the theming per suburb/service requirement and improves internal linking. The existing ServiceLayout.astro and SuburbService.astro wrappers may become redundant after this change – we can likely remove or refactor those legacy layout files once PageLayout is confirmed working, to avoid confusion (the checklist had noted removing legacy components like CrossServiceLinks, which is related
+GitHub
+).
+
+6. Documentation Updates (Optional)
+
+Although optional, it’s highly recommended to add a documentation file to explain the new design system. Create DESIGN_SYSTEM.md (or update README.md) to include:
+
+Overview of Design Tokens and Themes: Explain how designTokens, serviceThemes, and suburbThemes work and how to add new tokens or theme overrides. This helps future developers understand how to adjust styling (for example, adding a new service’s color scheme would mean updating serviceThemes).
+
+Component Usage Guidelines: List the new UI components (Button, Card, Banner, Badge, Accordion, Tabs) with code examples of how to use each. For instance, show how to include a <Button variant="primary">Book Now</Button> or how to structure an FAQ using <Accordion>.
+
+Layout and Adjacency Behavior: Document that PageLayout automatically handles theming and nearby suburb links. Mention that if a page ever needs custom adjacent links, it can pass a neighbors prop to PageLayout, otherwise the default getAdjacentSuburbs will be used. Also note that PageLayout sets CSS variables for theme colors (like --primaryColor) which the components utilize – this is an important detail for anyone adjusting styles.
+
+Data Requirements: Note the presence of areas.clusters.json and areas.adj.json and how they fuel the geo-aware features. For example, if a new suburb is added or a suburb’s neighbors change, those JSON files should be updated accordingly, and the adjacency module will reflect it.
+
+By updating the documentation, the design system scaffolding becomes easier to maintain and extend. This is especially useful as the project grows (new services, new areas, or visual refreshes can be handled by updating the tokens and themes rather than one-off styling).
+
+With all the above changes in place, the geo design system integration is complete. We have added the necessary modules and components, and updated the dynamic page flow to use them. The application will now apply suburb- and service-specific theming consistently, and every service page will dynamically show related suburbs via adjacency data. These improvements not only enhance the user experience (visual consistency and relevant links) but also simplify content management by using a centralized design system.
+
+Sources:
+
+Project file index showing new UI component placeholders (Badge.astro, Button.astro, Card.astro, etc.)
+GitHub
+, and content files for area clusters and neighbors
+GitHub
+GitHub
+ that the adjacency module will leverage.
+
+Existing layout logic in ServiceLayout.astro for nearby areas, which will be superseded by the new adjacency-driven PageLayout
+GitHub
+.
+
+Main layout usage and cluster data in MainLayout.astro, illustrating how clusters were handled before (for schema)
+GitHub
+. The new scaffolding builds on this by using structured JSON data and theme providers instead of hard-coding.

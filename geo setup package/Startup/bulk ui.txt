@@ -1,0 +1,44 @@
+Short answer: **yes**—your current geo setup (GeoJSON → `areas.clusters.json` + `areas.adj.json`, SSG routes for service×suburb) is a perfect fit for this kind of **design system**. The only gotcha is making the **design tokens** play nicely with **Tailwind v4** in Astro without React. I solved that in the code below by using **CSS variables + Tailwind’s arbitrary values** (e.g. `bg-[var(--btn-bg)]`), so you get dynamic colours at runtime while keeping all the utility-class ergonomics.
+
+I’ve generated a **drop-in scaffold** with all the files you sketched (tokens, theme provider, Button/Card/Banner, PageLayout, and a sample service page wired to your geo props). It’s tailored for **Astro-only components** and your SSG pipeline.
+
+### download the bundle
+
+* **Zip:** [geo-design-system-scaffold.zip](sandbox:/mnt/data/geo-design-system-scaffold.zip)
+
+### files & paths (ready to drop into your repo)
+
+* `src/lib/designTokens.js`
+* `src/lib/suburbThemes.js`
+* `src/lib/serviceThemes.js`
+* `src/lib/themeProvider.js`
+* `src/components/ui/Button.astro`
+* `src/components/ui/Card.astro`
+* `src/components/ui/Banner.astro`
+* `src/components/layout/PageLayout.astro`
+* `src/pages/services/[service]/[suburb]/index.astro` (example page using the layout)
+* `docs/DESIGN_SYSTEM.md` (how it all fits)
+
+### why this works with your geo data
+
+* Pages already receive `suburb.slug`, `suburb.name`, `service` (slug), `availableServices` and `adjacentSuburbs` from your generators. The components read those props and theme themselves via `createTheme(suburb.slug, service)`.
+* Adjacent suburb cards use your adjacency output to suggest **nearby** routes.
+* Gradients use standard Tailwind classes; solid colours are **hex tokens** injected via `style="--btn-bg:#…"` and consumed by Tailwind arbitrary values: `bg-[var(--btn-bg)]`, `border-[var(--btn-border)]`. No React required.
+
+### important fixes vs your sketch
+
+* **Class vs. color mismatch** fixed: previously, hex values were placed directly in `class` strings (which wouldn’t work). Now, hex goes into **CSS variables**, and classes reference those vars.
+* **Relative imports corrected** for Astro file layout (e.g., from the service page to `PageLayout.astro`: `../../../components/layout/PageLayout.astro`).
+* **No React**: all components are `.astro` and server-friendly.
+
+### quick start
+
+1. Unzip into repo root.
+2. Ensure Tailwind v4 is active (you already have it).
+3. Use the example page at `src/pages/services/[service]/[suburb]/index.astro` as a reference—wire it to your existing props generator just like in the file.
+
+If you want, I can also:
+
+* wire **adjacentSuburbs** to your `areas.adj.json` accessor,
+* add **badges, tabs, and accordions**,
+* or generate a **unified diff** against your `ts-phase2.6-readiness-rollout` branch for an instant PR.

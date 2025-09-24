@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "scripts": {
+    "daedalus:sweep": "node scripts/daedalus/tools/policy-sweeper.mjs --variants=small",
+    "daedalus:sweep:medium": "node scripts/daedalus/tools/policy-sweeper.mjs --variants=medium",
+    "daedalus:sweep:svc": "node scripts/daedalus/tools/policy-sweeper.mjs --variants=small --service=bond-cleaning"
+  }
+}

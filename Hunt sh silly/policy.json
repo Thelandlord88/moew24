@@ -1,0 +1,30 @@
+{
+  "strict_invariants": [
+    "runtime_ssr.truthPin != \"violated\"",
+    "runtime_ssr.counts.noAdapter == 0",
+    "runtime_ssr.counts.dynamicJsonImports == 0",
+    "build_dependencies.counts.potential_conflicts == 0",
+    "build_dependencies.counts.illegal_targets == 0",
+    "geo_fitness.counts.importAssertions == 0",
+    "geo_fitness.counts.dynamicJsonImports == 0",
+    "data_contracts.counts.schemasFailed == 0",
+    "determinism.diff == \"\"",
+    "css_hygiene.counts.inlineStyles == 0",
+    "(repo_inventory_v2.reasons_summary.orphan_page ?? 0) == 0",
+    "(repo_inventory_v2.reasons_summary.duplicate_group ?? 0) <= 10"
+  ],
+  "warn_invariants": [
+    "content_integrity.counts.brokenAnchors == 0",
+    "performance.counts.largeImages == 0",
+    "accessibility.counts.criticalA11y == 0",
+    "security.counts.secrets == 0",
+    "code_quality.counts.esmCjsBoundary == 0",
+    "css_hygiene.counts.hardcodedColors <= 2",
+    "css_hygiene.counts.unusedClasses <= 5",
+    "css_accessibility.counts.lowContrastPatterns <= 2",
+    "css_accessibility.counts.missingFocusStyles <= 5",
+    "css_performance.counts.cssSizeKb <= 50",
+    "(repo_inventory_v2.reasons_summary.backup ?? 0) < 50",
+    "(repo_inventory_v2.reasons_summary.unused ?? 0) < 120"
+  ]
+}

@@ -1,0 +1,47 @@
+---
+// src/components/ui/Tabs.astro
+// Minimal tabs component without external deps.
+// Usage:
+// <Tabs tabs={[{id:'overview',label:'Overview'},{id:'pricing',label:'Pricing'}]} active="overview">
+//   <Fragment slot="overview">Overview content</Fragment>
+//   <Fragment slot="pricing">Pricing content</Fragment>
+// </Tabs>
+
+const { tabs = [], active = (tabs[0]?.id || 'tab-1') } = Astro.props;
+---
+<div class="w-full">
+  <div class="flex gap-2 border-b border-gray-200">
+    {tabs.map(t => (
+      <a href={`#${t.id}`} class={`px-4 py-2 text-sm font-medium ${t.id === active ? 'border-b-2 border-blue-600 text-blue-700' : 'text-gray-600 hover:text-gray-900'}`}>
+        {t.label}
+      </a>
+    ))}
+  </div>
+  <div class="mt-4">
+    {tabs.map(t => (
+      <section id={t.id} class={t.id === active ? '' : 'hidden'}>
+        <slot name={t.id} />
+      </section>
+    ))}
+  </div>
+</div>
+
+<script is:inline>
+  // Tiny client enhancement to switch sections when clicking tabs
+  document.currentScript?.closest('div')?.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const root = a.closest('div')?.parentElement;
+      const id = a.getAttribute('href')?.slice(1);
+      if (!id || !root) return;
+      root.querySelectorAll('section[id]').forEach(sec => sec.classList.toggle('hidden', sec.id !== id));
+      root.querySelectorAll('a[href^="#"]').forEach(link => {
+        const on = link.getAttribute('href')?.slice(1) === id;
+        link.classList.toggle('border-b-2', on);
+        link.classList.toggle('border-blue-600', on);
+        link.classList.toggle('text-blue-700', on);
+        link.classList.toggle('text-gray-600', !on);
+      });
+      e.preventDefault();
+    }, { passive: false });
+  });
+</script>

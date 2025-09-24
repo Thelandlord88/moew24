@@ -1,0 +1,26 @@
+name: Geo Toolchain
+
+on:
+  push: { branches: ["**"] }
+  pull_request:
+
+jobs:
+  geo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run typecheck:full
+      - run: pnpm run geo:metrics -- --json --out __reports/geo-metrics.json
+      - run: pnpm run geo:doctor  -- --json --out __reports/geo-doctor.json
+      - run: pnpm vitest run --reporter=dot
+      - run: pnpm run geo:gate -- --strict
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: geo-reports
+          path: __reports/*.json

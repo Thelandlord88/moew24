@@ -1,0 +1,339 @@
+Love this vibe—“CEO code-engineer had a cheeky night, thinking sideways” + “private investigator for the codebase.” Your `rg-hunt.sh` is already a sharp flashlight. Let’s turn it into a full investigative unit that not only finds trouble but manufactures fixes and proof. And yes, we’ll invent a brand-new sandwich: something odd but very doable.
+
+Below is (1) what your hunt already does well, (2) surgical upgrades, and (3) a never-been-tried\*-ish\* “sandwich” that stitches repo reality to user intent—so the hunt actively narrows gaps and proposes patches.
+
+---
+
+# 1) Your current hunt—what it’s great at (keep this as the foundation)
+
+**Sections it covers:**
+
+* **Environment preflight** – prints pwd, ripgrep, Node versions.
+* **JSON parsing sweep** – parses all JSON (excludes comment-tolerant tsconfig family); logs `JSON_ERROR` with path + message.
+* **Commented JSON detector** – `//`, `/* */` in strict JSON (excluding tsconfig\*).
+* **EISDIR suspects** – static calls to `readFile*('.../')`, `readFile*('.../schemas')`, globs passed to `readFile*('*.json')`.
+* **Module boundary mismatches** – `require()` inside `.mjs`, `import` in `.cjs`, `module.exports` in `.mjs`, `export` in `.cjs`.
+* **npm script “bang” hazard** – `!` in scripts that can trigger bash history expansion.
+* **TypeScript check** – `tsc --noEmit` if available.
+* **Filename hygiene** – flags weird characters or patterns that tend to cause path/FS errors.
+* **Deterministic CI signal** – increments `ISSUES` and exits non-zero if any group fails.
+* **Single SoT log** – `__reports/rg-hunt.<stamp>.log`.
+
+This is already “PI-grade triage.” We’ll keep it as the **top bread** and **bottom bread** of everything that follows.
+
+---
+
+# 2) Precision upgrades (low effort, high signal)
+
+These slot straight into your bash file as new sections or tiny Node helpers. They improve the *thinking* of the hunt, not just the *scanning*.
+
+## A) Determinism Hunter
+
+Goal: keep build artifacts stable.
+
+**What it checks**
+
+* Greps for nondeterministic calls in your scripts layer:
+
+  * `Date.now()`, `new Date()` (without a controlled seed or timestamp injection)
+  * `Math.random()` (without seeded RNG)
+  * Unstable `JSON.stringify` of objects without key sort.
+
+**Snippet (add after your ESM/CJS checks)**
+
+```bash
+hdr "Determinism hazards"
+note_if_matches "Possible nondeterminism: Date.now()/Math.random()" \
+  -g 'scripts/**' -g 'src/**' \
+  -e 'Date\.now\(\)' -e 'Math\.random\(\)'
+note_if_matches "Unsorted stringify (consider stable stringify)" \
+  -g 'scripts/**' -g 'src/**' \
+  -e 'JSON\.stringify\(\s*[^,)]*\)'
+```
+
+*Follow-up:* When it fires, suggest using a `stableStringify()` util and an injectable clock or seed.
+
+## B) Big-Binary & Oversize Source Guard
+
+Goal: prevent accidental large files from landing in `src/` or repo history bloat.
+
+```bash
+hdr "Oversize file guard"
+# Warn if any file under src/ exceeds 512 KB; fail if > 2 MB
+big=$(find src -type f -size +512k 2>/dev/null | sed 's/^/  → /')
+if [[ -n "$big" ]]; then
+  warn "Large files under src/:"
+  echo "$big" | tee -a "$OUT"
+fi
+huge=$(find src -type f -size +2000k 2>/dev/null | sed 's/^/  → /')
+if [[ -n "$huge" ]]; then
+  bad "Very large files found under src/ (consider assets/hosting/CDN)"; ((ISSUES++))
+fi
+```
+
+## C) EOL & .editorconfig Conformance
+
+Goal: stop CRLF/LF churn and spacing wars.
+
+```bash
+hdr "Editor config conformance"
+if command -v editorconfig-checker >/dev/null 2>&1; then
+  if ! editorconfig-checker -no-color | tee -a "$OUT"; then
+    bad ".editorconfig violations"; ((ISSUES++))
+  else
+    ok ".editorconfig clean"
+  fi
+else
+  warn "editorconfig-checker not installed; skipping"
+fi
+
+hdr "EOL consistency (LF)"
+note_if_matches "CRLF line endings discovered" -e $'\r$' -g 'src/**' -g 'scripts/**' -g '!**/*.png' -g '!**/*.jpg'
+```
+
+## D) Secret & Token Canary (safe patterns only)
+
+Goal: catch obvious leaks without false positives.
+
+```bash
+hdr "Secrets canary"
+note_if_matches "Potential secrets (high-entropy or known token prefixes)" \
+  -e 'AKIA[0-9A-Z]{16}' \
+  -e 'ghp_[0-9A-Za-z]{36,}' \
+  -e 'AIzaSy[0-9A-Za-z_\-]+' \
+  -g '!node_modules' -g '!dist' -g '!build'
+```
+
+*Keep this conservative. Pair with a `.secretsignore` for known placeholders.*
+
+## E) Package Scripts Portability
+
+Goal: flag scripts that assume GNU tools and break on macOS/BSD CI agents.
+
+```bash
+hdr "Portable scripts check"
+note_if_matches "Use of GNU-only flags in npm scripts (gsed/ggrep suggested or cross-platform node helpers)" \
+  -g 'package.json' \
+  -e 'sed\s+-r' -e 'grep\s+-P' -e 'xargs\s+-r'
+```
+
+---
+
+# 3) Content & Routing Intelligence (Astro/MD/MDX aware)
+
+These make the hunt “understand the site,” not just the repo.
+
+## F) Frontmatter Schema Gate for Content
+
+Goal: every page/doc has required frontmatter and sane types.
+
+1. **Add** `schemas/content.frontmatter.schema.json`:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Content Frontmatter",
+  "type": "object",
+  "required": ["title", "description", "updated"],
+  "properties": {
+    "title": { "type": "string", "minLength": 3 },
+    "description": { "type": "string", "minLength": 20 },
+    "updated": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "draft": { "type": "boolean" },
+    "canonical": { "type": "string" }
+  },
+  "additionalProperties": true
+}
+```
+
+2. **Add** `scripts/dev/frontmatter_guard.mjs` to parse MD/MDX/ASTRO frontmatter with `gray-matter` (or a minimal parser) and validate via quick JSON Schema (tiny inline validator is fine if you want to avoid deps). Fail on missing `title|description|updated`.
+
+3. **Wire it** in `rg-hunt.sh`:
+
+```bash
+hdr "Frontmatter schema validation"
+if [ -f scripts/dev/frontmatter_guard.mjs ]; then
+  node scripts/dev/frontmatter_guard.mjs | tee -a "$OUT" || { bad "Frontmatter violations"; ((ISSUES++)); }
+else
+  warn "frontmatter_guard not found; skipping"
+fi
+```
+
+## G) Anchor & Orphan Detector (Markdown/MDX/ASTRO)
+
+Goal: no broken in-page links, and no orphaned documents.
+
+* Scan all `(#anchor)` references and confirm a corresponding heading `## Heading {#anchor}` exists.
+* Find content files with **zero inbound links** (orphans); propose a home for them (e.g., “Related” slot on 2–3 closest pages).
+
+**Tiny Node runner** (add as `scripts/dev/anchor_guard.mjs`):
+
+* Build a map of `slug → anchors[]` from headings.
+* Verify every `(#anchor)` exists.
+* Build a `linksGraph` (doc → doc) and flag nodes with inDegree = 0 (excluding explicitly `draft: true`).
+
+Wire similarly to the frontmatter guard and increment `ISSUES` for broken anchors; warn (not fail) for orphans.
+
+## H) Route Drift Check (Astro pages)
+
+Goal: ensure dynamic routes and params are well-formed.
+
+* Verify `src/pages/[slug].astro` has a matching data provider or fallback.
+* Ensure only legal param characters in filenames.
+* Verify `getStaticPaths()` (if used) deterministically sorts outputs.
+
+**Fast win:** grep for likely issues
+
+```bash
+hdr "Astro route hygiene"
+note_if_matches "Dynamic route with invalid param chars" -g 'src/pages/**' -e '\[[^a-zA-Z0-9\-_]+\]\.astro$'
+note_if_matches "getStaticPaths without stable sort" -g 'src/pages/**' -e 'getStaticPaths\([\s\S]*?\)\s*{[\s\S]*?return\s*\{[\s\S]*?params'
+```
+
+(If you want the robust approach, write a tiny AST walker later.)
+
+---
+
+# 4) The “new sandwich” — something unusual, but not impossible
+
+**Name:** The **Intent-to-Patch Sandwich**
+**Why it’s new:** Most hunts stop at “you’ve got issues.” This one fuses **real user intent signals** with **repo facts** and auto-manufactures *patchable suggestions*—even ready-to-commit files—so engineers move immediately, not “someday.”
+
+**Top bread — Your current hunt.**
+Cold, objective scans: syntax, EISDIR, modules, scripts, determinism.
+
+**Filling Layer 1 — Demand Signals (“Witness Statements”).**
+Feed in:
+
+* `analytics/search.csv` — site search queries (top N)
+* `logs/404.csv` — paths users tried to reach
+* `support/tickets.csv` — titles/labels (export)
+* optional: `console-errors.jsonl` from production
+
+Cluster them (lowercase, whitespace-normalize, strip stopwords) → produce top intents: `["receipt", "invoice", "bond-clean checklists", "service area ipswich", ...]`.
+
+**Filling Layer 2 — Repo Reality (“Crime Scene”).**
+Cross-reference those intents with what exists:
+
+* `content/**` & `src/pages/**`: frontmatter, headings, anchors, existing FAQ.
+* Your routing map (Astro pages).
+* Known redirects table (if any).
+
+**Filling Layer 3 — Auto-Drafted Fix Assets.**
+For each gap (intent with no clear page/section):
+
+* **Generate a stub MDX** with valid frontmatter, a short outline, and placeholder content that passes the frontmatter & anchor guards.
+* **Propose internal links** (2–3 candidates) based on text similarity of headings/frontmatter.
+* **Draft a 301 redirect** if a 404 path maps neatly to a new or existing page.
+* **Compose a PR-ready patch** under `__drafts/intent-fixes/…` with all files staged (but not applied).
+
+**Bottom bread — Gate & Evidence.**
+
+* Write `__reports/intent-to-patch.json` + `intent-to-patch.md` summarising: top intents, matched pages, gaps, generated stubs, proposed redirects.
+* Fail CI if: any top-5 intent has `coverage=false` or any 404 repeats ≥ X/day without a redirect plan.
+
+### Minimal implementation sketch
+
+**1) Add** `scripts/dev/intent_to_patch.mjs` (no external deps required):
+
+* Read `analytics/search.csv`, `logs/404.csv`, `support/tickets.csv` if present (skip gracefully).
+* Produce `intents[]` with counts.
+* Walk `content/**` + `src/pages/**`, build in-memory index of titles/headings.
+* For each intent with no good match: create **draft MDX** in `__drafts/intent/<slug>.mdx`:
+
+  * Frontmatter (`title`, `description`, `updated: YYYY-MM-DD`, `tags: [intent, "faq-candidate"]`)
+  * Body outline with `## Answer`, `## Next steps`, and anchor IDs.
+* Emit JSON + MD report.
+* **Do not auto-apply**; just generate drafts & a `git apply`-ready patch when run with `--patch`.
+
+**2) Wire into your hunt:**
+
+```bash
+hdr "Intent-to-Patch Sandwich"
+if [ -f scripts/dev/intent_to_patch.mjs ]; then
+  node scripts/dev/intent_to_patch.mjs --write --patch | tee -a "$OUT" || true
+  if jq -e '.topGaps | map(select(.rank <= 5)) | any(.coverage == false)' __reports/intent-to-patch.json >/dev/null 2>&1; then
+    bad "Top intents uncovered (see __reports/intent-to-patch.md)"; ((ISSUES++))
+  else
+    ok "Top intents are covered or drafts generated"
+  fi
+else
+  warn "intent_to_patch not found; skipping"
+fi
+```
+
+**3) Optional: self-healing mode (very controlled)**
+
+* Allow a `--apply-drafts` flag that moves generated MDX from `__drafts/intent/` to `content/faq/` and adds a `draft: true` frontmatter flag so it renders behind `noindex`. This lets marketing/SMEs iterate safely.
+
+---
+
+# 5) Bonus mini-sandwiches (stack as you like)
+
+### A. **Time-Bomb Sandwich**
+
+* Find `TODO:` / `FIXME:` with dates or `@by(YYYY-MM-DD)`.
+* If date is > 30 days in the past, fail with a clear checklist.
+  **Regex**: `TODO:.*@by\((\d{4}-\d{2}-\d{2})\)`
+
+### B. **Coupling-Debt Sandwich**
+
+* Build a rough import graph (JS/TS/ASTRO). Flag “high out-degree” files in `src/lib/**` that are not unit tested.
+* Output top 10 “risky single points” with suggested test titles.
+
+### C. **Docs-as-Code Consistency**
+
+* If a page exports JSON-LD or structured data, check it against a JSON Schema.
+* Fail on missing required LD fields for key templates (LocalBusiness, Service).
+
+### D. **Performance Envelope**
+
+* If you have a `__reports/page-metrics.json` (Lighthouse/Playwright), pull it in and fail on regressions > threshold (TTFB, CLS).
+
+---
+
+# 6) How to run, integrate, and get value quickly
+
+**Local**
+
+```bash
+bash scripts/dev/rg-hunt.sh .
+bat __reports/rg-hunt.*.log
+bat __reports/intent-to-patch.md || true
+```
+
+**CI (GitHub Actions, snippet)**
+
+```yaml
+- name: Repo Hunt
+  run: bash scripts/dev/rg-hunt.sh .
+- name: Upload reports
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: repo-hunt-reports
+    path: __reports/**
+```
+
+**PR Template add**
+
+```md
+### Hunt Evidence
+- [ ] `__reports/rg-hunt....log` attached
+- [ ] Intent-to-Patch: top intents covered or drafts generated
+- [ ] Determinism: no Date.now/Math.random in build outputs
+```
+
+---
+
+# 7) What you get out of this (fast)
+
+* **Less yak-shaving**: the hunt not only yells—it hands you drafts & patches.
+* **Fewer regressions**: determinism and frontmatter schema stop subtle PR landmines.
+* **User-outcome alignment**: those analytics/404s translate directly into page stubs, redirects, and links.
+* **Clear CI signal**: one green/red gate, human-readable MD reports, machine-readable JSON for dashboards.
+
+---
+
+If you want, I can drop in the minimal `intent_to_patch.mjs`, `frontmatter_guard.mjs`, and `anchor_guard.mjs` skeletons next so you can paste-run them immediately.

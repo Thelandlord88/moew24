@@ -1,0 +1,328 @@
+# Yes — you can build a robust, repo-wide **self-test** layer that *proves* your detectors work
+
+Short answer: absolutely. You can add a deterministic “self-test harness” around your existing hunts/lints that (1) plants controlled canaries, (2) verifies detectors catch them, (3) taps real runtime calls to surface non-static issues, and (4) emits JSON+MD reports plus patch sketches—then gates CI on the *proven* risks.&#x20;
+
+Below is a complete, production-grade blueprint with paste-ready scripts, report schemas, CI wiring, and a runbook.
+
+---
+
+## What this self-test system delivers
+
+* **Detector health checks**: canaries ensure your ripgrep/linters haven’t quietly broken.
+* **Static + runtime evidence**: rg catches text patterns; an fs-tap records *actual* bad file ops during dev/tests.
+* **Actionable artifacts**: machine-readable JSON & a human MD brief; optional patch stubs.
+* **Determinism**: stable sorting, fixed filenames, schemaVersion, and input hashes for clean PR diffs.
+* **Surgical gating**: CI fails only on “danger classes” (e.g., JSON parse failures, runtime EISDIR-like reads), while stylistic issues become warnings/briefs.
+
+---
+
+## Minimal file layout
+
+```
+scripts/
+  dev/
+    fs-tap.mjs          # runtime file-system tap (no deps)
+    hunt_fixit.mjs      # turns logs into fix notes/patch sketches
+    self_canary.sh      # canary cases proving detectors work
+  hunt/
+    rg-hunt.sh          # your existing hunt script (wrap with canary + fixit)
+__reports/              # JSON/MD outputs + patch sketches
+tests/faq-fixtures/     # tiny fixtures (optional, see Runbook)
+```
+
+---
+
+## 1) Canary: plant controlled “bad” cases and **assert detection**
+
+Create `scripts/dev/self_canary.sh` and call it from the very start of your hunt.
+
+```bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+# self_canary.sh — proves our detectors still fire
+# Usage: source scripts/dev/self_canary.sh; self_test_canary
+
+self_test_canary() {
+  local CROOT="__tmp/rg-canary.$$"
+  mkdir -p "$CROOT/sub(dir)"
+  : > "$CROOT/file with spaces.js"
+  : > "$CROOT/hash#name.ts"
+  : > "$CROOT/weird–dash.md"      # en dash
+  : > "$CROOT/sub(dir)/readme.md" # parentheses in path
+
+  # Reuse your filename-hygiene logic (same patterns the hunt uses)
+  local found
+  found=$(find "$CROOT" \
+    \( -name "*#*" -o -name "*–*" -o -name "* *" -o -name "*(*" \) -type f -print)
+
+  if [[ -n "$found" ]]; then
+    echo "[CANARY] ok — detectors caught canary filenames"
+  else
+    echo "[CANARY] FAIL — detectors did not catch canary filenames" >&2
+    return 1
+  fi
+
+  rm -rf "$CROOT"
+}
+```
+
+**Wire it into your hunt** (at the top, before scans):
+
+```bash
+source scripts/dev/self_canary.sh
+if ! self_test_canary; then
+  echo "❌ Canary failed — detectors are stale/broken"; exit 1
+fi
+```
+
+**Why it matters**: if a regex is changed or a find/glob breaks, your hunt will fail *fast*, not silently miss hazards.
+
+---
+
+## 2) Runtime tap: catch dynamic problems static scans can’t see
+
+Create `scripts/dev/fs-tap.mjs` (no dependencies). It wraps `fs.readFile*`/`fs.readdir*` and writes a JSONL event per suspicious call.
+
+```js
+#!/usr/bin/env node
+// fs-tap.mjs — runtime evidence for suspicious fs calls
+import fs from "fs";
+import path from "path";
+
+const REPORT_DIR = "__reports";
+const LOG = path.join(REPORT_DIR, "fs-tap.jsonl");
+if (!fs.existsSync(REPORT_DIR)) fs.mkdirSync(REPORT_DIR, { recursive: true });
+
+const isSuspicious = (p) => {
+  if (typeof p !== "string") return false;
+  if (p.endsWith("/")) return true;                 // likely dir path to readFile
+  if (/\*|\?|\[.+\]/.test(p)) return true;          // glob handed to readFile
+  try { return fs.existsSync(p) && fs.statSync(p).isDirectory(); } catch { return false; }
+};
+
+const log = (ev, p) => fs.appendFileSync(LOG, JSON.stringify({ ts: Date.now(), ev, p }) + "\n");
+const wrap1 = (fn, ev) => (p, ...rest) => { if (isSuspicious(p)) log(ev, p); return fn(p, ...rest); };
+const wrap2 = (fn, ev) => (p, opts, cb) => { if (isSuspicious(p)) log(ev, p); return fn(p, opts, cb); };
+
+fs.readFile = wrap2(fs.readFile, "readFile");
+fs.readFileSync = wrap1(fs.readFileSync, "readFileSync");
+fs.readdir = wrap2(fs.readdir, "readdir");
+fs.readdirSync = wrap1(fs.readdirSync, "readdirSync");
+
+// keep process alive only as a preloader; the actual app/test code runs after requiring this file
+```
+
+**Use it** by preloading in dev/test runs:
+
+```bash
+# Tap a script
+node -r ./scripts/dev/fs-tap.mjs scripts/some-task.mjs
+
+# Tap your test runner
+node -r ./scripts/dev/fs-tap.mjs node_modules/.bin/vitest run
+```
+
+**Hunt summary snippet** (append to your hunt script):
+
+```bash
+echo "## Runtime Tap Summary"
+if [[ -f "__reports/fs-tap.jsonl" ]]; then
+  hits=$(wc -l < __reports/fs-tap.jsonl | tr -d ' ')
+  if (( hits > 0 )); then
+    echo "❌ Suspicious runtime fs calls: $hits (see __reports/fs-tap.jsonl)"
+    ISSUES=$((ISSUES+1))
+  else
+    echo "✅ No suspicious runtime fs calls recorded"
+  fi
+else
+  echo "ℹ️  No runtime tap log; run tests with: node -r ./scripts/dev/fs-tap.mjs …"
+fi
+```
+
+---
+
+## 3) Fix-it companion: turn logs into **concrete next actions**
+
+Create `scripts/dev/hunt_fixit.mjs` to parse the latest hunt log + fs-tap output and emit a concise brief + patch sketches.
+
+```js
+#!/usr/bin/env node
+// hunt_fixit.mjs — generates __reports/hunt-fixit.md + patch sketches
+import fs from "fs";
+import path from "path";
+
+const REPORT = "__reports";
+const PATCH_DIR = path.join(REPORT, "patches");
+fs.mkdirSync(PATCH_DIR, { recursive: true });
+
+const latest = () => fs.readdirSync(REPORT)
+  .filter(f => /^rg-hunt\.\d{8}-\d{6}\.log$/.test(f)).sort().pop();
+
+const logPath = latest() ? path.join(REPORT, latest()) : null;
+const tapPath = path.join(REPORT, "fs-tap.jsonl");
+const md = [`# Hunt Fix-It Brief (${new Date().toISOString()})`];
+
+if (logPath && fs.existsSync(logPath)) {
+  const log = fs.readFileSync(logPath, "utf8");
+
+  if (/\brequire\(.+\)\b.*\.mjs/mi.test(log)) {
+    md.push("## ESM/CJS: `.mjs` using `require()`",
+            "- Convert to `import` or rename to `.cjs` and use `module.exports`.");
+    fs.writeFileSync(path.join(PATCH_DIR, "esm-cjs-notes.patch"),
+`# Replace in affected .mjs:
+#   const X = require('pkg');
+# with:
+#   import X from 'pkg';
+`);
+  }
+
+  if (/module\.exports.*\.mjs/mi.test(log))
+    md.push("## ESM/CJS: `module.exports` inside `.mjs` — switch to `export default` / `export const`.");
+
+  if (/export\s+.*\.cjs/mi.test(log))
+    md.push("## ESM/CJS: `export` inside `.cjs` — convert to `.mjs` or use `module.exports`.");
+
+  if (/JSON_ERROR/.test(log)) {
+    md.push("## JSON parse errors — remove trailing commas/comments; only JSONC where allowed.");
+  }
+
+  if (/SCRIPT_BANG/.test(log)) {
+    md.push("## npm scripts: `!` risk — quote or move logic into node scripts to avoid history expansion.");
+  }
+}
+
+if (fs.existsSync(tapPath)) {
+  const lines = fs.readFileSync(tapPath, "utf8").trim().split(/\r?\n/).filter(Boolean);
+  const bad = lines.map(l => JSON.parse(l)).filter(x => x.ev.startsWith("readFile"));
+  if (bad.length) {
+    md.push(`## Runtime: suspicious \`readFile*\` calls (${bad.length})`,
+            "- Replace dir/glob reads with `readdir*` + per-file reads.");
+    fs.writeFileSync(path.join(PATCH_DIR, "runtime-fs-notes.patch"),
+`# Review __reports/fs-tap.jsonl and refactor callers to avoid readFile on dirs/globs.`);
+  }
+}
+
+fs.writeFileSync(path.join(REPORT, "hunt-fixit.md"), md.join("\n") + "\n");
+console.log("Wrote __reports/hunt-fixit.md and patch sketches in __reports/patches/");
+```
+
+**Call it from your hunt** (near the end):
+
+```bash
+echo "## Speculative Repair (Fix-It)"
+node scripts/dev/hunt_fixit.mjs || true
+```
+
+---
+
+## 4) Reports: stable, machine-readable shapes
+
+**Runtime tap** (`__reports/fs-tap.jsonl` — one event per line):
+
+```json
+{"ts": 1726530000000, "ev":"readFileSync", "p":"schemas/"}
+{"ts": 1726530000123, "ev":"readFile",     "p":"schemas/*.json"}
+```
+
+**Fix-it brief** (`__reports/hunt-fixit.md`): human summary with bullets and references to `patches/`.
+
+**Hunt log** (`__reports/rg-hunt.YYYYMMDD-HHMMSS.log`): your current combined console + summary; keep sorted outputs for deterministic diffs.
+
+---
+
+## 5) CI wiring (GitHub Actions example)
+
+```yaml
+# .github/workflows/hunt.yml
+name: Repo Hunt
+on: [push, pull_request]
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ripgrep
+      - run: node -v
+      - name: Run hunt (+ canary + fix-it)
+        run: |
+          bash scripts/hunt/rg-hunt.sh
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: hunt-reports
+          path: __reports/*
+```
+
+**Policy** inside `rg-hunt.sh` (pseudo):
+
+```bash
+# After calculating ISSUES from static + runtime + JSON failures:
+if (( ISSUES > 0 )); then
+  echo "❌ Hunt failed with $ISSUES issue group(s)"; exit 1
+else
+  echo "✅ Hunt clean"; exit 0
+fi
+```
+
+---
+
+## 6) Determinism & flake guards
+
+* **Sort** file lists, table rows, and duplicate reports before writing.
+* Include `schemaVersion`, `generatedAt`, and an `inputsHash` (sha256 of key inputs) in JSON reports.
+* Prefer LF line endings in scripts and generated files.
+* Prune heavy dirs (`node_modules`, `dist`, `build`, `coverage`, `__reports`) in walks.
+
+---
+
+## 7) Rollout plan
+
+1. **Week 1 — Add canary & fix obvious detector nits**
+
+   * Integrate `self_canary.sh`.
+   * Ensure filename hygiene and JSON checks trip as expected.
+2. **Week 2 — Add runtime tap to your dev/test flows**
+
+   * Preload `fs-tap.mjs` in your test runner and one common local script.
+   * Review events; patch the worst offenders.
+3. **Week 3 — Fix-it briefs + CI artifacts**
+
+   * Enable `hunt_fixit.mjs`, publish reports as CI artifacts, and turn on policy gate for danger classes.
+4. **Week 4 — Tighten & tune**
+
+   * Add a small synonym list for rg patterns, reduce false positives, and expand canaries (e.g., JSONC in non-JSONC files).
+
+---
+
+## 8) Runbook (day-to-day)
+
+```bash
+# Generate evidence
+bash scripts/hunt/rg-hunt.sh
+
+# If tapping tests:
+node -r ./scripts/dev/fs-tap.mjs node_modules/.bin/vitest run
+
+# Read outputs
+bat __reports/rg-hunt.*.log
+bat __reports/hunt-fixit.md
+wc -l __reports/fs-tap.jsonl || true
+```
+
+---
+
+## 9) Optional niceties
+
+* **Golden snapshot**: record a “clean run” counts JSON and alert on >X% drift.
+* **Anchor guardian** (for MD/MDX docs): require `{#stable-id}` for any heading targeted by in-repo links.
+* **Tombstone detector**: use `git log --diff-filter=D` to find deleted assets and report dangling imports.
+
+---
+
+## Bottom line
+
+* **Feasible**: 100%. Pure Bash + tiny Node, no external services, minimal dependencies.
+* **Valuable**: converts “maybe problems” into *proven* issues, with concrete next steps and patch sketches.
+* **Operational**: deterministic artifacts, tight CI gating, and a clear runbook—so your hunts stay sharp as the codebase evolves.&#x20;

@@ -1,0 +1,3 @@
+{"role": "system", "content": "You are Hunter. Your job is to eliminate failure-classes and prove prevention with evidence."}
+{"role": "user", "content": "Read the last build reports and list failure-classes with examples. Propose new gates or thresholds."}
+{"role": "user", "content": "Audit internal-link fairness: compute inbound Gini and reciprocity. Suggest caps and damping adjustments."}

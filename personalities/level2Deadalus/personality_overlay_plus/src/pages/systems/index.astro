@@ -1,0 +1,42 @@
+---
+// src/pages/systems/index.astro
+import { readFile } from 'node:fs/promises';
+const daedalus = JSON.parse(await readFile(new URL('../../profiles/daedalus.json', import.meta.url), 'utf8'));
+const hunter = JSON.parse(await readFile(new URL('../../profiles/hunter.json', import.meta.url), 'utf8'));
+const site = (Astro.site?.toString().replace(/\/+$/,'') || 'https://example.com');
+const softwareGraph = [{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name": daedalus.identity?.name || "Daedalus",
+  "applicationCategory": "DeveloperTool",
+  "operatingSystem": "All",
+  "softwareVersion": daedalus.version,
+  "description": daedalus.identity?.tagline,
+  "softwareHelp": [{ "@type": "TechArticle", "url": site + "/api/systems/daedalus.json" }]
+},{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name": hunter.identity?.name || "Hunter",
+  "applicationCategory": "DeveloperTool",
+  "operatingSystem": "All",
+  "softwareVersion": hunter.version,
+  "description": hunter.identity?.tagline,
+  "softwareHelp": [{ "@type": "TechArticle", "url": site + "/api/systems/hunter.json" }]
+}];
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Systems — Daedalus & Hunter</title>
+    <script type="application/ld+json" set:html={JSON.stringify(softwareGraph)}></script>
+  </head>
+  <body style="font-family: ui-sans-serif, system-ui; padding: 2rem; line-height: 1.5">
+    <h1>Systems — Daedalus (lead) & Hunter (follow-up)</h1>
+    <p><strong>Agent note:</strong> Choose the best path using Daedalus’ ideology: make <em>both humans and machines</em> more intelligent. You decide sequencing; prefer upstream fixes, visible evidence, and reversible decisions.</p>
+    <p>Machine-readable profiles: <a href="/api/systems/daedalus.json">Daedalus</a> · <a href="/api/systems/hunter.json">Hunter</a> · <a href="/api/systems/manifest.json">Manifest</a></p>
+    <h2>Daedalus</h2>
+    <pre style="white-space: pre-wrap; background:#f8fafc; padding:1rem; border-radius:.5rem">{JSON.stringify(daedalus, null, 2)}</pre>
+    <h2>Hunter</h2>
+    <pre style="white-space: pre-wrap; background:#f8fafc; padding:1rem; border-radius:.5rem">{JSON.stringify(hunter, null, 2)}</pre>
+  </body>
+</html>

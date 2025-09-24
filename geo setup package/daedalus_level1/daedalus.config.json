@@ -1,0 +1,34 @@
+{
+  "$schema": "./daedalus.config.schema.json",
+  "siteUrl": "https://example.com",
+  "business": {
+    "name": "One N Done Bond Clean"
+  },
+  "services": [
+    {
+      "id": "bond-cleaning",
+      "name": "Bond Cleaning",
+      "theme": {
+        "primaryColor": "#0ea5e9"
+      }
+    },
+    {
+      "id": "spring-cleaning",
+      "name": "Spring Cleaning",
+      "theme": {
+        "primaryColor": "#16a34a"
+      }
+    },
+    {
+      "id": "bathroom-deep-clean",
+      "name": "Bathroom Deep Clean",
+      "theme": {
+        "primaryColor": "#9333ea"
+      }
+    }
+  ],
+  "policies": {
+    "neighborsMax": 6,
+    "linkReciprocity": true
+  }
+}

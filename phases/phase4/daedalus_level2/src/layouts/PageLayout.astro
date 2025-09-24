@@ -1,0 +1,36 @@
+---
+// src/layouts/PageLayout.astro
+import ThemeProvider from '../components/theme/ThemeProvider.astro';
+import Banner from '../components/ui/Banner.astro';
+
+const {
+  title,
+  subtitle,
+  theme,
+  jsonld
+} = Astro.props as {
+  title: string;
+  subtitle?: string;
+  theme: any;
+  jsonld?: Record<string, any>;
+};
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {jsonld?.localBusiness ? <script type="application/ld+json">{JSON.stringify(jsonld.localBusiness)}</script> : null}
+    {jsonld?.cleaningService ? <script type="application/ld+json">{JSON.stringify(jsonld.cleaningService)}</script> : null}
+    {jsonld?.place ? <script type="application/ld+json">{JSON.stringify(jsonld.place)}</script> : null}
+    {jsonld?.dataset ? <script type="application/ld+json">{JSON.stringify(jsonld.dataset)}</script> : null}
+  </head>
+  <body class="min-h-screen text-slate-900 bg-white">
+    <ThemeProvider theme={theme}>
+      <main class="container mx-auto px-4 sm:px-6 py-8">
+        <Banner title={title} subtitle={subtitle} />
+        <slot />
+      </main>
+    </ThemeProvider>
+  </body>
+</html>

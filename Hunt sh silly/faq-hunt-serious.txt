@@ -1,0 +1,314 @@
+Alright, CEO-code-engineer—tie’s crooked, brain’s spicy, PI is in the room. We’ll turn your **`rg-hunt.sh`** into a full “investigations stack” that not only hunts problems but **proves detectors work**, **suggests concrete fixes**, and **verifies repairs**—in one pass. Think: a weird-but-workable **sandwich** of self-tests, static hunts, runtime taps, and speculative repairs glued together with tiny policies.&#x20;
+
+# What the current hunt already nails (our “bread”)
+
+Your script sets the baseline: environment capture, JSON sweeps, comment-in-JSON tripwires, EISDIR filename hygiene, ESM/CJS mismatch scans, npm “bang” hazards, TODO/FIXME scans, and optional `tsc --noEmit`—all logged into `__reports/rg-hunt.<stamp>.log`. That’s a clean, deterministic **triage pass** you can keep as the top slice.&#x20;
+
+---
+
+# The new sandwich (not tried often, but totally doable)
+
+**Name:** The **Hunt Club Sandwich**
+**Layers:**
+
+1. **Self-Test Canary** – we purposely plant safe, temporary “bad” files/patterns and assert the hunt **catches them** (so detectors don’t silently rot).
+2. **Static Hunt (yours)** – the proven rg checks keep sweeping.
+3. **Runtime Tap** – a Node shim wraps `fs.readFile*`/`fs.readdir*` during dev/test to log real paths that would trigger EISDIR, wrong globs, or directory reads.
+4. **Speculative Repair** – a companion script parses the hunt log + tap output and **writes suggested patches** (or exact shell `git mv` lines) into `__reports/patches/`.
+5. **Policy Gate** – tiny jq checks fail only on **proven** harms (e.g., broken runtime reads, unfixable JSON), while warnings make rewrite briefs.
+
+This gives you (a) **detector health** (self-test), (b) **evidence** (static + runtime), (c) **next action** (patches), (d) **guardrails** (policy).
+
+---
+
+## 1) Add a **Self-Test Canary** to guarantee detectors work
+
+Drop this function into `rg-hunt.sh` and call it **before** the normal hunt phases. It plants dodgy filenames, runs a **targeted hygiene check**, asserts detection, then cleans up.
+
+```bash
+# --- Self-test: prove our detectors still fire --------------------------------
+self_test_canary() {
+  hdr "Self-Test Canary (verifies detectors still work)"
+  local CROOT="__tmp/rg-canary.$$"
+  mkdir -p "$CROOT/sub(dir)" || true
+  touch "$CROOT/file with spaces.js"
+  touch "$CROOT/hash#name.ts"
+  touch "$CROOT/weird–dash.md"           # en dash
+  touch "$CROOT/sub(dir)/readme.md"      # parens in path
+
+  # Re-run the same filename hygiene logic against the canary root
+  local found
+  found=$(find "$CROOT" -name "*#*" -o -name "*–*" -o -name "* *" -o -name "*(*" 2>/dev/null)
+
+  if [[ -n "$found" ]]; then
+    ok "Detectors caught canary filenames (good)"
+  else
+    bad "Detectors FAILED to catch canary filenames"
+    ISSUES=$((ISSUES+1))
+  fi
+
+  rm -rf "$CROOT"
+}
+```
+
+Then call it right after printing the header:
+
+```bash
+hdr "Repo Hunt :: $(date) -> $OUT"
+self_test_canary
+```
+
+Now every run **proves the hunt is alive**, not just “quiet.”
+
+---
+
+## 2) Add a **Runtime Tap** to catch the things static analysis misses
+
+Create `scripts/dev/fs-tap.mjs`: a zero-dep shim that monkey-patches fs methods, logs suspicious calls (dir reads with `readFile`, paths ending with `/`, globs passed to readFile, etc.) into `__reports/fs-tap.jsonl`.
+
+```js
+#!/usr/bin/env node
+// scripts/dev/fs-tap.mjs
+import fs from "fs";
+import path from "path";
+const REPORT_DIR = "__reports";
+const LOG = path.join(REPORT_DIR, "fs-tap.jsonl");
+if (!fs.existsSync(REPORT_DIR)) fs.mkdirSync(REPORT_DIR);
+
+const suspicious = (p) => {
+  if (typeof p !== "string") return false;
+  if (p.endsWith("/")) return true;
+  try { if (fs.existsSync(p) && fs.statSync(p).isDirectory()) return true; } catch {}
+  if (/\*|\?|\[.+\]/.test(p)) return true; // glob passed to readFile*
+  return false;
+};
+
+const wr = (ev, p) => fs.appendFileSync(LOG, JSON.stringify({ ts: Date.now(), ev, p }) + "\n");
+
+const wrap1 = (fn, ev) => (p, ...rest) => {
+  if (suspicious(p)) wr(ev, p);
+  return fn(p, ...rest);
+};
+const wrap2 = (fn, ev) => (p, opts, cb) => {
+  if (suspicious(p)) wr(ev, p);
+  return fn(p, opts, cb);
+};
+
+fs.readFile = wrap2(fs.readFile, "readFile");
+fs.readFileSync = wrap1(fs.readFileSync, "readFileSync");
+fs.readdir = wrap2(fs.readdir, "readdir");
+fs.readdirSync = wrap1(fs.readdirSync, "readdirSync");
+
+// Keep process running only as a preloader
+```
+
+**How to use:** run your dev/test commands with `-r`:
+
+```bash
+# Example: tap a test or a local script
+node -r ./scripts/dev/fs-tap.mjs scripts/whatever.mjs
+# or your test runner
+node -r ./scripts/dev/fs-tap.mjs node_modules/.bin/vitest run
+```
+
+Later in `rg-hunt.sh`, summarize the tap:
+
+```bash
+hdr "Runtime Tap Summary"
+if [ -f "__reports/fs-tap.jsonl" ]; then
+  hits=$(wc -l < __reports/fs-tap.jsonl | tr -d ' ')
+  if [ "$hits" -gt 0 ]; then
+    bad "Runtime suspicious fs calls detected ($hits). See __reports/fs-tap.jsonl"
+    ISSUES=$((ISSUES+1))
+  else
+    ok "No runtime suspicious fs calls recorded"
+  fi
+else
+  warn "No runtime tap log found (run with: node -r ./scripts/dev/fs-tap.mjs ...)"
+fi
+```
+
+*Why it matters:* static rg can’t see dynamic joins like `path.join(base, name)`. The tap catches the **actual** bad calls in situ.
+
+---
+
+## 3) Add a **Speculative Repair** companion that writes fix suggestions
+
+Create `scripts/dev/hunt_fixit.mjs`. It parses the latest `rg-hunt.*.log` and `fs-tap.jsonl`, then **emits suggested fixes** as MD + patch stubs under `__reports/patches/`. It doesn’t change code—keeps you in control.
+
+```js
+#!/usr/bin/env node
+// scripts/dev/hunt_fixit.mjs
+import fs from "fs";
+import path from "path";
+
+const REPORT = "__reports";
+if (!fs.existsSync(REPORT)) fs.mkdirSync(REPORT);
+const PATCH_DIR = path.join(REPORT, "patches");
+if (!fs.existsSync(PATCH_DIR)) fs.mkdirSync(PATCH_DIR);
+
+function latestLog() {
+  const files = fs.readdirSync(REPORT).filter(f => /^rg-hunt\.\d{8}-\d{6}\.log$/.test(f));
+  return files.sort().pop() ? path.join(REPORT, files.sort().pop()) : null;
+}
+
+const logPath = latestLog();
+const tapPath = path.join(REPORT, "fs-tap.jsonl");
+const md = [];
+md.push(`# Hunt Fix-It Brief (${new Date().toISOString()})`);
+
+if (logPath && fs.existsSync(logPath)) {
+  const log = fs.readFileSync(logPath, "utf8");
+
+  // 1) .mjs using require()
+  if (/require\(\).*in \.mjs/mi.test(log) || /require\(/.test(log) && log.includes(".mjs")) {
+    md.push(`## ESM/CJS: \`.mjs\` using \`require()\``);
+    md.push(`- Suggest converting \`require()\` to \`import\` or switch file to \`.cjs\`.`);
+    fs.writeFileSync(path.join(PATCH_DIR, "esm-cjs-notes.patch"),
+`# Manual patch sketch:
+# - In affected .mjs files, replace:
+#     const X = require('pkg');
+#   with:
+#     import X from 'pkg';
+# - Verify default vs named exports before applying.
+`);
+  }
+
+  // 2) module.exports in .mjs
+  if (/module\.exports.*in \.mjs/mi.test(log) || /module\.exports/.test(log) && log.includes(".mjs")) {
+    md.push(`## ESM/CJS: \`module.exports\` inside \`.mjs\``);
+    md.push(`- Suggest migrating to \`export default\` or \`export const\` syntax.`);
+  }
+
+  // 3) export syntax in .cjs
+  if (/export .*in \.cjs/mi.test(log) || /export\s+/.test(log) && log.includes(".cjs")) {
+    md.push(`## ESM/CJS: \`export\` inside \`.cjs\``);
+    md.push(`- Suggest converting file to \`.mjs\` or use \`module.exports\`.`);
+  }
+
+  // 4) readFile passed a glob or dir
+  if (/glob.*readFile|readFile.*\/\)/mi.test(log)) {
+    md.push(`## fs usage: \`readFile*\` with glob or directory`);
+    md.push(`- Suggest using \`fast-glob\` (or \`fs.readdir*\`) then \`readFile\` each resolved file.`);
+    fs.writeFileSync(path.join(PATCH_DIR, "readfile-glob-notes.patch"),
+`# Example:
+# import fg from 'fast-glob';
+# for (const f of await fg('schemas/*.json')) {
+#   const s = await fs.promises.readFile(f, 'utf8');
+#   ...
+# }
+`);
+  }
+
+  // 5) npm script '!' hazards
+  if (/SCRIPT_BANG/.test(log)) {
+    md.push(`## npm scripts: '!' history expansion`);
+    md.push(`- Suggest quoting or moving to a node script to avoid bash history expansion in shells.`);
+  }
+
+  // 6) JSON parse errors
+  if (/JSON_ERROR/.test(log)) {
+    md.push(`## JSON parse errors`);
+    md.push(`- Fix invalid JSON (trailing commas, comments). Consider \`jsonc\` only where allowed.`);
+  }
+}
+
+if (fs.existsSync(tapPath)) {
+  const lines = fs.readFileSync(tapPath, "utf8").trim().split(/\r?\n/).filter(Boolean);
+  const bad = lines.map(l => JSON.parse(l)).filter(x => x.ev.startsWith("readFile"));
+  if (bad.length) {
+    md.push(`## Runtime: suspicious \`readFile*\` calls (${bad.length})`);
+    md.push(`- Replace dir/glob reads with \`readdir*\` + per-file reads.`);
+    fs.writeFileSync(path.join(PATCH_DIR, "runtime-fs-notes.patch"),
+`# Review __reports/fs-tap.jsonl and refactor callers to avoid readFile on dirs/globs.`);
+  }
+}
+
+fs.writeFileSync(path.join(REPORT, "hunt-fixit.md"), md.join("\n") + "\n");
+console.log("Wrote __reports/hunt-fixit.md and patch sketches in __reports/patches/");
+```
+
+Wire it in near the end of `rg-hunt.sh`:
+
+```bash
+hdr "Speculative Repair (Fix-It Brief)"
+if have node && [ -f scripts/dev/hunt_fixit.mjs ]; then
+  node scripts/dev/hunt_fixit.mjs | tee -a "$OUT"
+  if [ -f "__reports/hunt-fixit.md" ]; then
+    ok "Fix-It brief ready: __reports/hunt-fixit.md (+ patches/)"
+  fi
+else
+  warn "Fix-It helper not found; skipping"
+fi
+```
+
+---
+
+## 4) Strengthen the **policy gate** with tiny, surgical rules
+
+Add a small jq section that fails only when it’s truly dangerous:
+
+```bash
+# Fail on: runtime fs misuse; JSON errors were already counted; filename hygiene already counted.
+if [ -f "__reports/fs-tap.jsonl" ]; then
+  hits=$(wc -l < __reports/fs-tap.jsonl | tr -d ' ')
+  if [ "$hits" -gt 0 ]; then
+    bad "Policy: runtime fs violations present"; ISSUES=$((ISSUES+1))
+  fi
+fi
+```
+
+Everything else (ESM/CJS styling, TODOs, scripts with `!`) can warn and push rewrite briefs—keeping velocity.
+
+---
+
+## 5) Bonus slices (tasty, optional)
+
+* **Tombstone Detector:** scan repo for references to **deleted** assets (via `git log --diff-filter=D --name-only`) and report dangling imports/links.
+* **Golden-Report Drift:** persist a checksum of “clean hunt” snapshots (e.g., `hunt.clean.sha`) and warn when counts drift > X% run-to-run (prevents slow regressions).
+* **Anchor Guardian:** if your content/site uses MD/MDX headings, diff heading IDs between commits; suggest `{#stable-id}` when an incoming link would break.
+
+---
+
+## How this flows (one fast command)
+
+1. **Self-Test Canary** proves detectors fire.
+2. **Static Hunt** (your rg sweep) produces a structured log.
+3. **Runtime Tap** (when used) records real fs calls.
+4. **Speculative Repair** writes `__reports/hunt-fixit.md` + `patches/`.
+5. **Policy Gate** fails only on “danger class” issues; otherwise prints tidy briefs with links to patches.
+
+---
+
+## Runbook
+
+```bash
+# Add the two new helpers
+mkdir -p scripts/dev
+$EDITOR scripts/dev/fs-tap.mjs
+$EDITOR scripts/dev/hunt_fixit.mjs
+
+# Wire self_test_canary + summaries into rg-hunt.sh (as shown above)
+
+# Optional: collect runtime evidence while running tests
+node -r ./scripts/dev/fs-tap.mjs node_modules/.bin/vitest run
+
+# Hunt
+bash scripts/dev/rg-hunt.sh
+
+# Read the briefs
+bat __reports/rg-hunt.*.log
+bat __reports/hunt-fixit.md
+bat __reports/fs-tap.jsonl
+```
+
+---
+
+## Why this sandwich works
+
+* **Not impossible:** no exotic deps; pure bash + tiny Node.
+* **Unusual (in a good way):** most repos lint; few **self-test their lints**, **tap runtime fs**, and **emit fixable patch sketches** on every hunt.
+* **CEO-worthy:** you get measurable risk reduction (runtime proof), visible next actions (patch stubs), and detector reliability (canary).
+* **Engineer-friendly:** low ceremony, additive, and you decide when to apply patches.
+
+If you want, I can tailor the patch generators to your exact code patterns (e.g., auto-rewrite specific `require()` forms, produce precise `git mv` commands for forbidden filenames, or emit PR-ready branches).

@@ -1,0 +1,257 @@
+Love this energy—“CEO code engineer who’s had a cheeky night out,” meets “PI for the FAQ.” Perfect brief.
+
+Here’s how we turn your `rg-hunt.sh` into a tiny investigations unit that *proves* where your FAQ is weak, and ships fixes—fast.
+
+
+
+# What your current tool already gives us
+
+* **Solid repo triage:** JSON parsing sweep, ESM/CJS mismatch checks, TODO markers, optional `tsc --noEmit`, and EISDIR trip-wires. Clean output to `__reports/rg-hunt.<stamp>.log`. (We’ll keep this as the “crime scene sweep”.)&#x20;
+
+# The “PI for FAQ” plan (the new sandwich)
+
+Think of a sandwich with two reliable breads and weird-but-useful fillings:
+
+**Top bread — Evidence sweep (already yours):** keep `rg-hunt.sh` running early to ensure the repo is parse-clean, routes exist, and anchors aren’t obviously busted.&#x20;
+
+**Fillings — three layers we’ll add:**
+
+1. **Witness Statements (Demand signals):** parse site search queries (`/analytics/search.csv`), 404 logs (`/logs/404.csv`), and support tickets (`/support/tickets.csv`). Cluster queries ➜ topics your FAQ must cover.
+2. **Alibi Check (Content reality):** crawl local `docs/**`, `content/**`, or `src/pages/**` for FAQ Q/A blocks, anchors, schema.org FAQ markup, and interlinks. Flag:
+
+   * duplicate/near-duplicate questions,
+   * questions without `?`,
+   * answers that are too short/too long,
+   * stale items (no edits in N days),
+   * anchors referenced but missing in HTML/MDX,
+   * FAQ entries with no inbound links from product pages.
+3. **Case File (Actionables):** emit `__reports/faq-pi.json` + `__reports/faq-pi.md` with: **gaps** (high demand, no coverage), **rotting** (stale/high bounce), **broken** (anchors/links), **redundant** (dupes), plus **auto-drafted rewrite prompts**.
+
+**Bottom bread — Gate it:** tiny policy: fail CI if (for example) `gaps.count > 0` for top-5 search intents or if `brokenAnchors > 0`. Your existing exit-code pattern already supports this.&#x20;
+
+---
+
+# Drop-in script: `scripts/docs/faq_pi.mjs`
+
+Paste this as a **new** Node script. It reads markdown/astro, optional CSVs, and writes JSON+MD “case files.” (LF endings by default.)
+
+```js
+#!/usr/bin/env node
+// FAQ PI: Private Investigator for your FAQ
+// Usage: node scripts/docs/faq_pi.mjs --write
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
+
+const ROOT = process.cwd();
+const REPORT_DIR = path.join(ROOT, "__reports");
+const NOW = new Date().toISOString();
+const ARG_WRITE = process.argv.includes("--write");
+
+// ------- tiny utils -------
+const walk = (dir) => {
+  /** @type {string[]} */ const out = [];
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (["node_modules",".git","__reports","dist","build","coverage",".next",".output"].includes(e.name)) continue;
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) out.push(...walk(p)); else out.push(p);
+  }
+  return out;
+};
+const read = (p) => fs.readFileSync(p, "utf8");
+const hash = (s) => crypto.createHash("sha256").update(s).digest("hex").slice(0,8);
+const daysSince = (ts) => Math.floor((Date.now() - ts.getTime()) / 86400000);
+
+// ------- inputs -------
+const CONTENT = walk(ROOT).filter(f => /\.(md|mdx|markdown|astro)$/i.test(f));
+const ROUTES  = walk(path.join(ROOT, "src")).filter(f => /pages\/.+\.(astro|mdx?)$/i.test(f));
+const SEARCH_CSV = fs.existsSync("analytics/search.csv") ? read("analytics/search.csv") : "";
+const ERR404_CSV = fs.existsSync("logs/404.csv") ? read("logs/404.csv") : "";
+const TICKETS_CSV= fs.existsSync("support/tickets.csv") ? read("support/tickets.csv") : "";
+
+// ------- parse demand (very tolerant CSV) -------
+const toRows = (csv) => csv.split(/\r?\n/).slice(1).map(l => l.split(",")[0]?.trim()).filter(Boolean);
+const demandTerms = [...toRows(SEARCH_CSV), ...toRows(ERR404_CSV)]
+  .map(s => s.toLowerCase()).filter(Boolean);
+
+// ------- extract FAQ blocks -------
+/**
+ * Rules:
+ *  - Headings with a question ("?" in h2/h3) are questions
+ *  - Blocks beginning with "Q:"/"A:" pairs
+ *  - schema.org FAQPage detection via "FAQPage" or "Question"/"acceptedAnswer"
+ */
+const faqEntries = [];
+for (const file of CONTENT) {
+  const src = read(file);
+  const mtime = fs.statSync(file).mtime;
+  const lines = src.split(/\r?\n/);
+
+  // Headings as questions
+  for (let i=0;i<lines.length;i++){
+    const h = lines[i].match(/^#{2,3}\s+(.+)/);
+    if (h) {
+      const q = h[1].trim();
+      if (q.length < 200) {
+        // naive answer: next paragraph(s) until next heading
+        let j=i+1, body=[];
+        while (j<lines.length && !/^#{1,6}\s+/.test(lines[j])) { body.push(lines[j]); j++; }
+        faqEntries.push({ file, line:i+1, q, a: body.join("\n").trim(), mtime });
+      }
+    }
+  }
+  // Q:/A: pairs
+  const qa = [...src.matchAll(/^\s*Q:\s*(.+)\n([\s\S]*?)^\s*A:\s*([\s\S]*?)(?=^\s*Q:|\Z)/gmi)];
+  for (const m of qa) {
+    faqEntries.push({ file, line: 1, q: m[1].trim(), a: (m[3]||"").trim(), mtime });
+  }
+  // schema.org hints (very light)
+  if (/FAQPage|\"@type\"\s*:\s*\"Question\"/i.test(src)) {
+    // leave a breadcrumb; detailed JSON-LD parsing could be added later
+  }
+}
+
+// ------- analysis -------
+const norm = (s) => s.toLowerCase().replace(/[\W_]+/g," ").replace(/\s+/g," ").trim();
+const byQ = new Map();
+for (const e of faqEntries) {
+  const k = norm(e.q);
+  if (!byQ.has(k)) byQ.set(k, []);
+  byQ.get(k).push(e);
+}
+const duplicates = [...byQ.entries()].filter(([,v]) => v.length > 1).map(([k,v]) => ({ question:k, entries:v }));
+
+const broken = []; // anchor/link checks (shallow)
+const anchorRx = /\(#([^)]+)\)/g;
+for (const e of faqEntries) {
+  let m; 
+  while ((m = anchorRx.exec(e.a))) {
+    const id = m[1];
+    if (!new RegExp(`\\{#${id}\\}|^\\s*<a\\s+name=['"]${id}['"]`, 'mi').test(e.a)) {
+      broken.push({ q: e.q, file: e.file, anchor:id });
+    }
+  }
+}
+
+const tooShort = faqEntries.filter(e => e.a.split(/\s+/).length < 20);
+const tooLong  = faqEntries.filter(e => e.a.split(/\s+/).length > 400);
+const noQuestionMark = faqEntries.filter(e => !/\?/.test(e.q));
+const stale = faqEntries.filter(e => daysSince(e.mtime) > 120);
+
+const demandSet = new Set(demandTerms);
+const coverage = [...demandSet].map(term => {
+  const hit = faqEntries.find(e => norm(e.q).includes(term));
+  return { term, covered: !!hit, example: hit?.q || null };
+});
+const gaps = coverage.filter(x => !x.covered).slice(0, 50); // top 50 terms without coverage
+
+// ------- prompts to rewrite / fill gaps -------
+const improv = faqEntries.slice(0, 50).map(e => ({
+  q: e.q,
+  brief: `Rewrite the answer in 120–220 words, plain English, include one internal link to a relevant page, end with a one-sentence CTA. Preserve accuracy.`,
+}));
+const drafts = gaps.map(g => ({
+  q: `FAQ: ${g.term}?`,
+  brief: `Draft a new answer (100–180 words) that resolves user intent for "${g.term}". Include a short example, link to the most relevant page, and a one-line CTA.`,
+}));
+
+// ------- output -------
+const report = {
+  schemaVersion: 1,
+  generatedAt: NOW,
+  meta: {
+    filesScanned: CONTENT.length,
+    routesSeen: ROUTES.length,
+    inputsHash: hash(JSON.stringify({ CONTENT, ROUTES, demandTerms: [...demandSet].slice(0,100) })),
+  },
+  counts: {
+    totalFAQ: faqEntries.length,
+    duplicates: duplicates.length,
+    brokenAnchors: broken.length,
+    tooShort: tooShort.length,
+    tooLong: tooLong.length,
+    noQuestionMark: noQuestionMark.length,
+    stale: stale.length,
+    gaps: gaps.length
+  },
+  duplicates, broken, tooShort, tooLong, noQuestionMark, stale,
+  gaps, improv, drafts
+};
+
+if (!fs.existsSync(REPORT_DIR)) fs.mkdirSync(REPORT_DIR);
+const jsonPath = path.join(REPORT_DIR, "faq-pi.json");
+const mdPath   = path.join(REPORT_DIR, "faq-pi.md");
+
+const md = [
+  `# FAQ Case File (${NOW})`,
+  `- Total FAQ entries: ${report.counts.totalFAQ}`,
+  `- Gaps (no coverage for top terms): ${report.counts.gaps}`,
+  `- Duplicates: ${report.counts.duplicates} | Stale: ${report.counts.stale} | Broken anchors: ${report.counts.brokenAnchors}`,
+  ``,
+  `## Top Gaps`,
+  ...report.gaps.slice(0,15).map(g => `- ${g.term}`),
+  ``,
+  `## Duplicate Questions`,
+  ...report.duplicates.slice(0,10).map(d => `- ${d.question} (${d.entries.length} places)`),
+  ``,
+  `## Rewrite Briefs (samples)`,
+  ...report.improv.slice(0,10).map(b => `- **${b.q}** — ${b.brief}`),
+].join("\n");
+
+if (ARG_WRITE) {
+  fs.writeFileSync(jsonPath, JSON.stringify(report, null, 2) + "\n");
+  fs.writeFileSync(mdPath, md + "\n");
+  console.log(`Wrote ${jsonPath}\nWrote ${mdPath}`);
+} else {
+  console.log(JSON.stringify(report, null, 2));
+}
+
+process.exit(0);
+```
+
+**Wire it into your existing hunt:** add a tiny stanza to `rg-hunt.sh` to run it and fold the exit policy:
+
+```bash
+### 7) FAQ PI (case file)
+if have node && [ -f scripts/docs/faq_pi.mjs ]; then
+  hdr "FAQ PI"
+  node scripts/docs/faq_pi.mjs --write | tee -a "$OUT"
+  if jq -e '.counts.gaps > 0 or .counts.brokenAnchors > 0' __reports/faq-pi.json >/dev/null 2>&1; then
+    bad "FAQ gaps/broken anchors detected"
+    ISSUES=$((ISSUES+1))
+  else
+    ok "FAQ looks healthy"
+  fi
+else
+  warn "FAQ PI script not found; skipping"
+fi
+```
+
+---
+
+# “New sandwich” ideas you probably haven’t tried (but are doable)
+
+1. **404→FAQ Redirect Sandwich:** For each recurring 404 path, propose (a) redirect target and (b) a matching FAQ entry (auto-draft prompt). Ship both in the case file, gate if ≥ N occurrences in 7 days.
+2. **Search-Intent→Schema Sandwich:** When we detect a gap, auto-generate a *stub* MDX with valid `FAQPage` JSON-LD scaffold + frontmatter. Open a PR with “needs SME review” label.
+3. **Anchor-Guardian Sandwich:** On each PR touching `docs/**`, auto-diff headings; if an anchor ID changes, suggest inserting an explicit `{#stable-id}` and list affected inbound links.
+4. **Freshness-Budget Sandwich:** Stale (>120 days) high-traffic answers must get a refresh brief. Gate only on *top quartile traffic* to keep friction low.
+5. **Answer-Length Tuner:** Flag over-long answers and output a rewrite brief with a 150–200w target + bullets + CTA. (You’ll see engagement lift.)
+
+---
+
+# Runbook (quick)
+
+```bash
+# 1) Save the new script
+mkdir -p scripts/docs
+$EDITOR scripts/docs/faq_pi.mjs
+
+# 2) Run your existing hunt, which now calls the PI
+bash scripts/dev/rg-hunt.sh .
+
+# 3) Inspect
+bat __reports/faq-pi.md
+jq . __reports/faq-pi.json
+```
+
+This keeps your original “crime scene sweep” intact, adds a laser-focused FAQ investigator, and enforces just enough policy to keep things improving without blocking real work.

@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Geo Configuration Schema",
+  "type": "object",
+  "required": ["site", "brand", "services"],
+  "properties": {
+    "site": {
+      "type": "string",
+      "format": "uri",
+      "description": "Primary site URL"
+    },
+    "brand": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Brand name"
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z-]+$"
+      },
+      "description": "Available services"
+    },
+    "proximity": {
+      "type": "object",
+      "properties": {
+        "biasKm": {
+          "type": "number",
+          "minimum": 1,
+          "description": "Proximity bias in kilometers"
+        },
+        "clusterBoost": {
+          "type": "number",
+          "minimum": 1,
+          "description": "Cluster preference multiplier"
+        },
+        "crossPenalty": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Cross-cluster penalty factor"
+        }
+      }
+    }
+  }
+}

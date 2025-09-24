@@ -1,0 +1,12 @@
+{
+  "springfield-lakes": [
+    "forest-lake",
+    "ripley"
+  ],
+  "forest-lake": [
+    "springfield-lakes"
+  ],
+  "ripley": [
+    "springfield-lakes"
+  ]
+}

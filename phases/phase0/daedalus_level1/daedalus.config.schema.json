@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "siteUrl": {
+      "type": "string"
+    },
+    "business": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "theme": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      }
+    },
+    "policies": {
+      "type": "object",
+      "properties": {
+        "neighborsMax": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "linkReciprocity": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "required": [
+    "siteUrl",
+    "business",
+    "services"
+  ]
+}

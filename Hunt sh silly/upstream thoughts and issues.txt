@@ -1,0 +1,230 @@
+I’m going to treat this like a design review with **two lenses**:
+
+1. upstream/first-principles (move the box, label the shelf, write the rule), and
+2. risk engineering (what can go wrong, how we prevent it, and how we abort safely).
+
+You’ll end with a **clear go/no-go matrix**, **kill criteria**, and **hardened guardrails** that let you get signal without drifting into tactics that are likely to be penalised. I’ll also show how to fold this beside your existing Lift Pack so CI remains the source of truth.
+
+---
+
+# Executive stance (what’s in / what’s out)
+
+**Green (encouraged, measurable, safe):**
+
+* Internal broken-link reclamation and content refresh based on **real 404s you own**.
+* Third-party summaries **with disclosure + canonical** to your definitive guide.
+* FAQ content that is **visible** and helpful, with **noindex,follow** where appropriate.
+* Geo-aware internal linking that matches reality (covered suburbs only), capped and mirrored in JSON-LD.
+
+**Amber (strictly controlled & rate-limited):**
+
+* “Reharvest” discovery for external broken links → **evidence pack** for human outreach only.
+* Draft generation for partner sites → **manual publish** after editorial review.
+
+**Red (don’t ship):**
+
+* UA-based DOM differences, hidden commercial blocks, doorway feeders, automated third-party posting, synthetic reviews.
+
+Your Grey Layer draft mostly sits in **Amber**. Keep it there with *process*, *limits*, and *abort paths*.
+
+---
+
+# Translate tactics into upstream patterns
+
+Think of the **doorway risk** as the “box in the hallway.” Instead of adding padding to your shoes (guards) or walking differently (cloaks), we:
+
+* **Move the box**: ensure every page we create is discoverably useful on its own.
+* **Label the shelf**: encode standards in a single config dial and CI gates (already in your Lift Pack).
+* **Write the rule**: set explicit, auditable limits (rate, volume, approval) and **kill criteria**.
+
+Below I’ll walk each module of your Grey Layer through those rules.
+
+---
+
+## 1) Reharvest (outbound 404 discovery) → “Evidence-first outreach”
+
+**Goal:** Find real, relevant dead links on reputable pages and rebuild the *missing resource* genuinely.
+
+**Do it well (Green):**
+
+* Source set: gov/edu/org/community, trade bodies, property management blogs with **editorial footprints**.
+* Artefact: a **replacement resource** (guide/checklist/FAQ) on your site that *answers the exact query* the broken link once covered.
+* Outreach: single-thread, human, **no template blast**; include before/after screenshots and your replacement.
+
+**Guardrails to add:**
+
+* **Topical overlap check:** Extract page title + H1; reject candidates whose title trigram overlap with your resource is < 0.35 Jaccard → keeps you in-topic.
+* **Relevance explainability:** For each candidate row in your CSV, store 1–2 sentences of why your resource is a credible replacement (forces human judgement).
+* **Cap:** ≤ 10 credible candidates/week; ≥ 48 h cool-off before contacting any site twice.
+
+**Kill criteria (abort):**
+
+* Any unnatural-links warning in GSC, or **ref-domains velocity > +35 % WoW** with ≥ 40 % from the same TLD family → pause and audit sources.
+
+---
+
+## 2) Parasite exports → “Disclosed summaries with canonical”
+
+**The safe core:** You’re not auto-posting. You’re exporting **disclosed, helpful summaries** that point to your canonical.
+
+**Do it well (Amber→Green):**
+
+* **Disclosure line** at the top (“Summary of our canonical guide at …”).
+* **One** link cluster: the canonical, and optionally **one** deep link (e.g., a highly relevant subsection).
+* **No embedded tracking**, no shared analytics IDs; keep the content **generic** and useful on its own.
+
+**Guardrails to add:**
+
+* **Uniqueness bound:** Summary must be ≤ 60 % overlap with your canonical page (measured by 3-gram Jaccard). Fails → rewrite.
+* **Cadence:** ≤ 1 summary **per platform per day**; stagger publish times; rotate platforms.
+* **Platform QA checklist:** Does the platform render canonicals? If not, add a plain-text disclosure line at top + bottom.
+
+**Kill criteria:**
+
+* If a platform removes canonicals or adds `rel="nofollow sponsored ugc"` to every outbound link globally, treat it as a **brand channel only** (no SEO assumptions).
+
+---
+
+## 3) FAQ feeder pages (noindex,follow) → “Discoverability without doorway”
+
+**Do it well (Green if tightly bounded):**
+
+* Pages are **visible**, answer a precise question (≥ 60–120 words), and link to **covered** money pages only.
+* `noindex,follow` + submit **main** sitemap only (never the FAQ feeder map).
+* Keep total feeder count **below** site page count unless you have clear user demand.
+
+**Guardrails to add:**
+
+* **Coverage enforcement:** Links must match your `coverage` truth set; CI fails if any FAQ links to a non-covered suburb/service.
+* **Volume limit:** ≤ 2× your total number of money pages, hard cap 2 000 (or your risk appetite). If you already have 1 000 money pages, keep feeders ≤ 2 000.
+* **Link economy:** Max **2 internal links** per FAQ (one canonical service category; one nearest relevant suburb page).
+
+**Kill criteria:**
+
+* Crawl budget warnings (spike in “Discovered – currently not indexed” for feeder paths), or internal link compression measured by Open-Site crawl → prune weak FAQs.
+
+---
+
+## 4) Edge worker (synonym expansions) → “Make it editorial or don’t ship”
+
+**Safe rule:** If content is worth showing, it’s worth shipping **in source**. Edge injection only for **micro-UX** (e.g., progressive enhancement) and **never** for SEO signals.
+
+**Guardrails to add if ever enabling:**
+
+* **Discoverability:** Block must be visible (e.g., `<details>`). No UA conditions, no differential HTML by IP/UA.
+* **Diff audit:** CI step that diffs origin HTML vs edge HTML for any **commercial tokens**; fails if added.
+* **Feature flag:** Edge worker is default-off; only enabled on PRs with an “approved-by-humans” label.
+
+**Kill criteria:** Any inspection tool showing a structural difference between fetchers → disable immediately.
+
+---
+
+## 5) Monitor & Panic → “Pre-mortem and auto-recovery”
+
+**Expand your monitor to track:**
+
+* **Ref-domain velocity** (7-day window), by **TLD family** and by **platform bucket** (e.g., “publisher,” “wiki/knowledge,” “SaaS help,” “community”).
+* **Anchor diversity** on new links (brand vs partial vs generic). Target: ≥ 60 % brand/generic.
+* **Indexation deltas** by path bucket (`/services/`, `/faq/`, `/blog/`). Unusual drops trigger a pause.
+* **Similarity drift** across **service×suburb** pages (your Lift Pack already calculates this—log the weekly 95th percentile).
+
+**Automatic actions when thresholds trip (panic switch):**
+
+* Delete/410 **weakest 10 %** FAQ feeders first (lowest clicks, lowest dwell).
+* Suspend parasite exports for 14 days; require manual review of recent partners.
+* Freeze any in-flight outreach sequences; switch to “repair internal” mode.
+
+---
+
+# Fold it beside the Lift Pack (safety by composition)
+
+1. **CI separation:** Keep `lift:ci` as the deploy gate. Run `grey:ci` as a **non-blocking** job that produces artefacts (`__ai/grey-monitor.json`, `__ai/reharvest-candidates.csv`, export drafts). Nothing in Grey can ship assets by itself.
+
+2. **Single source of truth:** Lift Pack retains the invariants that matter in production HTML:
+
+   * Nearby lockstep, schema honesty, anchor caps, local content minima, similarity guard, sitemap hygiene, **no UA differences**, **no hidden keywords**.
+
+3. **Shared dials:** Mirror any Grey limits in `__ai/visibility-flags.json` where appropriate (e.g., `nearby.maxItems`), so both layers converge on the same policy.
+
+---
+
+# Governance: human-in-loop checklists
+
+### Outreach (reharvest) one-pager
+
+* [ ] Does your replacement **actually** answer the original intent?
+* [ ] Is the linking page editorial (not directory/aggregator)?
+* [ ] Are you asking for a **fix** (replace broken link), not a new promotional link?
+* [ ] Screenshot of broken link included; minimal, personal note; **no follow-ups beyond one gentle reminder**.
+
+### Summaries (parasite export)
+
+* [ ] Disclosure + canonical at top.
+* [ ] One deep link max; no tracking.
+* [ ] Overlap with canonical < 60 % (3-gram Jaccard).
+* [ ] Platform has real editorial users (not zombie subdomains).
+* [ ] Scheduled cadence within cap; reviewed by human.
+
+### FAQ feeders
+
+* [ ] Question is phrased like a genuine query (answerable without your service).
+* [ ] Answer length 60–120 words, cites local realities (agents, parking, access, inspection timing).
+* [ ] Links go only to **covered** pages.
+* [ ] `noindex,follow` present; main sitemap only.
+
+---
+
+# Measurement model (what “good” looks like)
+
+* **Traffic quality**: rising **lead rate** from `/services/*` and **stable** or **improved** time-to-quote.
+* **Referring domains**: slow, steady growth with **brand/generic** anchors dominant.
+* **Indexation**: `/services/` stable ↑; `/faq/` may hover in “Discovered/Excluded” (expected); **no spikes** in “Crawled – currently not indexed” tied to feeders.
+* **Similarity**: 95th percentile similarity across service×suburb **< 0.80** (your Lift Pack threshold is 0.85 for fails).
+* **Manual interventions**: near-zero; any need to “explain” a tactic to a reviewer is a smell—roll back.
+
+---
+
+# Concrete changes I recommend before you run anything
+
+1. **Rename modules** to their intent:
+
+   * `reharvest.mjs` → `outbound-404-evidence.mjs`
+   * `parasite.mjs` → `syndication-summaries.mjs`
+   * `faqsitemap.mjs` → `faq-noindex-map.mjs`
+     Names shape behavior—this helps future you stay in bounds.
+
+2. **Bake limits into CI**, not just JSON: fail build if Grey flags flip to “aggressive” on `main`.
+
+3. **Add a review gate**: PR label `approved-grey` required to run `grey:*` jobs on CI; otherwise, those steps skip.
+
+4. **Extend logs**: for each export or candidate, store: topical score, reason summary, reviewer initials, and go/no-go decision.
+
+5. **Connect to your geo truth**: every feeder or summary link must pass `coverage: true` against `areas.clusters.json` + `cluster_map.json`. If not covered → fail.
+
+---
+
+# Mentor’s rule of thumb (keep the room walkable)
+
+* If a stranger landed on the page without context, would they **learn something useful** even if they never click your link?
+
+  * If **yes**, you’ve moved the box into the closet.
+  * If **no**, you’re just padding your shoes—don’t ship it.
+
+* If a change is hard to **explain in one sentence** to a human reviewer, it’s probably the wrong change.
+
+* If you can’t set an **objective kill switch** for the tactic, you shouldn’t turn it on.
+
+---
+
+## Go/No-Go matrix (print this)
+
+| Tactic                       | Preconditions                                      | Ship if…                                                     | Watch                                              | Kill if…                                                            |
+| ---------------------------- | -------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------------- |
+| Outbound 404 evidence        | Seed list is editorial; replacement guide is ready | Topical overlap ≥ 0.35; replacement genuinely answers intent | Ref-domain velocity, anchor mix                    | GSC link warning, +35 % WoW ref-domain spike, single-TLD clustering |
+| Disclosed summaries          | Platform supports disclosure/canonical             | Overlap < 60%; one deep link; cadence ≤ 1/day/platform       | Platform policy changes; canonical stripping       | Platform nofollows everything or strips canonical → brand-only use  |
+| FAQ feeders (noindex,follow) | Questions map to real queries; visible answers     | ≤ 2 links; coverage truth passes; volume ≤ 2× money pages    | “Discovered – not indexed” spikes; sitemap balance | Indexation/path bucket warnings; internal link squeeze              |
+| Edge micro-UX                | Explicit allowlist                                 | No commercial tokens added; diff shows editorial only        | Origin vs edge diff                                | Any structural SEO change via edge; inspection diffs                |
+
+---
+
+If you keep every step **explainable, rate-limited, and reversible**, you’ll harvest the legitimate upside (surface area, crawl paths, editorial mentions) without crossing into tactics you can’t defend. The Lift Pack’s DOM-level guardrails remain your seatbelt; the Grey Layer becomes a **research and drafting assistant**, not a switch that can silently push you into risk.

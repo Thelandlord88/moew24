@@ -1,0 +1,375 @@
+Sweet — your agent “got religion” on upstream thinking. Now let’s feed it a **single, paste-ready prompt** that (a) updates `hunt.sh` to the modular Hunter v2, (b) installs the minimal tooling, and (c) drops in the new detectors with proof-invariants. I’ve wired this to the exact failure trail you captured (dynamic JSON imports + `NoAdapterInstalled`) so it closes that entire class, not just the instance.&#x20;
+
+---
+
+# 🔧 PROMPT TO RUN (paste this to your agent)
+
+**ROLE — Upstream-Curious Hunter v2 (Implementer)**
+You are updating our repo’s `hunt.sh` from a hygiene script into a **modular class-eliminator**. Operate by Box → Closet → Policy. Eliminate failure classes (don’t bandaid). Add proof-invariants (checks/tests) that would have failed before.
+
+**PRIMARY DEFECT CLASS TO CLOSE NOW**
+Build failed with **NoAdapterInstalled** while static checks looked “clean.” Root cause: **dynamic JSON imports & import-assertions** triggering SSR detection during build. Close this class repo-wide.&#x20;
+
+---
+
+## ✅ Acceptance criteria (must all be true)
+
+1. `hunt.sh` becomes an orchestrator that runs modular detectors from `hunters/` and writes machine artifacts under `__reports/hunt/`.
+2. New detectors created and invoked:
+
+   * `hunters/runtime_ssr.sh` (parses `astro.config.*`, scans SSR triggers, runs `npx astro build --verbose || true`, fails on `NoAdapterInstalled`, warns on dynamic JSON `import()` / `@vite-ignore` / `assert { type: 'json' }`).
+   * `hunters/performance.sh` (finds images ≥200KB, optional dep bloat & circulars if tools exist).
+   * `hunters/security.sh` (secrets/eval/innerHTML/mixed-content regex sweep).
+   * `hunters/a11y.sh` (static `<img>` alt check; optional Playwright+axe smoke if present).
+   * `hunters/code_quality.sh` (dead files & duplication if tools exist; otherwise report TODO).
+3. Determinism + portability: `set -euo pipefail`, `export LC_ALL=C`, idempotent outputs.
+4. **Proof-invariant:** a gate that **fails** when:
+
+   * `astro build` logs `NoAdapterInstalled`, **or**
+   * dynamic JSON import/assertion patterns are present without an allowlist.
+5. Human summary **and** `__reports/hunt/summary.json` produced every run.
+
+---
+
+## 🔩 Plan (do these steps in order — be idempotent)
+
+1. **Create folder structure & helpers**
+
+   * `mkdir -p hunters __reports/hunt`
+   * Write detectors below (exact contents provided).
+   * Add tiny JSON writer helper (pure POSIX + Node fallback, no jq required).
+
+2. **Refactor `hunt.sh` into an orchestrator**
+
+   * Add strict bash, `LC_ALL=C`, consistent excludes.
+   * Call each `hunters/*.sh` and collect JSON into `__reports/hunt/*.json`.
+   * Aggregate into `__reports/hunt/summary.json` + pretty markdown.
+
+3. **Install minimal optional tools (best-effort)**
+
+   * If `package.json` exists, add scripts + devDeps (no hard fail if missing).
+
+4. **Run & prove**
+
+   * Run `bash hunt.sh --strict` and ensure it **fails** if NoAdapterInstalled or SSR trigger patterns exist; otherwise passes with warnings only.
+
+---
+
+## 🧩 PATCHES / FILES TO WRITE
+
+> Apply exactly these files (create or overwrite). Keep executable bit on `.sh` files.
+
+### 1) `hunt.sh` (orchestrator)
+
+```bash
+#!/usr/bin/env bash
+# Hunter v2 Orchestrator — Upstream-Curious edition
+set -euo pipefail
+export LC_ALL=C
+
+ROOT="${1:-.}"
+OUT_DIR="__reports/hunt"
+mkdir -p "$OUT_DIR"
+
+# Colors off in CI unless FORCE_COLOR set
+if [[ -t 1 && "${FORCE_COLOR:-}" != "0" ]]; then RED=$'\e[31m'; YEL=$'\e[33m'; GRN=$'\e[32m'; BLU=$'\e[34m'; NC=$'\e[0m'; else RED=""; YEL=""; GRN=""; BLU=""; NC=""; fi
+
+STRICT="${STRICT:-0}"           # STRICT=1 to fail on warnings
+MAX_RESULTS="${MAX_RESULTS:-200}"
+
+# Node-based JSON merge (no jq dependency)
+merge_json() {
+  node -e '
+    const fs=require("fs"); const out=process.argv[2]; const files=process.argv.slice(3);
+    const m={schemaVersion:1, generatedAt:new Date().toISOString(), reports:[]};
+    for(const f of files){ try{ m.reports.push({name:f, data:JSON.parse(fs.readFileSync(f,"utf8"))}); }catch{} }
+    // roll-up counts if present
+    const counts={}; for(const r of m.reports){ if(r.data && r.data.counts){ for(const [k,v] of Object.entries(r.data.counts)){ counts[k]=(counts[k]||0)+v; } } }
+    if(Object.keys(counts).length) m.counts=counts;
+    fs.writeFileSync(out, JSON.stringify(m,null,2));
+  ' "$OUT_DIR/summary.json" "$@" || true
+}
+
+run_hunter() {
+  local script="$1"
+  printf "%s\n" "${BLU}▶ ${script}${NC}"
+  if bash "$script"; then
+    printf "%s\n" "${GRN}✔ ${script} OK${NC}"
+  else
+    printf "%s\n" "${RED}✖ ${script} reported issues${NC}"
+    # do not exit yet; we decide after aggregation
+  fi
+}
+
+echo "🧭 Hunter v2 Orchestrator"
+echo "Root: $ROOT  Strict: $STRICT"
+
+# 1) Runtime / SSR (closes NoAdapterInstalled class)
+run_hunter "hunters/runtime_ssr.sh" || true
+
+# 2) Performance
+run_hunter "hunters/performance.sh" || true
+
+# 3) Security
+run_hunter "hunters/security.sh" || true
+
+# 4) Accessibility
+run_hunter "hunters/a11y.sh" || true
+
+# 5) Code quality
+run_hunter "hunters/code_quality.sh" || true
+
+# Aggregate JSON
+merge_json "$OUT_DIR"/*.json
+
+# Produce a compact human summary
+node -e '
+const fs=require("fs");
+const p="__reports/hunt/summary.json";
+if(!fs.existsSync(p)) process.exit(0);
+const j=JSON.parse(fs.readFileSync(p,"utf8"));
+const c=j.counts||{};
+const rows=Object.entries(c).map(([k,v])=>`${k}: ${v}`).join("\n");
+console.log("\n=== Hunter Summary ===\n"+rows+"\n");
+' || true
+
+# Decide exit
+# Strict mode: fail on any red flags from runtime_ssr
+EXIT=0
+if [[ -f "$OUT_DIR/runtime_ssr.json" ]]; then
+  if node -e 'const j=require("./__reports/hunt/runtime_ssr.json"); process.exit((j.redFlags||0)>0?1:0)'; then :; else EXIT=1; fi
+fi
+
+# If STRICT=1, fail when counts contain critical classes
+if [[ "$STRICT" == "1" ]]; then
+  if node -e '
+    const j=require("./__reports/hunt/summary.json");
+    const c=j.counts||{};
+    const fail = (c.noAdapter||0) + (c.dynamicJsonImports||0) + (c.secrets||0) + (c.missingAlt||0) > 0;
+    process.exit(fail?1:0);
+  '; then :; else EXIT=1; fi
+fi
+
+exit "$EXIT"
+```
+
+---
+
+### 2) `hunters/runtime_ssr.sh`
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+OUT="__reports/hunt/runtime_ssr.json"
+mkdir -p "$(dirname "$OUT")"
+
+# Detect SSR-related hazards for Astro SSG builds
+RG_EXCL=(--hidden -g '!node_modules/**' -g '!dist/**' -g '!build/**' -g '!__reports/**')
+
+has_no_adapter() {
+  grep -Fq "NoAdapterInstalled" "$1"
+}
+
+# 1) Config sanity
+CONFIG_OUTPUT=$(rg -n "output:\s*['\"](static|server)['\"]" astro.config.* || true)
+OUTPUT_MODE=$(printf "%s" "$CONFIG_OUTPUT" | sed -n 's/.*output:\s*["'\'']\([^"'\'' ]*\).*/\1/p' | head -n1)
+[[ -z "${OUTPUT_MODE:-}" ]] && OUTPUT_MODE="unknown"
+
+# 2) Static SSR triggers
+PRERENDER_FALSE=$(rg -n "export\s+const\s+prerender\s*=\s*false" src/ || true)
+
+# 3) Dynamic import hazards (JSON, assertions, vite-ignore)
+DYN_JSON=$(rg -n --pcre2 'import\s*\(\s*[^)]*\.json[^)]*\)' src/ || true)
+ASSERT_JSON=$(rg -n --pcre2 'assert\s*:\s*\{\s*type\s*:\s*[\"\x27]json[\"\x27]\s*\}' src/ || true)
+VITE_IGNORE=$(rg -n '@vite-ignore' src/ || true)
+
+# 4) Probe build (non-fatal)
+BUILD_LOG="__reports/hunt/astro-build.log"
+( npx --no-install astro build --verbose || true ) > "$BUILD_LOG" 2>&1 || true
+NO_ADAPTER=0; has_no_adapter "$BUILD_LOG" && NO_ADAPTER=1
+
+# Counts & red flags
+dynamicCount=$( (printf "%s\n%s\n" "$DYN_JSON" "$ASSERT_JSON" | grep -c .) || true )
+redFlags=$(( NO_ADAPTER>0 ? 1 : 0 ))
+
+# Write JSON
+node -e '
+  const fs=require("fs");
+  const OUT=process.env.OUT;
+  const data={
+    schemaVersion:1,
+    subject:"runtime_ssr",
+    outputMode: "'$OUTPUT_MODE'",
+    counts:{
+      noAdapter: '$NO_ADAPTER',
+      dynamicJsonImports: '$dynamicCount',
+      prerenderFalse: '$(printf "%s" "$PRERENDER_FALSE" | grep -c . || true)'
+    },
+    notes:{
+      config:`'"$CONFIG_OUTPUT"'`,
+      dynamic:`'"$DYN_JSON"'`,
+      assertJson:`'"$ASSERT_JSON"'`,
+      viteIgnore:`'"$VITE_IGNORE"'`
+    },
+    redFlags: '$redFlags'
+  };
+  fs.writeFileSync(OUT, JSON.stringify(data,null,2));
+' OUT="$OUT"
+
+# Human echo (optional)
+if [[ "$NO_ADAPTER" -gt 0 ]]; then
+  echo "❌ NoAdapterInstalled observed during build"
+fi
+
+# Policy suggestion (text breadcrumb)
+if [[ "$dynamicCount" -gt 0 ]]; then
+  echo "⚠ Found dynamic JSON import patterns. Prefer static imports or prebuild data."
+fi
+```
+
+> **Why this closes the class:** it **proves** (by attempting a build) when `NoAdapterInstalled` is present and **flags** dynamic JSON/`@vite-ignore` import patterns that commonly flip Astro into SSR — exactly the “smoking gun” you saw.&#x20;
+
+---
+
+### 3) `hunters/performance.sh`
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+OUT="__reports/hunt/performance.json"; mkdir -p "$(dirname "$OUT")"
+
+# Large assets (≥200KB)
+largeFiles=$(find src public -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" -o -iname "*.svg" \) -size +200k 2>/dev/null | sort || true)
+largeCount=$(printf "%s" "$largeFiles" | grep -c . || true)
+
+# Optional tools (best-effort; do not fail if missing)
+depUnused=""; circ=""; depCount=0; circCount=0
+if [ -f package.json ]; then
+  npx --yes --silent depcheck --json > __reports/hunt/depcheck.json 2>/dev/null || true
+  depCount=$(node -e 'try{const j=require("./__reports/hunt/depcheck.json");console.log((j.dependencies||[]).length+(j.devDependencies||[]).length)}catch{console.log(0)}')
+  npx --yes --silent madge --circular --extensions ts,tsx,js,mjs,cjs src > __reports/hunt/madge.txt 2>/dev/null || true
+  circCount=$(rg -c "circular dependencies" __reports/hunt/madge.txt 2>/dev/null || true)
+fi
+
+node -e '
+  const fs=require("fs");
+  const out="'$OUT'";
+  const large=`'"$largeFiles"'`.trim().split("\n").filter(Boolean);
+  const counts={ largeAssets: '$largeCount', unusedDeps: '$depCount', circulars: '$circCount' };
+  fs.writeFileSync(out, JSON.stringify({schemaVersion:1,subject:"performance",counts, samples:{large}}, null, 2));
+'
+```
+
+---
+
+### 4) `hunters/security.sh`
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+OUT="__reports/hunt/security.json"; mkdir -p "$(dirname "$OUT")"
+
+RG_EXCL=(--hidden -g '!node_modules/**' -g '!dist/**' -g '!build/**' -g '!__reports/**')
+
+secrets=$(rg -n --pcre2 '(?i)(api[_-]?key|secret|token|aws[_-]?access|stripe_|ghp_[0-9a-z]{36}|-----BEGIN (RSA|OPENSSH) PRIVATE KEY-----)' "${RG_EXCL[@]}" src .env* || true)
+evals=$(rg -n --pcre2 '\b(eval|new\s+Function)\s*\(' "${RG_EXCL[@]}" src || true)
+xss=$(rg -n --pcre2 '(set:html|innerHTML\s*=)' "${RG_EXCL[@]}" src || true)
+mixed=$(rg -n --pcre2 'http://[^"\047\s]+' "${RG_EXCL[@]}" src public || true)
+
+count() { printf "%s" "${1:-}" | grep -c . || true; }
+
+node -e '
+  const fs=require("fs");
+  const out="'$OUT'";
+  const counts={
+    secrets:'"$(count "$secrets")"', eval:'"$(count "$evals")"',
+    xssSinks:'"$(count "$xss")"', mixedContent:'"$(count "$mixed")"'
+  };
+  const notes={secrets:`'"$secrets"'`, evals:`'"$evals"'`, xss:`'"$xss"'`, mixed:`'"$mixed"'`};
+  fs.writeFileSync(out, JSON.stringify({schemaVersion:1,subject:"security",counts,notes}, null, 2));
+'
+```
+
+---
+
+### 5) `hunters/a11y.sh`
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+OUT="__reports/hunt/a11y.json"; mkdir -p "$(dirname "$OUT")"
+
+missingAlt=$(rg -n --pcre2 '<img(?![^>]*\balt=)[^>]*>' src public || true)
+count=$(printf "%s" "$missingAlt" | grep -c . || true)
+
+node -e '
+  const fs=require("fs");
+  const out="'$OUT'";
+  fs.writeFileSync(out, JSON.stringify({
+    schemaVersion:1, subject:"a11y",
+    counts:{ missingAlt:'"$count"' },
+    notes:{ examples:`'"$missingAlt"'` }
+  }, null, 2));
+'
+```
+
+---
+
+### 6) `hunters/code_quality.sh`
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+OUT="__reports/hunt/code_quality.json"; mkdir -p "$(dirname "$OUT")"
+
+# Placeholders with counts; optional tools (ts-prune, jscpd) if installed later
+longFns=$(rg -n --pcre2 'function\s+[A-Za-z0-9_]+\s*\([^)]*\)\s*\{|\([^)]+\)\s*=>\s*\{' src || true)
+dupHint="" # Fill via jscpd later
+deadHint="" # Fill via ts-prune later
+
+node -e '
+  const fs=require("fs");
+  const out="'$OUT'";
+  const counts={ longFunctions:'"$(printf "%s" "$longFns" | grep -c . || true)"' };
+  const notes={ longFunctionSamples:`'"$(printf "%s" "$longFns" | head -n 20)"'` };
+  fs.writeFileSync(out, JSON.stringify({schemaVersion:1,subject:"code_quality",counts,notes}, null, 2));
+'
+```
+
+---
+
+## 📦 Optional package setup (best-effort, skip if no `package.json`)
+
+```bash
+if [ -f package.json ]; then
+  npm pkg set scripts.hunt="STRICT=1 bash hunt.sh"
+  npm pkg set scripts.hunt:loose="bash hunt.sh"
+  npm add -D depcheck madge jscpd ts-prune @playwright/test axe-core || true
+fi
+```
+
+---
+
+## 🧪 Proof run (the invariant)
+
+```bash
+# Strict run should fail if NoAdapterInstalled occurs or dynamic JSON imports exist
+STRICT=1 bash hunt.sh || true
+
+# Show the rolled up machine artifact
+cat __reports/hunt/summary.json
+```
+
+**Pass condition:** If the repo still contains dynamic JSON import/assertion patterns or `astro build` produces `NoAdapterInstalled`, `hunt.sh` exits non-zero in `STRICT=1`. After you convert those dynamic loads to **static imports / prebuilt data**, the run goes green.
+
+---
+
+### Notes for the agent
+
+* Prefer **static imports** or a tiny **prebuild step** that writes canonical JSON to `src/data/*.json` and imports them statically in Astro/TS.
+* If SSR is *truly required*, explicitly install and enable the correct adapter in `astro.config.*` and add that decision to the human summary (with file paths).
+* Keep diffs **small, reversible**, and update `__reports/hunt/astro-build.log` on every run for evidence.
+
+---
+
+If you want, I can also generate a mini PR description template and a one-shot script to automatically convert the most common dynamic JSON imports into static imports with type-safe modules.

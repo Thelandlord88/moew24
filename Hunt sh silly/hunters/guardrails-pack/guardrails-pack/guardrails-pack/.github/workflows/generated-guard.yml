@@ -1,0 +1,23 @@
+name: generated-guard
+on:
+  pull_request:
+    branches: [ main ]
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - name: Rebuild generated outputs
+        run: node scripts/run-generators.mjs
+      - name: Ensure no diffs after generation
+        run: |
+          CHANGED="$(git status --porcelain)"
+          if [ -n "$CHANGED" ]; then
+            echo "❌ Generated files were stale. Commit generator outputs."
+            echo "$CHANGED"
+            exit 1
+          fi
