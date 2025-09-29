@@ -1,0 +1,1 @@
+../../../../scripts/personalities/personality-loader.mjs

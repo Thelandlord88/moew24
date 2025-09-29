@@ -1,0 +1,11 @@
+nohup: ignoring input
+🧠 Initializing NEXUS Runtime...
+🧠 Initializing NEXUS consciousness...
+✅ NEXUS consciousness initialized (4/4 patterns loaded)
+✅ NEXUS consciousness loaded
+⚠️ Port 8080 in use — retrying with 8081
+⚠️ Port 8081 in use — retrying with 8082
+🌐 NEXUS Runtime liste⚠️ Request handling error: SyntaxError: Bad control character in string literal in JSON at position 145
+    at JSON.parse (<anonymous>)
+    at NexusRuntime.handleHttpRequest (file:///workspaces/July22/nexus/nexus-runtime.mjs:76:51)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

@@ -1,0 +1,60 @@
+---
+// 🔘 Themed Button Component
+// Uses CSS variables for dynamic theming while keeping Tailwind utility classes
+
+interface Props {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  class?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+}
+
+const { 
+  variant = 'primary', 
+  size = 'md', 
+  href, 
+  class: className = '',
+  type = 'button',
+  disabled = false
+} = Astro.props;
+
+// Base button classes
+const baseClasses = "inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+
+// Size variants
+const sizeClasses = {
+  sm: "px-4 py-2 text-sm rounded-lg",
+  md: "px-6 py-3 text-base rounded-lg", 
+  lg: "px-8 py-4 text-lg rounded-xl"
+};
+
+// Variant classes using CSS variables for dynamic theming
+const variantClasses = {
+  primary: "bg-[var(--primary-color)] text-white hover:opacity-90 focus:ring-[var(--primary-color)]",
+  secondary: "bg-[var(--secondary-color)] text-white hover:opacity-90 focus:ring-[var(--secondary-color)]",
+  outline: "border-2 border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white focus:ring-[var(--primary-color)]",
+  ghost: "text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:bg-opacity-10 focus:ring-[var(--primary-color)]"
+};
+
+const finalClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
+---
+
+{href ? (
+  <a 
+    href={href} 
+    class={finalClasses}
+    aria-disabled={disabled}
+  >
+    <slot />
+  </a>
+) : (
+  <button 
+    type={type}
+    class={finalClasses}
+    disabled={disabled}
+  >
+    <slot />
+  </button>
+)}

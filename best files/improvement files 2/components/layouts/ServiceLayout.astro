@@ -1,0 +1,85 @@
+---
+/**
+ * 🏗️ Canonical ServiceLayout component.
+ * Import this via:  import { ServiceLayout } from '@ui'
+ * Direct path imports are blocked by ESLint and CI guards.
+ */
+import MainLayout from "~/layouts/MainLayout.astro";
+import { findServiceBySlug, findSuburbBySlug } from "~/lib/data";
+import SuburbFaq from "~/components/SuburbFaq.astro";
+import ServiceNav from "~/components/ServiceNav.astro";
+import { resolveSuburbDisplay } from "~/lib/suburbs/resolveDisplay";
+import { prettyServiceName } from "~/lib/links/buildable";
+
+function deriveSlugsFromUrl() {
+  const segs = Astro.url.pathname.split("/").filter(Boolean);
+  // expected: /services/{service}/{suburb}/...
+  return {
+    serviceSlug: segs[1] || "",
+    suburbSlug:  segs[2] || ""
+  };
+}
+
+const { serviceSlug, suburbSlug } = deriveSlugsFromUrl();
+const service = findServiceBySlug(serviceSlug);
+const suburb  = findSuburbBySlug(suburbSlug);
+
+// Enhanced display resolution with fallbacks
+const suburbDisplay = resolveSuburbDisplay(suburbSlug);
+const serviceName = service?.title || prettyServiceName(serviceSlug);
+const suburbName = suburb?.name || suburbDisplay.name;
+
+// Prepare page meta with enhanced fallbacks
+const pageTitle = service && suburb 
+  ? `${serviceName} in ${suburbName} | One & Done Bond Clean`
+  : `${serviceName} in ${suburbName}`;
+
+const pageDescription = service && suburb
+  ? `${service.description || serviceName} — Servicing ${suburbName} and nearby areas. 100% Bond Back Guarantee.`
+  : `Professional ${serviceName.toLowerCase()} services in ${suburbName}. Contact us for availability.`;
+
+const canonical = `/services/${serviceSlug || "unknown"}/${suburbSlug || "unknown"}/`;
+const isValid = Boolean(service && suburb);
+---
+
+<MainLayout title={pageTitle} description={pageDescription} canonical={canonical}>
+  {isValid ? (
+    <section class="max-w-6xl mx-auto px-4 py-8">
+      <header class="mb-8">
+        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white">
+          {serviceName} in {suburbName}
+        </h1>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          {service.description || `Professional ${serviceName.toLowerCase()} for ${suburbName} and surrounds.`}
+        </p>
+      </header>
+
+      <!-- Service Navigation - Required for cross-links audit -->
+      <ServiceNav 
+        service={serviceSlug} 
+        suburb={suburbSlug}
+        cluster={suburbDisplay.cluster}
+        data-relservices 
+        aria-label="Related services" 
+      />
+
+      <slot />
+
+      <!-- Generalized FAQ (safer import) -->
+      <SuburbFaq suburbSlug={suburbSlug} serviceSlug={serviceSlug} maxItems={8} className="mt-10" />
+    </section>
+  ) : (
+    <section class="max-w-4xl mx-auto px-4 py-16 text-center">
+      <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-4">
+        {serviceName} in {suburbName}
+      </h1>
+      <p class="text-slate-700 dark:text-slate-300 mb-8">
+        This service may not be available in this area. Contact us to check availability.
+      </p>
+      <div class="space-x-4">
+        <a class="text-sky-600 hover:text-sky-700 underline font-medium" href="/services/">Browse services</a>
+        <a class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg transition-colors" href="/contact/">Contact Us</a>
+      </div>
+    </section>
+  )}
+</MainLayout>

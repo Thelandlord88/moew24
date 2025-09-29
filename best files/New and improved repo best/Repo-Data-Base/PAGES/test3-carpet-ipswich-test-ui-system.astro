@@ -1,0 +1,265 @@
+---
+// 🧪 TEST PAGE 3: Carpet Cleaning in Ipswich
+// Rich purple theme with heritage community focus
+
+import PageLayout from '../components/PageLayout.astro';
+import Banner from '../components/Banner.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+import { createTheme } from '../themeProvider.js';
+
+const serviceSlug = 'carpet-cleaning';
+const suburbSlug = 'ipswich';
+
+// Get theme data for this combination
+const theme = createTheme(serviceSlug, suburbSlug);
+const service = theme.service;
+const suburb = theme.suburb;
+
+const title = `${service.name} in ${suburb.name} | OneDone Cleaning`;
+const description = `Professional ${service.name.toLowerCase()} in ${suburb.name}. ${service.description}`;
+---
+
+<PageLayout 
+  serviceSlug={serviceSlug}
+  suburbSlug={suburbSlug}
+  title={title}
+  description={description}
+>
+  <!-- Hero Banner with purple theme and heritage focus -->
+  <Banner 
+    title={`${service.name} in Historic ${suburb.name}`}
+    subtitle={`${service.tagline} • Caring for carpets in Queensland's heritage city`}
+    variant="hero"
+  >
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+      <Button variant="primary" size="lg">
+        Book Carpet Clean • {service.priceRange}
+      </Button>
+      <Button variant="outline" size="lg">
+        🏛️ Heritage Home Specialist
+      </Button>
+    </div>
+  </Banner>
+
+  <!-- Heritage-Focused Service Info -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        
+        <!-- Ipswich heritage highlights -->
+        <div class="mb-12 text-center">
+          <h2 class="text-3xl font-bold mb-6 text-gray-900">
+            Heritage Home Carpet Specialists
+          </h2>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {suburb.highlights.map(highlight => (
+              <Card variant="feature" class="text-center">
+                <div class="text-lg font-semibold text-[var(--primary-color)] mb-2">
+                  🏛️
+                </div>
+                <div class="text-gray-700">
+                  {highlight}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <!-- Specialized carpet cleaning features -->
+        <div class="mb-12">
+          <h3 class="text-2xl font-bold mb-8 text-center text-gray-900">
+            Our Professional {service.name} Process
+          </h3>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {service.features.map((feature, index) => (
+              <Card class="text-center">
+                <div class="text-[var(--service-accent)] text-xl mb-2">
+                  <span class="bg-[var(--primary-color)] text-white w-8 h-8 rounded-full inline-flex items-center justify-center text-sm font-bold">
+                    {index + 1}
+                  </span>
+                </div>
+                <div class="font-medium text-gray-800">
+                  {feature}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <!-- Heritage home expertise -->
+        <div class="bg-gradient-to-br {service.bgGradient} rounded-2xl p-8 mb-12">
+          <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 class="text-2xl font-bold mb-4 text-[var(--text-color)]">
+                Trusted in Historic {suburb.name}
+              </h3>
+              <p class="text-[var(--text-color)] mb-6 opacity-90">
+                With over {suburb.population.toLocaleString()} residents, {suburb.name} is renowned for its 
+                heritage buildings and established community. We understand the unique needs of both 
+                historic and modern homes.
+              </p>
+              
+              <div class="space-y-3">
+                <div class="flex items-center gap-3 text-[var(--text-color)]">
+                  <div class="w-6 h-6 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-sm">✓</span>
+                  </div>
+                  <span>Heritage home experience</span>
+                </div>
+                <div class="flex items-center gap-3 text-[var(--text-color)]">
+                  <div class="w-6 h-6 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-sm">✓</span>
+                  </div>
+                  <span>Gentle on antique carpets</span>
+                </div>
+                <div class="flex items-center gap-3 text-[var(--text-color)]">
+                  <div class="w-6 h-6 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-sm">✓</span>
+                  </div>
+                  <span>Established local trust</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-center">
+              <div class="bg-white bg-opacity-20 rounded-xl p-6">
+                <div class="text-4xl mb-4">{service.icon}</div>
+                <div class="text-2xl font-bold text-[var(--text-color)] mb-2">
+                  {service.priceRange}
+                </div>
+                <div class="text-[var(--text-color)] opacity-75 mb-4">
+                  Professional carpet cleaning
+                </div>
+                <div class="text-sm text-[var(--text-color)] opacity-75">
+                  Heritage home specialists
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Before/After showcase -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <Card variant="highlight" padding="lg">
+            <h4 class="text-xl font-bold mb-3 text-gray-900">Why Choose Our Carpet Cleaning?</h4>
+            <ul class="space-y-3 text-gray-600">
+              <li class="flex items-start gap-3">
+                <span class="text-[var(--primary-color)] mt-1">💧</span>
+                <div>
+                  <strong>Hot Water Extraction:</strong> Deep cleaning that removes embedded dirt and allergens
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-[var(--primary-color)] mt-1">🌿</span>
+                <div>
+                  <strong>Eco-Friendly:</strong> Safe for families, pets, and heritage home environments
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="text-[var(--primary-color)] mt-1">⚡</span>
+                <div>
+                  <strong>Fast Drying:</strong> Advanced technology means carpets dry in 2-4 hours
+                </div>
+              </li>
+            </ul>
+          </Card>
+          
+          <Card variant="highlight" padding="lg">
+            <h4 class="text-xl font-bold mb-3 text-[var(--primary-color)]">About Historic {suburb.name}</h4>
+            <p class="text-gray-600 mb-4">{suburb.description}</p>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <div class="font-semibold text-gray-700">Population</div>
+                <div class="text-gray-500">{suburb.population.toLocaleString()}</div>
+              </div>
+              <div>
+                <div class="font-semibold text-gray-700">Postcode</div>
+                <div class="text-gray-500">{suburb.postcode}</div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        <!-- Carpet types we clean -->
+        <div class="bg-gray-50 rounded-2xl p-8 mb-12">
+          <h3 class="text-2xl font-bold mb-6 text-center text-gray-900">
+            All Carpet Types Welcome
+          </h3>
+          <div class="grid md:grid-cols-4 gap-6 text-center">
+            <div class="bg-white rounded-lg p-4">
+              <div class="text-2xl mb-2">🧵</div>
+              <div class="font-semibold text-gray-800">Wool Carpets</div>
+              <div class="text-sm text-gray-500 mt-1">Gentle heritage cleaning</div>
+            </div>
+            <div class="bg-white rounded-lg p-4">
+              <div class="text-2xl mb-2">✨</div>
+              <div class="font-semibold text-gray-800">Synthetic</div>
+              <div class="text-sm text-gray-500 mt-1">Deep stain removal</div>
+            </div>
+            <div class="bg-white rounded-lg p-4">
+              <div class="text-2xl mb-2">🏺</div>
+              <div class="font-semibold text-gray-800">Persian Rugs</div>
+              <div class="text-sm text-gray-500 mt-1">Specialist care</div>
+            </div>
+            <div class="bg-white rounded-lg p-4">
+              <div class="text-2xl mb-2">🐕</div>
+              <div class="font-semibold text-gray-800">Pet-Affected</div>
+              <div class="text-sm text-gray-500 mt-1">Odor elimination</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="text-center">
+          <h3 class="text-3xl font-bold mb-6 text-gray-900">
+            Ready for Fresher Carpets?
+          </h3>
+          <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Join the {suburb.name} residents who trust us with their carpet cleaning. 
+            Professional results with heritage home care.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button variant="primary" size="lg" href="/quote">
+              Get Your Free Quote
+            </Button>
+            <Button variant="secondary" size="lg" href="tel:1300663366">
+              Call for Same-Day Service
+            </Button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Local Trust Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 text-center">
+      <h3 class="text-2xl font-bold mb-8 text-gray-900">
+        Established in {suburb.name}
+      </h3>
+      
+      <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <Card variant="highlight">
+          <div class="text-3xl font-bold text-[var(--primary-color)] mb-2">400+</div>
+          <div class="text-gray-700 font-medium">Carpets Cleaned</div>
+          <div class="text-sm text-gray-500 mt-1">in {suburb.name}</div>
+        </Card>
+        
+        <Card variant="highlight">
+          <div class="text-3xl font-bold text-[var(--primary-color)] mb-2">98%</div>
+          <div class="text-gray-700 font-medium">Customer Satisfaction</div>
+          <div class="text-sm text-gray-500 mt-1">verified results</div>
+        </Card>
+        
+        <Card variant="highlight">
+          <div class="text-3xl font-bold text-[var(--primary-color)] mb-2">5+</div>
+          <div class="text-gray-700 font-medium">Years Experience</div>
+          <div class="text-sm text-gray-500 mt-1">heritage home specialist</div>
+        </Card>
+      </div>
+    </div>
+  </section>
+</PageLayout>

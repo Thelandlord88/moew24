@@ -1,0 +1,238 @@
+---
+/**
+ * Dynamic Service + Suburb Pages
+ * Generates pages for each service in each suburb (e.g., /services/bond-cleaning/brisbane)
+ */
+import { geoConfig, enrichedClusters, getSuburb, getAdjacentSuburbs } from '../../../lib/geoCompat.ts';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SEOHead from '../../../components/seo/SEOHead.astro';
+import StructuredData from '../../../components/seo/StructuredData.astro';
+import QuoteForm from '../../../components/QuoteForm.astro';
+
+export async function getStaticPaths() {
+  const config = geoConfig();
+  const clusters = enrichedClusters();
+  
+  const paths = [];
+  
+  for (const service of config.services) {
+    for (const cluster of clusters) {
+      for (const suburb of cluster.suburbs) {
+        paths.push({
+          params: { 
+            service: service,
+            suburb: suburb.slug 
+          },
+          props: { 
+            service,
+            suburb: suburb.slug,
+            suburbData: suburb,
+            clusterName: cluster.name
+          }
+        });
+      }
+    }
+  }
+  
+  return paths;
+}
+
+const { service, suburb, suburbData, clusterName } = Astro.props;
+const config = geoConfig();
+
+// Get suburb details
+const fullSuburbData = getSuburb(suburb);
+const adjacentSuburbs = getAdjacentSuburbs(suburb);
+
+// Get service and suburb-related blog posts
+const allPosts = await getCollection('posts');
+const localPosts = allPosts.filter(post => 
+  (post.data.service === service || post.data.tags?.includes(service)) &&
+  (post.data.suburbs?.includes(suburb) || post.data.region === suburbData.cluster)
+).slice(0, 3);
+
+// Format names for display
+const serviceName = service.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+const suburbName = suburbData.name;
+
+const title = `${serviceName} in ${suburbName}`;
+const description = `Professional ${serviceName.toLowerCase()} services in ${suburbName}, ${clusterName}. ${config.brand} provides expert cleaning with local knowledge and guaranteed results. Book your free quote today.`;
+---
+
+<BaseLayout 
+  title={title}
+  description={description}
+  canonicalURL={new URL(`/services/${service}/${suburb}`, Astro.site)}
+>
+  <SEOHead 
+    slot="head"
+    title={title}
+    description={description}
+    ogType="website"
+    service={service}
+    suburb={suburb}
+  />
+  <StructuredData 
+    slot="head"
+    type="service"
+    title={title}
+    description={description}
+    service={service}
+    suburb={suburb}
+  />
+
+  <main class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="text-center">
+      <h1 class="text-4xl font-bold text-brand">
+        {serviceName} in {suburbName}
+      </h1>
+      <p class="text-xl text-slate-600 max-w-3xl mx-auto">
+        {description}
+      </p>
+      <div class="flex flex-wrap justify-center gap-4 mt-6">
+        <span class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold">
+          ✓ Local {suburbName} Service
+        </span>
+        <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold">
+          ✓ Same Day Available
+        </span>
+        <span class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full font-semibold">
+          ✓ 100% Guarantee
+        </span>
+      </div>
+    </div>
+
+    <!-- Local Service Info -->
+    <div class="grid md:grid-cols-2 gap-8 mt-12">
+      <div>
+        <h2 class="text-2xl font-semibold text-brand">
+          {serviceName} Experts in {suburbName}
+        </h2>
+        <div class="mt-4 space-y-4 text-slate-600">
+          <p>
+            As your local {serviceName.toLowerCase()} specialists in {suburbName}, we understand the unique needs of properties in the {clusterName} area. Our experienced team has been serving {suburbName} residents and providing exceptional cleaning services with attention to detail.
+          </p>
+          <p>
+            Whether you need {serviceName.toLowerCase()} for your rental property inspection or just want a thorough professional clean, we're here to help. Our local knowledge of {suburbName} means we understand local property managers' requirements and deliver results that exceed expectations.
+          </p>
+        </div>
+        
+        {fullSuburbData && (
+          <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+            <h3 class="text-lg font-semibold text-blue-900">
+              Local Service Area Information
+            </h3>
+            <p class="text-blue-800 mt-2">
+              <strong>Suburb:</strong> {suburbName}<br>
+              <strong>Region:</strong> {clusterName}<br>
+              <strong>Service Radius:</strong> We service all of {suburbName} and surrounding areas
+            </p>
+          </div>
+        )}
+      </div>
+
+      <!-- Quote Form -->
+      <div class="border rounded-xl p-6">
+        <h3 class="text-xl font-semibold text-brand">
+          Get Your Free {suburbName} Quote
+        </h3>
+        <p class="text-slate-600 mt-2">
+          Local {serviceName.toLowerCase()} service in {suburbName}. Quick response, professional results.
+        </p>
+        <div class="mt-4">
+          <QuoteForm />
+        </div>
+      </div>
+    </div>
+
+    <!-- Why Choose Us for this Location -->
+    <div class="mt-12 border rounded-xl p-8">
+      <h2 class="text-2xl font-semibold text-center text-brand">
+        Why Choose Us for {serviceName} in {suburbName}?
+      </h2>
+      <div class="grid md:grid-cols-3 gap-6 mt-6">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+            <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold mt-2">Local {suburbName} Knowledge</h3>
+          <p class="text-slate-600 mt-1">We know {suburbName} properties and local requirements inside out.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+            <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold mt-2">Fast Response</h3>
+          <p class="text-slate-600 mt-1">Quick service to {suburbName} - often same day availability.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
+            <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold mt-2">Guaranteed Results</h3>
+          <p class="text-slate-600 mt-1">100% satisfaction guarantee for all {suburbName} clients.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nearby Areas -->
+    {adjacentSuburbs.length > 0 && (
+      <div class="mt-12">
+        <h2 class="text-2xl font-semibold text-center text-brand">
+          We Also Service Areas Near {suburbName}
+        </h2>
+        <div class="grid md:grid-cols-4 gap-4 mt-6">
+          {adjacentSuburbs.slice(0, 8).map(nearbySuburb => {
+            const nearbyData = getSuburb(nearbySuburb);
+            return nearbyData ? (
+              <a 
+                href={`/services/${service}/${nearbySuburb}`}
+                class="block p-4 border rounded-lg hover:border-brand transition-colors text-center"
+              >
+                <div class="font-semibold text-brand">{nearbyData.name}</div>
+                <div class="text-sm text-slate-600">{serviceName}</div>
+              </a>
+            ) : null;
+          })}
+        </div>
+      </div>
+    )}
+
+    <!-- Local Blog Posts -->
+    {localPosts.length > 0 && (
+      <div class="mt-12">
+        <h2 class="text-2xl font-semibold text-center text-brand">
+          Local {serviceName} Tips for {suburbName}
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6 mt-6">
+          {localPosts.map(post => (
+            <article class="border rounded-lg overflow-hidden">
+              <div class="p-6">
+                <h3 class="text-lg font-semibold">
+                  <a href={`/blog/${post.slug}`} class="text-brand hover:underline">
+                    {post.data.title}
+                  </a>
+                </h3>
+                <p class="text-slate-600 mt-2">{post.data.description}</p>
+                <a 
+                  href={`/blog/${post.slug}`}
+                  class="text-brand hover:underline font-semibold text-sm mt-4 inline-block"
+                >
+                  Read More →
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    )}
+  </main>
+</BaseLayout>

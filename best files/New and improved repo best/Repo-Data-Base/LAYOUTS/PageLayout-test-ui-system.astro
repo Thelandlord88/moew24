@@ -1,0 +1,151 @@
+---
+// 🏗️ Page Layout Component
+// Wraps content with theming and adjacency-aware navigation
+
+import { createTheme, getThemeStyles, getAdjacentSuburbs } from '../themeProvider.js';
+
+interface Props {
+  serviceSlug: string;
+  suburbSlug: string;
+  title: string;
+  description: string;
+  showAdjacent?: boolean;
+}
+
+const { 
+  serviceSlug, 
+  suburbSlug, 
+  title, 
+  description,
+  showAdjacent = true 
+} = Astro.props;
+
+// Create theme for this service+suburb combination
+const theme = createTheme(serviceSlug, suburbSlug);
+const themeStyles = getThemeStyles(theme);
+
+// Get adjacent suburbs for navigation
+const adjacentSuburbs = showAdjacent ? getAdjacentSuburbs(suburbSlug) : [];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Theme CSS Variables -->
+  <style>
+    :root {
+      {themeStyles}
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="container mx-auto px-4 py-4">
+      <nav class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <a href="/" class="text-2xl font-bold text-[var(--primary-color)]">
+            OneDone Cleaning
+          </a>
+          <span class="text-gray-400">|</span>
+          <span class="text-lg font-medium text-gray-700">
+            {theme.service?.name} in {theme.suburb?.name}
+          </span>
+        </div>
+        
+        <div class="hidden md:flex space-x-6">
+          <a href="/services" class="text-gray-600 hover:text-[var(--primary-color)] transition-colors">
+            Services
+          </a>
+          <a href="/areas" class="text-gray-600 hover:text-[var(--primary-color)] transition-colors">
+            Areas
+          </a>
+          <a href="/quote" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all">
+            Get Quote
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <slot />
+  </main>
+
+  <!-- Adjacent Suburbs Navigation -->
+  {adjacentSuburbs.length > 0 && (
+    <section class="bg-white border-t border-gray-200 py-12">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-bold text-center mb-8 text-gray-900">
+          {theme.service?.name} in Nearby Areas
+        </h2>
+        
+        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {adjacentSuburbs.map(adjacent => (
+            <a 
+              href={`/test/${serviceSlug}/${adjacent}`}
+              class="block p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-[var(--primary-color)] hover:bg-opacity-10 hover:border-[var(--primary-color)] transition-all group"
+            >
+              <div class="text-center">
+                <div class="font-semibold text-gray-900 group-hover:text-[var(--primary-color)] transition-colors">
+                  {adjacent.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                </div>
+                <div class="text-sm text-gray-500 mt-1">
+                  {theme.service?.name}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="text-xl font-semibold mb-4">OneDone Cleaning</h3>
+          <p class="text-gray-300">
+            Professional cleaning services across Brisbane, Logan, and Ipswich.
+          </p>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold mb-4">Quick Links</h4>
+          <ul class="space-y-2 text-gray-300">
+            <li><a href="/services" class="hover:text-white transition-colors">All Services</a></li>
+            <li><a href="/areas" class="hover:text-white transition-colors">Service Areas</a></li>
+            <li><a href="/quote" class="hover:text-white transition-colors">Get Quote</a></li>
+            <li><a href="/contact" class="hover:text-white transition-colors">Contact Us</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold mb-4">Contact Info</h4>
+          <div class="text-gray-300 space-y-2">
+            <p>📞 1300 ONEDONE</p>
+            <p>✉️ hello@onedonecleaning.com.au</p>
+            <p>🕒 Mon-Fri: 7am-7pm</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+        <p>&copy; 2025 OneDone Cleaning. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,8 @@
+nohup: ignoring input
+🧠 Initializing NEXUS Runtime...
+🧠 Initializing NEXUS consciousness...
+✅ NEXUS consciousness initialized (4/4 patterns loaded)
+✅ NEXUS consciousness loaded
+⚠️ Port 8080 in use — retrying with 8081
+⚠️ Port 8081 in use — retrying with 8082
+🌐 NEXUS Runtime listening on http://127.0.0.1:8082

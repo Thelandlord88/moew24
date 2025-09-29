@@ -1,0 +1,23 @@
+{
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
+    "git.terminalGitEditor": true,
+    "terminal.integrated.shellIntegration.enabled": true,
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+        }
+    },
+    "terminal.integrated.enableFileLinks": "on",
+    "terminal.integrated.persistentSessionReviveProcess": "onExitAndReload",
+    "terminal.integrated.tabs.enableAnimation": true,
+    "terminal.integrated.gpuAcceleration": "on",
+    "terminal.integrated.showExitAlert": true,
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontWeight": "normal",
+    "terminal.integrated.copyOnSelection": true
+}

@@ -1,0 +1,89 @@
+---
+/**
+ * Breadcrumbs Component
+ * Hierarchical navigation with structured data
+ */
+export interface Props {
+  items: Array<{
+    label: string;
+    href: string;
+  }>;
+  service?: string;
+  suburb?: string;
+  current?: string;
+}
+
+const { items, service, suburb, current } = Astro.props;
+
+import { geoConfig } from '../../lib/geoCompat.ts';
+
+const config = geoConfig();
+const site = Astro.site || config.site;
+
+// Build breadcrumb items
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  ...items
+];
+
+// Add current page if provided
+if (current) {
+  breadcrumbItems.push({ label: current, href: Astro.url.pathname });
+}
+
+// Generate structured data for breadcrumbs
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": breadcrumbItems.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.label,
+    "item": new URL(item.href, site).href
+  }))
+};
+
+const jsonLd = JSON.stringify(breadcrumbSchema, null, 0);
+---
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <ol class="flex items-center space-x-2 text-sm text-gray-600">
+    {breadcrumbItems.map((item, index) => (
+      <li class="flex items-center">
+        {index > 0 && (
+          <svg class="w-4 h-4 mx-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+          </svg>
+        )}
+        {index === breadcrumbItems.length - 1 ? (
+          <span class="font-medium text-gray-900" aria-current="page">
+            {item.label}
+          </span>
+        ) : (
+          <a 
+            href={item.href} 
+            class="hover:text-brand transition-colors"
+            aria-label={`Navigate to ${item.label}`}
+          >
+            {item.label}
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={jsonLd}></script>
+
+<style>
+  .breadcrumb {
+    @apply mb-6 px-4 py-2 bg-gray-50 rounded-lg;
+  }
+  
+  @media (max-width: 640px) {
+    .breadcrumb ol {
+      @apply text-xs;
+    }
+  }
+</style>

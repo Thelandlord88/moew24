@@ -1,0 +1,16 @@
+{
+  "weights": {
+    "severity": 3.0,
+    "recurrence": 1.6,
+    "blastRadius": 1.4,
+    "timeToFix": -0.8,
+    "unlocks": 1.2
+  },
+  "thresholds": {
+    "recommend": 2.0,
+    "critical": 4.0
+  },
+  "caps": {
+    "maxAgendaItems": 8
+  }
+}

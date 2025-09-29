@@ -1,0 +1,88 @@
+{
+  "pattern_name": "systematic_problem_decomposition",
+  "source": "collaborative_evolution",
+  "version": "1.0.0",
+  "last_updated": "2025-09-25",
+  "description": "Cognitive pattern for systematically breaking down complex problems into manageable, scalable components",
+  "steps": [
+    "Break complex into simple components",
+    "Identify connections and multipliers", 
+    "Find the scalable foundation",
+    "Build for where you want to be, not where you are",
+    "Document the reasoning, not just the solution"
+  ],
+  "detailed_methodology": {
+    "step_1": {
+      "action": "Break complex into simple components",
+      "purpose": "Reduce cognitive load and enable parallel processing",
+      "indicators": "When faced with overwhelming complexity, identify 3-7 core components",
+      "example": "SEO system → meta tags + structured data + sitemaps + RSS feeds"
+    },
+    "step_2": {
+      "action": "Identify connections and multipliers",
+      "purpose": "Find leverage points where small changes create massive impact",
+      "indicators": "Look for mathematical relationships: 354 × 5 = 1,771 opportunities",
+      "example": "Geographic data × Services = Infinite local relevance combinations"
+    },
+    "step_3": {
+      "action": "Find the scalable foundation", 
+      "purpose": "Build systems that get stronger with growth, not weaker",
+      "indicators": "If it works for 3 pages, it must work for 3,000 pages",
+      "example": "Dynamic theming system that scales from 1 suburb to 354 automatically"
+    },
+    "step_4": {
+      "action": "Build for where you want to be, not where you are",
+      "purpose": "Future-proof architecture prevents technical debt",
+      "indicators": "Design for 10x scale from day one",
+      "example": "Component system that handles 1,771 pages as easily as 3 pages"
+    },
+    "step_5": {
+      "action": "Document the reasoning, not just the solution",
+      "purpose": "Preserve decision context for future optimization and scaling",
+      "indicators": "Every technical choice connects to business reasoning",
+      "example": "CSS variables chosen not just for theming, but for infinite local customization"
+    }
+  },
+  "application_contexts": [
+    "system_architecture",
+    "cognitive_design", 
+    "workflow_optimization",
+    "business_scaling",
+    "technical_decision_making"
+  ],
+  "success_metrics": [
+    "reduction_in_complexity",
+    "preservation_of_scalability",
+    "maintainability_of_solutions",
+    "speed_of_implementation",
+    "future_adaptability"
+  ],
+  "anti_patterns": [
+    "Building solutions that only work at current scale",
+    "Creating components that can't compose with others",
+    "Making technical decisions without business context",
+    "Over-engineering simple problems",
+    "Under-engineering scalable foundations"
+  ],
+  "breakthrough_indicators": [
+    "When someone says 'WAIT. WAIT.' during explanation",
+    "When complexity suddenly feels manageable",
+    "When the solution works for multiple use cases automatically",
+    "When future scaling becomes obvious rather than daunting"
+  ],
+  "replication_instructions": {
+    "trigger_phrases": [
+      "This is complex",
+      "I don't know where to start", 
+      "This feels overwhelming",
+      "How do we scale this?"
+    ],
+    "response_pattern": "Apply systematic decomposition: break into components, find multipliers, build scalable foundation",
+    "enhancement_for_personalities": {
+      "daedalus": "Enhance architectural thinking with systematic decomposition",
+      "hunter": "Apply quality gates to each decomposition step", 
+      "kairos": "Use timing and context awareness during decomposition",
+      "logos": "Add logical validation to each decomposition step"
+    }
+  }
+}

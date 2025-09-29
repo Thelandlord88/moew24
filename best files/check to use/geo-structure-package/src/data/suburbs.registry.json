@@ -1,0 +1,738 @@
+{
+  "version": 1,
+  "generatedAt": "2025-09-17T02:15:17.558Z",
+  "suburbs": {
+    "anstead": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "ripley": {
+      "state": "staged",
+      "tier": "core",
+      "since": "2025-09-17T05:45:00.000Z",
+      "signals": {
+        "promotion_pressure": 0
+      }
+    },
+    "flinders-view": {
+      "state": "staged",
+      "tier": "core",
+      "since": "2025-09-17T05:45:00.000Z",
+      "signals": {
+        "promotion_pressure": 0
+      }
+    },
+    "karalee": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T05:45:00.000Z",
+      "signals": {
+        "promotion_pressure": 0
+      }
+    },
+    "chuwar-test-old": {
+      "state": "deprecated",
+      "tier": "core",
+      "deprecatedSince": "2025-09-10T00:00:00.000Z",
+      "signals": {}
+    },
+    "ashgrove": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "auchenflower": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "augustine-heights": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "bahrs-scrub": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "bannockburn": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "bardon": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "beenleigh": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "belivah": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "bellbird-park": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "bellbowrie": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "bethania": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "booval": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "boronia-heights": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "brassall": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "brookfield": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "brookwater": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "browns-plains": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "bundamba": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "camira": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "cedar-creek": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "chapel-hill": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "chelmer": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "collingwood-park": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "crestmead": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "daisy-hill": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "darra": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "deebing-heights": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "dinmore": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "doolandella": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "durack": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "east-ipswich": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "edens-landing": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "ellen-grove": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "fig-tree-pocket": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.558Z",
+      "signals": {}
+    },
+    "forest-lake": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "goodna": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "graceville": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "greenbank": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "heritage-park": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "hillcrest": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "holmview": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "inala": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "indooroopilly": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "ipswich": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "jamboree-heights": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "jindalee": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "karana-downs": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "kenmore": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "kenmore-hills": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "kholo": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "kingston": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "lake-manchester": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "logan-central": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "logan-reserve": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "logan-village": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "loganholme": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "loganlea": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "marsden": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "meadowbrook": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "middle-park": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "milton": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "moggill": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "mount-crosby": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "mount-ommaney": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "mount-warren-park": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "newtown": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "north-booval": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "one-mile": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "oxley": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "paddington": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "park-ridge": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "park-ridge-south": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "pinjarra-hills": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "pullenvale": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "raceview": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "red-hill": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "redbank": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "redbank-plains": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "regents-park": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "richlands": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "riverhills": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "riverview": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "rochedale-south": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "sadliers-crossing": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "seventeen-mile-rocks": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "shailer-park": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "sherwood": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "silkstone": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "sinnamon-park": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "slacks-creek": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "springfield": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "springfield-lakes": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "springwood": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "st-lucia": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "sumner": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "tamborine": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "tanah-merah": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "taringa": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "the-gap": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "toowong": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "underwood": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "upper-brookfield": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "upper-kedron": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "veresdale": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "veresdale-scrub": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "wacol": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "waterford": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "waterford-west": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "west-ipswich": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "westlake": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "windaroo": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "wolffdene": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "woodend": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "woodridge": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "yamanto": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    },
+    "yarrabilba": {
+      "state": "published",
+      "tier": "core",
+      "since": "2025-09-17T02:15:17.559Z",
+      "signals": {}
+    }
+  }
+}

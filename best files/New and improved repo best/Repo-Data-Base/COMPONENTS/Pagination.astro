@@ -1,0 +1,29 @@
+---
+const { basePath, page, lastPage } = Astro.props as {
+  basePath: string; // e.g. "/blog/" or "/blog/category/checklists/"
+  page: number;
+  lastPage: number;
+};
+
+function pageHref(n: number) {
+  return n === 1 ? basePath : `${basePath}${n}/`;
+}
+---
+
+{lastPage > 1 && (
+  <nav class="mt-8 flex items-center justify-center gap-2" aria-label="Pagination">
+    <a
+      class="px-3 py-1 rounded border text-sm disabled:opacity-40"
+      href={page > 1 ? pageHref(page - 1) : undefined}
+      aria-disabled={page === 1}
+    >Prev</a>
+
+    <span class="text-sm">Page {page} of {lastPage}</span>
+
+    <a
+      class="px-3 py-1 rounded border text-sm disabled:opacity-40"
+      href={page < lastPage ? pageHref(page + 1) : undefined}
+      aria-disabled={page === lastPage}
+    >Next</a>
+  </nav>
+)}

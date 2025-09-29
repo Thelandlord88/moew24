@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2025-09-14T06:56:39.477Z",
+  "sourceDir": "/workspaces/July22/geo-import",
+  "destDir": "/workspaces/July22/src/data",
+  "counts": {
+    "coords": 345,
+    "index": 345,
+    "aliases": 345,
+    "lgas": 3,
+    "clusters": 3,
+    "cluster_suburbs": 346,
+    "adjacency_nodes": 0,
+    "adjacency_edges_directed": 0,
+    "cluster_duplicates": 1,
+    "orphans_in_index": 0
+  },
+  "hashes": {
+    "suburbs.coords.json": "b3827e88a18e1b29a478d1781615ae1def32817fa1756d1312fbb594e2f62b82",
+    "suburbs.index.json": "5c3c3bdfddbc67908dec4fdbde9cfa2ec8b040cbc7b0358b2bbe106248a6ca76",
+    "suburbs.aliases.json": "ba4eb9867c8c5c5e6f5e0031afb707e6275262b88d40dc7efe7f04143cdb6707",
+    "lgas.groups.json": "128899752216680060ff59ad0fcacfd796a7e3a142ea15a9ce4a40ff6ab2b6db",
+    "areas.clusters.json": "5b10d3e8931bce95d8351caa2929031a1fdea42e7c220d8a82b2022bb7491b07",
+    "adjacency.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "README.geo-data.md": "2de4693f99d3a1cea7d0edc3fea4faf1f7963835359bc25c3d444e09f16e76d8",
+    "geo.integrity.json": "ff721f98414af73d70af6d7b6b8aea207bf6940a3fae5623c82d20241572fce8"
+  },
+  "notes": []
+}

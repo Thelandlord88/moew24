@@ -1,0 +1,47 @@
+{
+  "integration": "daedalus-cognitive-architecture",
+  "version": "1.0.0",
+  "components": {
+    "cognitive-feed-agent": {
+      "file": "cognitive/cognitive-feed-agent.mjs",
+      "purpose": "Real-time request processing with personality cycles",
+      "integration_point": "cli.mjs --watch-feed mode"
+    },
+    "knowledge-loader": {
+      "file": "cognitive/knowledge-loader.mjs",
+      "purpose": "Structured domain knowledge ingestion",
+      "integration_point": "core/context.mjs knowledge injection"
+    },
+    "evolution-engine-v3": {
+      "file": "cognitive/evolution-engine-v3.mjs",
+      "purpose": "Production-grade personality evolution with conflict detection",
+      "integration_point": "cli.mjs --evolve mode, personality management"
+    },
+    "intelligence-analyzer-v2.2": {
+      "file": "cognitive/intelligence-analyzer-v2.2.mjs", 
+      "purpose": "Advanced personality intelligence analysis and optimization",
+      "integration_point": "personality validation in core/context.mjs"
+    },
+    "enhance-hunter": {
+      "file": "cognitive/enhance-hunter.mjs",
+      "purpose": "Hunter personality enhancement utilities",
+      "integration_point": "personality enhancement workflows"
+    },
+    "personality-loader": {
+      "file": "cognitive/personality-loader.mjs",
+      "purpose": "Dynamic personality loading and validation",
+      "integration_point": "core/context.mjs personality initialization"
+    },
+    "ui-knowledge-corpus": {
+      "file": "knowledge/domains/visual-engineering/astro5-tailwind4.json",
+      "purpose": "Astro 5 + Tailwind CSS v4 patterns and validation rules",
+      "integration_point": "plugins/04-write-pages.mjs, plugins/05-internal-links.mjs"
+    }
+  },
+  "next_steps": [
+    "Modify core/context.mjs to load knowledge corpus",
+    "Add --watch-feed flag to cli.mjs",
+    "Integrate UI patterns into page writing plugins",
+    "Create COGNITIVE_FEED.md for request routing"
+  ]
+}

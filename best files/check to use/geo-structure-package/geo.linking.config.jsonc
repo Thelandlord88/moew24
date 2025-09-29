@@ -1,0 +1,14 @@
+{
+  // Fairness: keep promotion gentle; fail if it dominates lists
+  "fairness": {
+    "maxPromotedShareWarn": 0.35,
+    "maxPromotedShareFail": 0.50,
+    "maxPromotedCrossClusterRatio": 0.10
+  },
+  // Graph health: ensure a mostly connected, navigable graph
+  "graph": {
+    "minLargestComponentRatio": 0.95,
+    "maxIsolates": 0,
+    "minMeanDegree": 3
+  }
+}

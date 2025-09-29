@@ -1,0 +1,1052 @@
+{
+  "$schema": "../schemas/suburbs.meta.schema.json",
+  "nodes": {
+    "acacia-ridge": {
+      "tier": "support"
+    },
+    "albion": {
+      "tier": "expansion"
+    },
+    "alderley": {
+      "tier": "support"
+    },
+    "algester": {
+      "tier": "expansion"
+    },
+    "amberley": {
+      "tier": "support"
+    },
+    "annerley": {
+      "tier": "expansion"
+    },
+    "anstead": {
+      "tier": "core"
+    },
+    "archerfield": {
+      "tier": "support"
+    },
+    "ascot": {
+      "tier": "support"
+    },
+    "ashgrove": {
+      "tier": "core"
+    },
+    "ashwell": {
+      "tier": "support"
+    },
+    "aspley": {
+      "tier": "expansion"
+    },
+    "auchenflower": {
+      "tier": "core"
+    },
+    "augustine-heights": {
+      "tier": "core"
+    },
+    "bahrs-scrub": {
+      "tier": "core"
+    },
+    "bald-hills": {
+      "tier": "support"
+    },
+    "balmoral": {
+      "tier": "support"
+    },
+    "banks-creek": {
+      "tier": "support"
+    },
+    "bannockburn": {
+      "tier": "core"
+    },
+    "banyo": {
+      "tier": "support"
+    },
+    "bardon": {
+      "tier": "core"
+    },
+    "barellan-point": {
+      "tier": "support"
+    },
+    "basin-pocket": {
+      "tier": "expansion"
+    },
+    "beenleigh": {
+      "tier": "core"
+    },
+    "belivah": {
+      "tier": "core"
+    },
+    "bellbird-park": {
+      "tier": "core"
+    },
+    "bellbowrie": {
+      "tier": "core"
+    },
+    "belmont": {
+      "tier": "support"
+    },
+    "berrinba": {
+      "tier": "support"
+    },
+    "bethania": {
+      "tier": "core"
+    },
+    "blacksoil": {
+      "tier": "support"
+    },
+    "blackstone": {
+      "tier": "support"
+    },
+    "boondall": {
+      "tier": "expansion"
+    },
+    "booval": {
+      "tier": "core"
+    },
+    "boronia-heights": {
+      "tier": "core"
+    },
+    "bowen-hills": {
+      "tier": "expansion"
+    },
+    "bracken-ridge": {
+      "tier": "support"
+    },
+    "brassall": {
+      "tier": "core"
+    },
+    "bridgeman-downs": {
+      "tier": "support"
+    },
+    "brighton": {
+      "tier": "support"
+    },
+    "brisbane-airport": {
+      "tier": "support"
+    },
+    "brisbane-city": {
+      "tier": "expansion"
+    },
+    "brookfield": {
+      "tier": "core"
+    },
+    "brookwater": {
+      "tier": "core"
+    },
+    "browns-plains": {
+      "tier": "core"
+    },
+    "buccan": {
+      "tier": "support"
+    },
+    "bulimba": {
+      "tier": "expansion"
+    },
+    "bulwer": {
+      "tier": "support"
+    },
+    "bundamba": {
+      "tier": "core"
+    },
+    "burbank": {
+      "tier": "support"
+    },
+    "calamvale": {
+      "tier": "expansion"
+    },
+    "calvert": {
+      "tier": "support"
+    },
+    "camira": {
+      "tier": "core"
+    },
+    "camp-hill": {
+      "tier": "support"
+    },
+    "cannon-hill": {
+      "tier": "support"
+    },
+    "carbrook": {
+      "tier": "support"
+    },
+    "carina": {
+      "tier": "support"
+    },
+    "carina-heights": {
+      "tier": "support"
+    },
+    "carindale": {
+      "tier": "support"
+    },
+    "carole-park": {
+      "tier": "support"
+    },
+    "carseldine": {
+      "tier": "support"
+    },
+    "cedar-creek": {
+      "tier": "core"
+    },
+    "cedar-grove": {
+      "tier": "expansion"
+    },
+    "cedar-vale": {
+      "tier": "support"
+    },
+    "chambers-flat": {
+      "tier": "support"
+    },
+    "chandler": {
+      "tier": "support"
+    },
+    "chapel-hill": {
+      "tier": "core"
+    },
+    "chelmer": {
+      "tier": "core"
+    },
+    "chermside": {
+      "tier": "expansion"
+    },
+    "chermside-west": {
+      "tier": "support"
+    },
+    "churchill": {
+      "tier": "expansion"
+    },
+    "chuwar": {
+      "tier": "support"
+    },
+    "clayfield": {
+      "tier": "expansion"
+    },
+    "coalfalls": {
+      "tier": "expansion"
+    },
+    "collingwood-park": {
+      "tier": "core"
+    },
+    "coopers-plains": {
+      "tier": "expansion"
+    },
+    "coorparoo": {
+      "tier": "expansion"
+    },
+    "corinda": {
+      "tier": "support"
+    },
+    "cornubia": {
+      "tier": "support"
+    },
+    "cowan-cowan": {
+      "tier": "support"
+    },
+    "crestmead": {
+      "tier": "core"
+    },
+    "daisy-hill": {
+      "tier": "core"
+    },
+    "darra": {
+      "tier": "core"
+    },
+    "deagon": {
+      "tier": "expansion"
+    },
+    "deebing-heights": {
+      "tier": "core"
+    },
+    "dinmore": {
+      "tier": "core"
+    },
+    "doolandella": {
+      "tier": "core"
+    },
+    "drewvale": {
+      "tier": "support"
+    },
+    "durack": {
+      "tier": "core"
+    },
+    "dutton-park": {
+      "tier": "expansion"
+    },
+    "eagle-farm": {
+      "tier": "support"
+    },
+    "eagleby": {
+      "tier": "support"
+    },
+    "east-brisbane": {
+      "tier": "support"
+    },
+    "east-ipswich": {
+      "tier": "core"
+    },
+    "eastern-heights": {
+      "tier": "expansion"
+    },
+    "ebbw-vale": {
+      "tier": "support"
+    },
+    "ebenezer": {
+      "tier": "support"
+    },
+    "edens-landing": {
+      "tier": "core"
+    },
+    "eight-mile-plains": {
+      "tier": "expansion"
+    },
+    "ellen-grove": {
+      "tier": "core"
+    },
+    "england-creek": {
+      "tier": "support"
+    },
+    "enoggera": {
+      "tier": "expansion"
+    },
+    "enoggera-reservoir": {
+      "tier": "support"
+    },
+    "everton-park": {
+      "tier": "support"
+    },
+    "fairfield": {
+      "tier": "expansion"
+    },
+    "ferny-grove": {
+      "tier": "support"
+    },
+    "fig-tree-pocket": {
+      "tier": "core"
+    },
+    "fitzgibbon": {
+      "tier": "expansion"
+    },
+    "flagstone": {
+      "tier": "expansion"
+    },
+    "flinders-lakes": {
+      "tier": "support"
+    },
+    "flinders-view": {
+      "tier": "core"
+    },
+    "forest-lake": {
+      "tier": "core"
+    },
+    "forestdale": {
+      "tier": "support"
+    },
+    "fortitude-valley": {
+      "tier": "expansion"
+    },
+    "gailes": {
+      "tier": "expansion"
+    },
+    "gaythorne": {
+      "tier": "support"
+    },
+    "geebung": {
+      "tier": "expansion"
+    },
+    "glenlogan": {
+      "tier": "support"
+    },
+    "goodna": {
+      "tier": "core"
+    },
+    "goolman": {
+      "tier": "support"
+    },
+    "gordon-park": {
+      "tier": "expansion"
+    },
+    "graceville": {
+      "tier": "core"
+    },
+    "grandchester": {
+      "tier": "support"
+    },
+    "grange": {
+      "tier": "expansion"
+    },
+    "greenbank": {
+      "tier": "core"
+    },
+    "greenslopes": {
+      "tier": "expansion"
+    },
+    "gumdale": {
+      "tier": "support"
+    },
+    "haigslea": {
+      "tier": "support"
+    },
+    "hamilton": {
+      "tier": "support"
+    },
+    "hawthorne": {
+      "tier": "expansion"
+    },
+    "heathwood": {
+      "tier": "support"
+    },
+    "hemmant": {
+      "tier": "support"
+    },
+    "hendra": {
+      "tier": "support"
+    },
+    "heritage-park": {
+      "tier": "core"
+    },
+    "herston": {
+      "tier": "expansion"
+    },
+    "highgate-hill": {
+      "tier": "support"
+    },
+    "hillcrest": {
+      "tier": "core"
+    },
+    "holland-park": {
+      "tier": "support"
+    },
+    "holland-park-west": {
+      "tier": "support"
+    },
+    "holmview": {
+      "tier": "core"
+    },
+    "inala": {
+      "tier": "core"
+    },
+    "indooroopilly": {
+      "tier": "core"
+    },
+    "ipswich": {
+      "tier": "core"
+    },
+    "ironbark": {
+      "tier": "support"
+    },
+    "jamboree-heights": {
+      "tier": "core"
+    },
+    "jeebropilly": {
+      "tier": "support"
+    },
+    "jimboomba": {
+      "tier": "support"
+    },
+    "jindalee": {
+      "tier": "core"
+    },
+    "kagaru": {
+      "tier": "support"
+    },
+    "kalinga": {
+      "tier": "support"
+    },
+    "kangaroo-point": {
+      "tier": "support"
+    },
+    "karalee": {
+      "tier": "support"
+    },
+    "karana-downs": {
+      "tier": "core"
+    },
+    "karawatha": {
+      "tier": "support"
+    },
+    "karrabin": {
+      "tier": "support"
+    },
+    "kedron": {
+      "tier": "expansion"
+    },
+    "kelvin-grove": {
+      "tier": "support"
+    },
+    "kenmore": {
+      "tier": "core"
+    },
+    "kenmore-hills": {
+      "tier": "core"
+    },
+    "keperra": {
+      "tier": "support"
+    },
+    "kholo": {
+      "tier": "core"
+    },
+    "kingston": {
+      "tier": "core"
+    },
+    "kooringal": {
+      "tier": "support",
+      "policyExempt": [
+        "minDegree"
+      ],
+      "bridgePriority": true
+    },
+    "kuraby": {
+      "tier": "support"
+    },
+    "lake-manchester": {
+      "tier": "core"
+    },
+    "lanefield": {
+      "tier": "support"
+    },
+    "larapinta": {
+      "tier": "support"
+    },
+    "leichhardt": {
+      "tier": "support"
+    },
+    "logan-central": {
+      "tier": "core"
+    },
+    "logan-reserve": {
+      "tier": "core"
+    },
+    "logan-village": {
+      "tier": "core"
+    },
+    "loganholme": {
+      "tier": "core"
+    },
+    "loganlea": {
+      "tier": "core"
+    },
+    "lota": {
+      "tier": "support"
+    },
+    "lower-mount-walker": {
+      "tier": "support"
+    },
+    "lutwyche": {
+      "tier": "expansion"
+    },
+    "lyons": {
+      "tier": "support"
+    },
+    "lytton": {
+      "tier": "support"
+    },
+    "macgregor": {
+      "tier": "expansion"
+    },
+    "mackenzie": {
+      "tier": "support"
+    },
+    "manly": {
+      "tier": "support"
+    },
+    "manly-west": {
+      "tier": "expansion"
+    },
+    "mansfield": {
+      "tier": "support"
+    },
+    "marburg": {
+      "tier": "support"
+    },
+    "marsden": {
+      "tier": "core"
+    },
+    "mcdowall": {
+      "tier": "support"
+    },
+    "meadowbrook": {
+      "tier": "core"
+    },
+    "middle-park": {
+      "tier": "core"
+    },
+    "milton": {
+      "tier": "core"
+    },
+    "mitchelton": {
+      "tier": "support"
+    },
+    "moggill": {
+      "tier": "core"
+    },
+    "monarch-glen": {
+      "tier": "support"
+    },
+    "moores-pocket": {
+      "tier": "expansion"
+    },
+    "moorooka": {
+      "tier": "support"
+    },
+    "moreton-bay": {
+      "tier": "maritime",
+      "policyExempt": [
+        "minDegree"
+      ],
+      "bridgePriority": true
+    },
+    "moreton-island": {
+      "tier": "support"
+    },
+    "morningside": {
+      "tier": "support"
+    },
+    "mount-coot-tha": {
+      "tier": "support"
+    },
+    "mount-crosby": {
+      "tier": "core"
+    },
+    "mount-forbes": {
+      "tier": "support"
+    },
+    "mount-gravatt": {
+      "tier": "expansion"
+    },
+    "mount-gravatt-east": {
+      "tier": "support"
+    },
+    "mount-marrow": {
+      "tier": "expansion"
+    },
+    "mount-mort": {
+      "tier": "support"
+    },
+    "mount-ommaney": {
+      "tier": "core"
+    },
+    "mount-walker-west": {
+      "tier": "support"
+    },
+    "mount-warren-park": {
+      "tier": "core"
+    },
+    "muirlea": {
+      "tier": "support"
+    },
+    "mundoolun": {
+      "tier": "support"
+    },
+    "munruben": {
+      "tier": "support"
+    },
+    "murarrie": {
+      "tier": "support"
+    },
+    "mutdapilly": {
+      "tier": "support"
+    },
+    "nathan": {
+      "tier": "expansion"
+    },
+    "new-beith": {
+      "tier": "support"
+    },
+    "new-chum": {
+      "tier": "support"
+    },
+    "new-farm": {
+      "tier": "support"
+    },
+    "newmarket": {
+      "tier": "support"
+    },
+    "newstead": {
+      "tier": "support"
+    },
+    "newtown": {
+      "tier": "core"
+    },
+    "norman-park": {
+      "tier": "support"
+    },
+    "north-booval": {
+      "tier": "core"
+    },
+    "north-ipswich": {
+      "tier": "support"
+    },
+    "north-maclean": {
+      "tier": "support"
+    },
+    "north-tivoli": {
+      "tier": "support"
+    },
+    "northgate": {
+      "tier": "support"
+    },
+    "nudgee": {
+      "tier": "support"
+    },
+    "nudgee-beach": {
+      "tier": "support"
+    },
+    "nundah": {
+      "tier": "support"
+    },
+    "one-mile": {
+      "tier": "core"
+    },
+    "oxley": {
+      "tier": "core"
+    },
+    "paddington": {
+      "tier": "core"
+    },
+    "pallara": {
+      "tier": "support"
+    },
+    "park-ridge": {
+      "tier": "core"
+    },
+    "park-ridge-south": {
+      "tier": "core"
+    },
+    "parkinson": {
+      "tier": "support"
+    },
+    "peak-crossing": {
+      "tier": "support"
+    },
+    "petrie-terrace": {
+      "tier": "expansion"
+    },
+    "pine-mountain": {
+      "tier": "support"
+    },
+    "pinjarra-hills": {
+      "tier": "core"
+    },
+    "pinkenba": {
+      "tier": "support"
+    },
+    "port-of-brisbane": {
+      "tier": "support"
+    },
+    "priestdale": {
+      "tier": "support"
+    },
+    "pullenvale": {
+      "tier": "core"
+    },
+    "purga": {
+      "tier": "support"
+    },
+    "raceview": {
+      "tier": "core"
+    },
+    "ransome": {
+      "tier": "support"
+    },
+    "red-hill": {
+      "tier": "core"
+    },
+    "redbank": {
+      "tier": "core"
+    },
+    "redbank-plains": {
+      "tier": "core"
+    },
+    "regents-park": {
+      "tier": "core"
+    },
+    "richlands": {
+      "tier": "core"
+    },
+    "ripley": {
+      "tier": "core"
+    },
+    "riverbend": {
+      "tier": "support"
+    },
+    "riverhills": {
+      "tier": "core"
+    },
+    "riverview": {
+      "tier": "core"
+    },
+    "robertson": {
+      "tier": "expansion"
+    },
+    "rochedale": {
+      "tier": "support"
+    },
+    "rochedale-south": {
+      "tier": "core"
+    },
+    "rocklea": {
+      "tier": "support"
+    },
+    "rosewood": {
+      "tier": "expansion"
+    },
+    "runcorn": {
+      "tier": "support"
+    },
+    "sadliers-crossing": {
+      "tier": "core"
+    },
+    "salisbury": {
+      "tier": "support"
+    },
+    "sandgate": {
+      "tier": "support"
+    },
+    "seven-hills": {
+      "tier": "support"
+    },
+    "seventeen-mile-rocks": {
+      "tier": "core"
+    },
+    "shailer-park": {
+      "tier": "core"
+    },
+    "sherwood": {
+      "tier": "core"
+    },
+    "shorncliffe": {
+      "tier": "support"
+    },
+    "silkstone": {
+      "tier": "core"
+    },
+    "silverbark-ridge": {
+      "tier": "support"
+    },
+    "sinnamon-park": {
+      "tier": "core"
+    },
+    "slacks-creek": {
+      "tier": "core"
+    },
+    "south-brisbane": {
+      "tier": "expansion"
+    },
+    "south-maclean": {
+      "tier": "expansion"
+    },
+    "south-ripley": {
+      "tier": "support"
+    },
+    "spring-hill": {
+      "tier": "expansion"
+    },
+    "spring-mountain": {
+      "tier": "support"
+    },
+    "springfield": {
+      "tier": "core"
+    },
+    "springfield-central": {
+      "tier": "support"
+    },
+    "springfield-lakes": {
+      "tier": "core"
+    },
+    "springwood": {
+      "tier": "core"
+    },
+    "st-lucia": {
+      "tier": "core"
+    },
+    "stafford": {
+      "tier": "support"
+    },
+    "stafford-heights": {
+      "tier": "support"
+    },
+    "stockleigh": {
+      "tier": "support"
+    },
+    "stones-corner": {
+      "tier": "support"
+    },
+    "stretton": {
+      "tier": "expansion"
+    },
+    "sumner": {
+      "tier": "core"
+    },
+    "sunnybank": {
+      "tier": "support"
+    },
+    "sunnybank-hills": {
+      "tier": "support"
+    },
+    "swanbank": {
+      "tier": "support"
+    },
+    "taigum": {
+      "tier": "expansion"
+    },
+    "tallegalla": {
+      "tier": "support"
+    },
+    "tamborine": {
+      "tier": "core"
+    },
+    "tanah-merah": {
+      "tier": "core"
+    },
+    "taringa": {
+      "tier": "core"
+    },
+    "tarragindi": {
+      "tier": "support"
+    },
+    "teneriffe": {
+      "tier": "support"
+    },
+    "tennyson": {
+      "tier": "expansion"
+    },
+    "thagoona": {
+      "tier": "support"
+    },
+    "the-bluff": {
+      "tier": "support"
+    },
+    "the-gap": {
+      "tier": "core"
+    },
+    "tingalpa": {
+      "tier": "expansion"
+    },
+    "tivoli": {
+      "tier": "support"
+    },
+    "toowong": {
+      "tier": "core"
+    },
+    "underwood": {
+      "tier": "core"
+    },
+    "undullah": {
+      "tier": "support"
+    },
+    "upper-brookfield": {
+      "tier": "core"
+    },
+    "upper-kedron": {
+      "tier": "core"
+    },
+    "upper-mount-gravatt": {
+      "tier": "expansion"
+    },
+    "veresdale": {
+      "tier": "core"
+    },
+    "veresdale-scrub": {
+      "tier": "core"
+    },
+    "virginia": {
+      "tier": "expansion"
+    },
+    "wacol": {
+      "tier": "core"
+    },
+    "wakerley": {
+      "tier": "expansion"
+    },
+    "walloon": {
+      "tier": "support"
+    },
+    "waterford": {
+      "tier": "core"
+    },
+    "waterford-west": {
+      "tier": "core"
+    },
+    "wavell-heights": {
+      "tier": "support"
+    },
+    "west-end": {
+      "tier": "support"
+    },
+    "west-ipswich": {
+      "tier": "core"
+    },
+    "westlake": {
+      "tier": "core"
+    },
+    "white-rock": {
+      "tier": "support"
+    },
+    "willawong": {
+      "tier": "support"
+    },
+    "willowbank": {
+      "tier": "support"
+    },
+    "wilston": {
+      "tier": "expansion"
+    },
+    "windaroo": {
+      "tier": "core"
+    },
+    "windsor": {
+      "tier": "expansion"
+    },
+    "wishart": {
+      "tier": "support"
+    },
+    "wolffdene": {
+      "tier": "core"
+    },
+    "woodend": {
+      "tier": "core"
+    },
+    "woodhill": {
+      "tier": "support"
+    },
+    "woodridge": {
+      "tier": "core"
+    },
+    "woolloongabba": {
+      "tier": "expansion"
+    },
+    "wooloowin": {
+      "tier": "expansion"
+    },
+    "woolshed": {
+      "tier": "support"
+    },
+    "wulkuraka": {
+      "tier": "support"
+    },
+    "wynnum": {
+      "tier": "expansion"
+    },
+    "wynnum-west": {
+      "tier": "support"
+    },
+    "yamanto": {
+      "tier": "core"
+    },
+    "yarrabilba": {
+      "tier": "core"
+    },
+    "yeerongpilly": {
+      "tier": "expansion"
+    },
+    "yeronga": {
+      "tier": "support"
+    },
+    "zillmere": {
+      "tier": "support"
+    }
+  },
+  "meta": {
+    "generated": "2025-09-15T06:43:25.562Z",
+    "notes": "Derived by derive-meta-tiers.mjs"
+  }
+}

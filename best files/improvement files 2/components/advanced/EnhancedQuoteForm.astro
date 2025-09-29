@@ -1,0 +1,316 @@
+---
+/**
+ * Enhanced QuoteForm with modern Astro features
+ * Uses latest form handling capabilities
+ */
+
+export interface Props {
+  service?: string;
+  suburb?: string;
+  class?: string;
+}
+
+const { service, suburb, class: className } = Astro.props;
+---
+
+<section data-quote
+         class={`q-form py-16 md:py-20 bg-gradient-to-b from-sky-50 to-sky-100 ${className || ''}`}
+         transition:name="quote-form">
+  <div class="max-w-4xl mx-auto px-6 md:px-8">
+    
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
+        Get Your <span class="text-sky-600">Free Quote</span> Today
+      </h2>
+      <p class="text-lg text-slate-600 mb-6">
+        100% Bond Back Guarantee • Police Checked Staff • Fully Insured
+      </p>
+      
+      <!-- Trust badges -->
+      <div class="flex flex-wrap justify-center gap-3 text-sm">
+        <span class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-3 py-1 rounded-full">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          7-Day Re-clean
+        </span>
+        <span class="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          Fully Insured
+        </span>
+        <span class="inline-flex items-center gap-2 bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path>
+          </svg>
+          Police Checked
+        </span>
+      </div>
+    </div>
+
+    <!-- Enhanced Form -->
+    <form 
+      method="POST" 
+      action="/api/quote"
+      class="q-form-content bg-white rounded-2xl shadow-xl p-8 md:p-12 space-y-6"
+      data-enhanced-form="true"
+    >
+      
+      <!-- Service Selection -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label for="service" class="block text-sm font-semibold text-slate-700 mb-2">
+            Service Needed *
+          </label>
+          <select 
+            name="service" 
+            id="service" 
+            required
+            value={service}
+            class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-sky-500 focus:ring-sky-500 transition-colors"
+          >
+            <option value="">Select a service...</option>
+            <option value="bond-cleaning" selected={service === 'bond-cleaning'}>Bond Cleaning</option>
+            <option value="bathroom-deep-clean" selected={service === 'bathroom-deep-clean'}>Bathroom Deep Clean</option>
+            <option value="spring-cleaning" selected={service === 'spring-cleaning'}>Spring Cleaning</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="suburb" class="block text-sm font-semibold text-slate-700 mb-2">
+            Suburb *
+          </label>
+          <input 
+            type="text" 
+            name="suburb" 
+            id="suburb" 
+            required
+            value={suburb}
+            placeholder="e.g. Ipswich, Springfield, Redbank Plains"
+            class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-sky-500 focus:ring-sky-500 transition-colors"
+          />
+        </div>
+      </div>
+
+      <!-- Property Details -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label for="propertyType" class="block text-sm font-semibold text-slate-700 mb-2">
+            Property Type
+          </label>
+          <select 
+            name="propertyType" 
+            id="propertyType"
+            class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-sky-500 focus:ring-sky-500 transition-colors"
+          >
+            <option value="">Select property type...</option>
+            <option value="house">House</option>
+            <option value="apartment">Apartment</option>
+            <option value="townhouse">Townhouse</option>
+            <option value="unit">Unit</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="rooms" class="block text-sm font-semibold text-slate-700 mb-2">
+            Number of Bedrooms
+          </label>
+          <select 
+            name="rooms" 
+            id="rooms"
+            class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-sky-500 focus:ring-sky-500 transition-colors"
+          >
+            <option value="">Select bedrooms...</option>
+            <option value="1">1 Bedroom</option>
+            <option value="2">2 Bedrooms</option>
+            <option value="3">3 Bedrooms</option>
+            <option value="4">4 Bedrooms</option>
+            <option value="5+">5+ Bedrooms</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">
+            Email Address *
+          </label>
+          <input 
+            type="email" 
+            name="email" 
+            id="email" 
+            required
+            placeholder="your.email@example.com"
+            class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-sky-500 focus:ring-sky-500 transition-colors"
+          />
+        </div>
+
+        <div>
+          <label for="phone" class="block text-sm font-semibold text-slate-700 mb-2">
+            Phone Number
+          </label>
+          <input 
+            type="tel" 
+            name="phone" 
+            id="phone"
+            placeholder="0412 345 678"
+            class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-sky-500 focus:ring-sky-500 transition-colors"
+          />
+        </div>
+      </div>
+
+      <!-- Urgency -->
+      <div>
+        <label for="urgency" class="block text-sm font-semibold text-slate-700 mb-2">
+          When do you need this done?
+        </label>
+        <select 
+          name="urgency" 
+          id="urgency"
+          class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-sky-500 focus:ring-sky-500 transition-colors"
+        >
+          <option value="">Select timeframe...</option>
+          <option value="within-week">Within a week</option>
+          <option value="within-month">Within a month</option>
+          <option value="flexible">I'm flexible</option>
+        </select>
+      </div>
+
+      <!-- Message -->
+      <div>
+        <label for="message" class="block text-sm font-semibold text-slate-700 mb-2">
+          Additional Details
+        </label>
+        <textarea 
+          name="message" 
+          id="message" 
+          rows="4"
+          placeholder="Any specific requirements, areas of concern, or questions..."
+          class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-sky-500 focus:ring-sky-500 transition-colors resize-y"
+        ></textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button 
+          type="submit"
+          class="w-full md:w-auto inline-flex items-center justify-center gap-3 bg-sky-600 hover:bg-sky-700 text-white font-bold px-8 py-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-sky-500/50"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+          </svg>
+          Get My Free Quote
+        </button>
+        
+        <p class="mt-3 text-sm text-slate-500">
+          We'll respond within 24 hours with your personalized quote
+        </p>
+      </div>
+    </form>
+
+    <!-- Success/Error Messages -->
+    <div id="quote-result" class="q-result mt-6 hidden">
+      <!-- Will be populated by JavaScript on form submission -->
+    </div>
+  </div>
+</section>
+
+<script>
+  // Enhanced form handling
+  document.addEventListener('astro:page-load', () => {
+    const form = document.querySelector('form[data-enhanced-form="true"]');
+    const resultDiv = document.getElementById('quote-result');
+    
+    if (form && resultDiv) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = submitButton?.textContent;
+        
+        // Show loading state
+        if (submitButton) {
+          submitButton.textContent = 'Sending...';
+          submitButton.disabled = true;
+        }
+        
+        try {
+          // Simulate form submission (in real app, this would go to your backend)
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+          const formData = new FormData(form);
+          const quoteId = `quote-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          
+          resultDiv.innerHTML = `
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-green-800">
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <strong>Quote Submitted Successfully!</strong>
+              </div>
+              <p class="mt-1">Thank you for your quote request! We'll get back to you within 24 hours.</p>
+              <p class="text-sm mt-2">Reference: ${quoteId}</p>
+            </div>
+          `;
+          form.reset();
+          
+        } catch (error) {
+          resultDiv.innerHTML = `
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                <strong>Error</strong>
+              </div>
+              <p class="mt-1">Something went wrong. Please try again or call us directly.</p>
+            </div>
+          `;
+        } finally {
+          if (submitButton) {
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+          }
+        }
+        
+        resultDiv.classList.remove('hidden');
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+  });
+</script>
+
+<style>
+  /* Enhanced form styling with view transitions */
+  form[data-enhanced-form="true"] {
+    view-transition-name: quote-form-content;
+  }
+  
+  /* Focus styles */
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  }
+  
+  /* Button hover effects */
+  button[type="submit"]:hover {
+    box-shadow: 0 10px 25px rgba(14, 165, 233, 0.2);
+  }
+  
+  /* Form validation styles */
+  input:invalid:not(:focus):not(:placeholder-shown),
+  select:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: #ef4444;
+  }
+  
+  input:valid:not(:focus):not(:placeholder-shown),
+  select:valid:not(:focus):not(:placeholder-shown) {
+    border-color: #10b981;
+  }
+</style>

@@ -1,0 +1,1629 @@
+{
+  "generated": "2025-09-23T01:06:43.872Z",
+  "stats": {
+    "services": 4,
+    "suburbs": 345
+  },
+  "suggestions": {
+    "service:bond-cleaning": [
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      }
+    ],
+    "service:carpet-cleaning": [
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      }
+    ],
+    "service:oven-cleaning": [
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      }
+    ],
+    "service:house-cleaning": [
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      }
+    ],
+    "service-location:bond-cleaning:acacia-ridge": [
+      {
+        "title": "Bond Cleaning in Acacia Ridge",
+        "url": "/services/bond-cleaning/acacia-ridge",
+        "description": "Local bond cleaning services in Acacia Ridge",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Acacia Ridge",
+        "url": "/suburbs/acacia-ridge",
+        "description": "Professional cleaning services in Acacia Ridge",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Algester",
+        "url": "/suburbs/algester",
+        "description": "Nearby cleaning services in Algester",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Archerfield",
+        "url": "/suburbs/archerfield",
+        "description": "Nearby cleaning services in Archerfield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Coopers Plains",
+        "url": "/suburbs/coopers-plains",
+        "description": "Nearby cleaning services in Coopers Plains",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:bond-cleaning:albion": [
+      {
+        "title": "Bond Cleaning in Albion",
+        "url": "/services/bond-cleaning/albion",
+        "description": "Local bond cleaning services in Albion",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Albion",
+        "url": "/suburbs/albion",
+        "description": "Professional cleaning services in Albion",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Ascot",
+        "url": "/suburbs/ascot",
+        "description": "Nearby cleaning services in Ascot",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Bowen Hills",
+        "url": "/suburbs/bowen-hills",
+        "description": "Nearby cleaning services in Bowen Hills",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Clayfield",
+        "url": "/suburbs/clayfield",
+        "description": "Nearby cleaning services in Clayfield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:bond-cleaning:alderley": [
+      {
+        "title": "Bond Cleaning in Alderley",
+        "url": "/services/bond-cleaning/alderley",
+        "description": "Local bond cleaning services in Alderley",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Alderley",
+        "url": "/suburbs/alderley",
+        "description": "Professional cleaning services in Alderley",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Ashgrove",
+        "url": "/suburbs/ashgrove",
+        "description": "Nearby cleaning services in Ashgrove",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Enoggera",
+        "url": "/suburbs/enoggera",
+        "description": "Nearby cleaning services in Enoggera",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Grange",
+        "url": "/suburbs/grange",
+        "description": "Nearby cleaning services in Grange",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:bond-cleaning:amberley": [
+      {
+        "title": "Bond Cleaning in Amberley",
+        "url": "/services/bond-cleaning/amberley",
+        "description": "Local bond cleaning services in Amberley",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Amberley",
+        "url": "/suburbs/amberley",
+        "description": "Professional cleaning services in Amberley",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Jeebropilly",
+        "url": "/suburbs/jeebropilly",
+        "description": "Nearby cleaning services in Jeebropilly",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Karrabin",
+        "url": "/suburbs/karrabin",
+        "description": "Nearby cleaning services in Karrabin",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Leichhardt",
+        "url": "/suburbs/leichhardt",
+        "description": "Nearby cleaning services in Leichhardt",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:bond-cleaning:ashwell": [
+      {
+        "title": "Bond Cleaning in Ashwell",
+        "url": "/services/bond-cleaning/ashwell",
+        "description": "Local bond cleaning services in Ashwell",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Ashwell",
+        "url": "/suburbs/ashwell",
+        "description": "Professional cleaning services in Ashwell",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Lanefield",
+        "url": "/suburbs/lanefield",
+        "description": "Nearby cleaning services in Lanefield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Rosewood",
+        "url": "/suburbs/rosewood",
+        "description": "Nearby cleaning services in Rosewood",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Tallegalla",
+        "url": "/suburbs/tallegalla",
+        "description": "Nearby cleaning services in Tallegalla",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:bond-cleaning:augustine-heights": [
+      {
+        "title": "Bond Cleaning in Augustine Heights",
+        "url": "/services/bond-cleaning/augustine-heights",
+        "description": "Local bond cleaning services in Augustine Heights",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Augustine Heights",
+        "url": "/suburbs/augustine-heights",
+        "description": "Professional cleaning services in Augustine Heights",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Bellbird Park",
+        "url": "/suburbs/bellbird-park",
+        "description": "Nearby cleaning services in Bellbird Park",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Brookwater",
+        "url": "/suburbs/brookwater",
+        "description": "Nearby cleaning services in Brookwater",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Redbank Plains",
+        "url": "/suburbs/redbank-plains",
+        "description": "Nearby cleaning services in Redbank Plains",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:bond-cleaning:bahrs-scrub": [
+      {
+        "title": "Bond Cleaning in Bahrs Scrub",
+        "url": "/services/bond-cleaning/bahrs-scrub",
+        "description": "Local bond cleaning services in Bahrs Scrub",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Bahrs Scrub",
+        "url": "/suburbs/bahrs-scrub",
+        "description": "Professional cleaning services in Bahrs Scrub",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Beenleigh",
+        "url": "/suburbs/beenleigh",
+        "description": "Nearby cleaning services in Beenleigh",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Belivah",
+        "url": "/suburbs/belivah",
+        "description": "Nearby cleaning services in Belivah",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Buccan",
+        "url": "/suburbs/buccan",
+        "description": "Nearby cleaning services in Buccan",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:bond-cleaning:bannockburn": [
+      {
+        "title": "Bond Cleaning in Bannockburn",
+        "url": "/services/bond-cleaning/bannockburn",
+        "description": "Local bond cleaning services in Bannockburn",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Bannockburn",
+        "url": "/suburbs/bannockburn",
+        "description": "Professional cleaning services in Bannockburn",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Belivah",
+        "url": "/suburbs/belivah",
+        "description": "Nearby cleaning services in Belivah",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Windaroo",
+        "url": "/suburbs/windaroo",
+        "description": "Nearby cleaning services in Windaroo",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Wolffdene",
+        "url": "/suburbs/wolffdene",
+        "description": "Nearby cleaning services in Wolffdene",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:bond-cleaning:beenleigh": [
+      {
+        "title": "Bond Cleaning in Beenleigh",
+        "url": "/services/bond-cleaning/beenleigh",
+        "description": "Local bond cleaning services in Beenleigh",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Bond Cleaning Services",
+        "url": "/services/bond-cleaning",
+        "description": "Professional bond cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Beenleigh",
+        "url": "/suburbs/beenleigh",
+        "description": "Professional cleaning services in Beenleigh",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Bahrs Scrub",
+        "url": "/suburbs/bahrs-scrub",
+        "description": "Nearby cleaning services in Bahrs Scrub",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Eagleby",
+        "url": "/suburbs/eagleby",
+        "description": "Nearby cleaning services in Eagleby",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Holmview",
+        "url": "/suburbs/holmview",
+        "description": "Nearby cleaning services in Holmview",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:carpet-cleaning:acacia-ridge": [
+      {
+        "title": "Carpet Cleaning in Acacia Ridge",
+        "url": "/services/carpet-cleaning/acacia-ridge",
+        "description": "Local carpet cleaning services in Acacia Ridge",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Acacia Ridge",
+        "url": "/suburbs/acacia-ridge",
+        "description": "Professional cleaning services in Acacia Ridge",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Algester",
+        "url": "/suburbs/algester",
+        "description": "Nearby cleaning services in Algester",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Archerfield",
+        "url": "/suburbs/archerfield",
+        "description": "Nearby cleaning services in Archerfield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Coopers Plains",
+        "url": "/suburbs/coopers-plains",
+        "description": "Nearby cleaning services in Coopers Plains",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:carpet-cleaning:albion": [
+      {
+        "title": "Carpet Cleaning in Albion",
+        "url": "/services/carpet-cleaning/albion",
+        "description": "Local carpet cleaning services in Albion",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Albion",
+        "url": "/suburbs/albion",
+        "description": "Professional cleaning services in Albion",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Ascot",
+        "url": "/suburbs/ascot",
+        "description": "Nearby cleaning services in Ascot",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Bowen Hills",
+        "url": "/suburbs/bowen-hills",
+        "description": "Nearby cleaning services in Bowen Hills",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Clayfield",
+        "url": "/suburbs/clayfield",
+        "description": "Nearby cleaning services in Clayfield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:carpet-cleaning:alderley": [
+      {
+        "title": "Carpet Cleaning in Alderley",
+        "url": "/services/carpet-cleaning/alderley",
+        "description": "Local carpet cleaning services in Alderley",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Alderley",
+        "url": "/suburbs/alderley",
+        "description": "Professional cleaning services in Alderley",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Ashgrove",
+        "url": "/suburbs/ashgrove",
+        "description": "Nearby cleaning services in Ashgrove",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Enoggera",
+        "url": "/suburbs/enoggera",
+        "description": "Nearby cleaning services in Enoggera",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Grange",
+        "url": "/suburbs/grange",
+        "description": "Nearby cleaning services in Grange",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:carpet-cleaning:amberley": [
+      {
+        "title": "Carpet Cleaning in Amberley",
+        "url": "/services/carpet-cleaning/amberley",
+        "description": "Local carpet cleaning services in Amberley",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Amberley",
+        "url": "/suburbs/amberley",
+        "description": "Professional cleaning services in Amberley",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Jeebropilly",
+        "url": "/suburbs/jeebropilly",
+        "description": "Nearby cleaning services in Jeebropilly",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Karrabin",
+        "url": "/suburbs/karrabin",
+        "description": "Nearby cleaning services in Karrabin",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Leichhardt",
+        "url": "/suburbs/leichhardt",
+        "description": "Nearby cleaning services in Leichhardt",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:carpet-cleaning:ashwell": [
+      {
+        "title": "Carpet Cleaning in Ashwell",
+        "url": "/services/carpet-cleaning/ashwell",
+        "description": "Local carpet cleaning services in Ashwell",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Ashwell",
+        "url": "/suburbs/ashwell",
+        "description": "Professional cleaning services in Ashwell",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Lanefield",
+        "url": "/suburbs/lanefield",
+        "description": "Nearby cleaning services in Lanefield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Rosewood",
+        "url": "/suburbs/rosewood",
+        "description": "Nearby cleaning services in Rosewood",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Tallegalla",
+        "url": "/suburbs/tallegalla",
+        "description": "Nearby cleaning services in Tallegalla",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:carpet-cleaning:augustine-heights": [
+      {
+        "title": "Carpet Cleaning in Augustine Heights",
+        "url": "/services/carpet-cleaning/augustine-heights",
+        "description": "Local carpet cleaning services in Augustine Heights",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Augustine Heights",
+        "url": "/suburbs/augustine-heights",
+        "description": "Professional cleaning services in Augustine Heights",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Bellbird Park",
+        "url": "/suburbs/bellbird-park",
+        "description": "Nearby cleaning services in Bellbird Park",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Brookwater",
+        "url": "/suburbs/brookwater",
+        "description": "Nearby cleaning services in Brookwater",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Redbank Plains",
+        "url": "/suburbs/redbank-plains",
+        "description": "Nearby cleaning services in Redbank Plains",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:carpet-cleaning:bahrs-scrub": [
+      {
+        "title": "Carpet Cleaning in Bahrs Scrub",
+        "url": "/services/carpet-cleaning/bahrs-scrub",
+        "description": "Local carpet cleaning services in Bahrs Scrub",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Bahrs Scrub",
+        "url": "/suburbs/bahrs-scrub",
+        "description": "Professional cleaning services in Bahrs Scrub",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Beenleigh",
+        "url": "/suburbs/beenleigh",
+        "description": "Nearby cleaning services in Beenleigh",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Belivah",
+        "url": "/suburbs/belivah",
+        "description": "Nearby cleaning services in Belivah",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Buccan",
+        "url": "/suburbs/buccan",
+        "description": "Nearby cleaning services in Buccan",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:carpet-cleaning:bannockburn": [
+      {
+        "title": "Carpet Cleaning in Bannockburn",
+        "url": "/services/carpet-cleaning/bannockburn",
+        "description": "Local carpet cleaning services in Bannockburn",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Bannockburn",
+        "url": "/suburbs/bannockburn",
+        "description": "Professional cleaning services in Bannockburn",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Belivah",
+        "url": "/suburbs/belivah",
+        "description": "Nearby cleaning services in Belivah",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Windaroo",
+        "url": "/suburbs/windaroo",
+        "description": "Nearby cleaning services in Windaroo",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Wolffdene",
+        "url": "/suburbs/wolffdene",
+        "description": "Nearby cleaning services in Wolffdene",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:carpet-cleaning:beenleigh": [
+      {
+        "title": "Carpet Cleaning in Beenleigh",
+        "url": "/services/carpet-cleaning/beenleigh",
+        "description": "Local carpet cleaning services in Beenleigh",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Carpet Cleaning Services",
+        "url": "/services/carpet-cleaning",
+        "description": "Professional carpet cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Beenleigh",
+        "url": "/suburbs/beenleigh",
+        "description": "Professional cleaning services in Beenleigh",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Bahrs Scrub",
+        "url": "/suburbs/bahrs-scrub",
+        "description": "Nearby cleaning services in Bahrs Scrub",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Eagleby",
+        "url": "/suburbs/eagleby",
+        "description": "Nearby cleaning services in Eagleby",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Holmview",
+        "url": "/suburbs/holmview",
+        "description": "Nearby cleaning services in Holmview",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:oven-cleaning:acacia-ridge": [
+      {
+        "title": "Oven Cleaning in Acacia Ridge",
+        "url": "/services/oven-cleaning/acacia-ridge",
+        "description": "Local oven cleaning services in Acacia Ridge",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Acacia Ridge",
+        "url": "/suburbs/acacia-ridge",
+        "description": "Professional cleaning services in Acacia Ridge",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Algester",
+        "url": "/suburbs/algester",
+        "description": "Nearby cleaning services in Algester",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Archerfield",
+        "url": "/suburbs/archerfield",
+        "description": "Nearby cleaning services in Archerfield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Coopers Plains",
+        "url": "/suburbs/coopers-plains",
+        "description": "Nearby cleaning services in Coopers Plains",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:oven-cleaning:albion": [
+      {
+        "title": "Oven Cleaning in Albion",
+        "url": "/services/oven-cleaning/albion",
+        "description": "Local oven cleaning services in Albion",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Albion",
+        "url": "/suburbs/albion",
+        "description": "Professional cleaning services in Albion",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Ascot",
+        "url": "/suburbs/ascot",
+        "description": "Nearby cleaning services in Ascot",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Bowen Hills",
+        "url": "/suburbs/bowen-hills",
+        "description": "Nearby cleaning services in Bowen Hills",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Clayfield",
+        "url": "/suburbs/clayfield",
+        "description": "Nearby cleaning services in Clayfield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:oven-cleaning:alderley": [
+      {
+        "title": "Oven Cleaning in Alderley",
+        "url": "/services/oven-cleaning/alderley",
+        "description": "Local oven cleaning services in Alderley",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Alderley",
+        "url": "/suburbs/alderley",
+        "description": "Professional cleaning services in Alderley",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Ashgrove",
+        "url": "/suburbs/ashgrove",
+        "description": "Nearby cleaning services in Ashgrove",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Enoggera",
+        "url": "/suburbs/enoggera",
+        "description": "Nearby cleaning services in Enoggera",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Grange",
+        "url": "/suburbs/grange",
+        "description": "Nearby cleaning services in Grange",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:oven-cleaning:amberley": [
+      {
+        "title": "Oven Cleaning in Amberley",
+        "url": "/services/oven-cleaning/amberley",
+        "description": "Local oven cleaning services in Amberley",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Amberley",
+        "url": "/suburbs/amberley",
+        "description": "Professional cleaning services in Amberley",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Jeebropilly",
+        "url": "/suburbs/jeebropilly",
+        "description": "Nearby cleaning services in Jeebropilly",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Karrabin",
+        "url": "/suburbs/karrabin",
+        "description": "Nearby cleaning services in Karrabin",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Leichhardt",
+        "url": "/suburbs/leichhardt",
+        "description": "Nearby cleaning services in Leichhardt",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:oven-cleaning:ashwell": [
+      {
+        "title": "Oven Cleaning in Ashwell",
+        "url": "/services/oven-cleaning/ashwell",
+        "description": "Local oven cleaning services in Ashwell",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Ashwell",
+        "url": "/suburbs/ashwell",
+        "description": "Professional cleaning services in Ashwell",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Lanefield",
+        "url": "/suburbs/lanefield",
+        "description": "Nearby cleaning services in Lanefield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Rosewood",
+        "url": "/suburbs/rosewood",
+        "description": "Nearby cleaning services in Rosewood",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Tallegalla",
+        "url": "/suburbs/tallegalla",
+        "description": "Nearby cleaning services in Tallegalla",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:oven-cleaning:augustine-heights": [
+      {
+        "title": "Oven Cleaning in Augustine Heights",
+        "url": "/services/oven-cleaning/augustine-heights",
+        "description": "Local oven cleaning services in Augustine Heights",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Augustine Heights",
+        "url": "/suburbs/augustine-heights",
+        "description": "Professional cleaning services in Augustine Heights",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Bellbird Park",
+        "url": "/suburbs/bellbird-park",
+        "description": "Nearby cleaning services in Bellbird Park",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Brookwater",
+        "url": "/suburbs/brookwater",
+        "description": "Nearby cleaning services in Brookwater",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Redbank Plains",
+        "url": "/suburbs/redbank-plains",
+        "description": "Nearby cleaning services in Redbank Plains",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:oven-cleaning:bahrs-scrub": [
+      {
+        "title": "Oven Cleaning in Bahrs Scrub",
+        "url": "/services/oven-cleaning/bahrs-scrub",
+        "description": "Local oven cleaning services in Bahrs Scrub",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Bahrs Scrub",
+        "url": "/suburbs/bahrs-scrub",
+        "description": "Professional cleaning services in Bahrs Scrub",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Beenleigh",
+        "url": "/suburbs/beenleigh",
+        "description": "Nearby cleaning services in Beenleigh",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Belivah",
+        "url": "/suburbs/belivah",
+        "description": "Nearby cleaning services in Belivah",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Buccan",
+        "url": "/suburbs/buccan",
+        "description": "Nearby cleaning services in Buccan",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:oven-cleaning:bannockburn": [
+      {
+        "title": "Oven Cleaning in Bannockburn",
+        "url": "/services/oven-cleaning/bannockburn",
+        "description": "Local oven cleaning services in Bannockburn",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Bannockburn",
+        "url": "/suburbs/bannockburn",
+        "description": "Professional cleaning services in Bannockburn",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Belivah",
+        "url": "/suburbs/belivah",
+        "description": "Nearby cleaning services in Belivah",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Windaroo",
+        "url": "/suburbs/windaroo",
+        "description": "Nearby cleaning services in Windaroo",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Wolffdene",
+        "url": "/suburbs/wolffdene",
+        "description": "Nearby cleaning services in Wolffdene",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:oven-cleaning:beenleigh": [
+      {
+        "title": "Oven Cleaning in Beenleigh",
+        "url": "/services/oven-cleaning/beenleigh",
+        "description": "Local oven cleaning services in Beenleigh",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "Oven Cleaning Services",
+        "url": "/services/oven-cleaning",
+        "description": "Professional oven cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Beenleigh",
+        "url": "/suburbs/beenleigh",
+        "description": "Professional cleaning services in Beenleigh",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Bahrs Scrub",
+        "url": "/suburbs/bahrs-scrub",
+        "description": "Nearby cleaning services in Bahrs Scrub",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Eagleby",
+        "url": "/suburbs/eagleby",
+        "description": "Nearby cleaning services in Eagleby",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Holmview",
+        "url": "/suburbs/holmview",
+        "description": "Nearby cleaning services in Holmview",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:house-cleaning:acacia-ridge": [
+      {
+        "title": "House Cleaning in Acacia Ridge",
+        "url": "/services/house-cleaning/acacia-ridge",
+        "description": "Local house cleaning services in Acacia Ridge",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Acacia Ridge",
+        "url": "/suburbs/acacia-ridge",
+        "description": "Professional cleaning services in Acacia Ridge",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Algester",
+        "url": "/suburbs/algester",
+        "description": "Nearby cleaning services in Algester",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Archerfield",
+        "url": "/suburbs/archerfield",
+        "description": "Nearby cleaning services in Archerfield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Coopers Plains",
+        "url": "/suburbs/coopers-plains",
+        "description": "Nearby cleaning services in Coopers Plains",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:house-cleaning:albion": [
+      {
+        "title": "House Cleaning in Albion",
+        "url": "/services/house-cleaning/albion",
+        "description": "Local house cleaning services in Albion",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Albion",
+        "url": "/suburbs/albion",
+        "description": "Professional cleaning services in Albion",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Ascot",
+        "url": "/suburbs/ascot",
+        "description": "Nearby cleaning services in Ascot",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Bowen Hills",
+        "url": "/suburbs/bowen-hills",
+        "description": "Nearby cleaning services in Bowen Hills",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Clayfield",
+        "url": "/suburbs/clayfield",
+        "description": "Nearby cleaning services in Clayfield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:house-cleaning:alderley": [
+      {
+        "title": "House Cleaning in Alderley",
+        "url": "/services/house-cleaning/alderley",
+        "description": "Local house cleaning services in Alderley",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Alderley",
+        "url": "/suburbs/alderley",
+        "description": "Professional cleaning services in Alderley",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Ashgrove",
+        "url": "/suburbs/ashgrove",
+        "description": "Nearby cleaning services in Ashgrove",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Enoggera",
+        "url": "/suburbs/enoggera",
+        "description": "Nearby cleaning services in Enoggera",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Grange",
+        "url": "/suburbs/grange",
+        "description": "Nearby cleaning services in Grange",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:house-cleaning:amberley": [
+      {
+        "title": "House Cleaning in Amberley",
+        "url": "/services/house-cleaning/amberley",
+        "description": "Local house cleaning services in Amberley",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Amberley",
+        "url": "/suburbs/amberley",
+        "description": "Professional cleaning services in Amberley",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Jeebropilly",
+        "url": "/suburbs/jeebropilly",
+        "description": "Nearby cleaning services in Jeebropilly",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Karrabin",
+        "url": "/suburbs/karrabin",
+        "description": "Nearby cleaning services in Karrabin",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Leichhardt",
+        "url": "/suburbs/leichhardt",
+        "description": "Nearby cleaning services in Leichhardt",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:house-cleaning:ashwell": [
+      {
+        "title": "House Cleaning in Ashwell",
+        "url": "/services/house-cleaning/ashwell",
+        "description": "Local house cleaning services in Ashwell",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Ashwell",
+        "url": "/suburbs/ashwell",
+        "description": "Professional cleaning services in Ashwell",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Lanefield",
+        "url": "/suburbs/lanefield",
+        "description": "Nearby cleaning services in Lanefield",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Rosewood",
+        "url": "/suburbs/rosewood",
+        "description": "Nearby cleaning services in Rosewood",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Tallegalla",
+        "url": "/suburbs/tallegalla",
+        "description": "Nearby cleaning services in Tallegalla",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:house-cleaning:augustine-heights": [
+      {
+        "title": "House Cleaning in Augustine Heights",
+        "url": "/services/house-cleaning/augustine-heights",
+        "description": "Local house cleaning services in Augustine Heights",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Augustine Heights",
+        "url": "/suburbs/augustine-heights",
+        "description": "Professional cleaning services in Augustine Heights",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Bellbird Park",
+        "url": "/suburbs/bellbird-park",
+        "description": "Nearby cleaning services in Bellbird Park",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Brookwater",
+        "url": "/suburbs/brookwater",
+        "description": "Nearby cleaning services in Brookwater",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Redbank Plains",
+        "url": "/suburbs/redbank-plains",
+        "description": "Nearby cleaning services in Redbank Plains",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:house-cleaning:bahrs-scrub": [
+      {
+        "title": "House Cleaning in Bahrs Scrub",
+        "url": "/services/house-cleaning/bahrs-scrub",
+        "description": "Local house cleaning services in Bahrs Scrub",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Bahrs Scrub",
+        "url": "/suburbs/bahrs-scrub",
+        "description": "Professional cleaning services in Bahrs Scrub",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Beenleigh",
+        "url": "/suburbs/beenleigh",
+        "description": "Nearby cleaning services in Beenleigh",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Belivah",
+        "url": "/suburbs/belivah",
+        "description": "Nearby cleaning services in Belivah",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Buccan",
+        "url": "/suburbs/buccan",
+        "description": "Nearby cleaning services in Buccan",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:house-cleaning:bannockburn": [
+      {
+        "title": "House Cleaning in Bannockburn",
+        "url": "/services/house-cleaning/bannockburn",
+        "description": "Local house cleaning services in Bannockburn",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Bannockburn",
+        "url": "/suburbs/bannockburn",
+        "description": "Professional cleaning services in Bannockburn",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Belivah",
+        "url": "/suburbs/belivah",
+        "description": "Nearby cleaning services in Belivah",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Windaroo",
+        "url": "/suburbs/windaroo",
+        "description": "Nearby cleaning services in Windaroo",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Wolffdene",
+        "url": "/suburbs/wolffdene",
+        "description": "Nearby cleaning services in Wolffdene",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ],
+    "service-location:house-cleaning:beenleigh": [
+      {
+        "title": "House Cleaning in Beenleigh",
+        "url": "/services/house-cleaning/beenleigh",
+        "description": "Local house cleaning services in Beenleigh",
+        "score": 1.2,
+        "type": "service-location"
+      },
+      {
+        "title": "House Cleaning Services",
+        "url": "/services/house-cleaning",
+        "description": "Professional house cleaning services",
+        "score": 1,
+        "type": "service"
+      },
+      {
+        "title": "Cleaning Services in Beenleigh",
+        "url": "/suburbs/beenleigh",
+        "description": "Professional cleaning services in Beenleigh",
+        "score": 1,
+        "type": "location"
+      },
+      {
+        "title": "Cleaning Services in Bahrs Scrub",
+        "url": "/suburbs/bahrs-scrub",
+        "description": "Nearby cleaning services in Bahrs Scrub",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Eagleby",
+        "url": "/suburbs/eagleby",
+        "description": "Nearby cleaning services in Eagleby",
+        "score": 0.8,
+        "type": "adjacent-location"
+      },
+      {
+        "title": "Cleaning Services in Holmview",
+        "url": "/suburbs/holmview",
+        "description": "Nearby cleaning services in Holmview",
+        "score": 0.8,
+        "type": "adjacent-location"
+      }
+    ]
+  }
+}

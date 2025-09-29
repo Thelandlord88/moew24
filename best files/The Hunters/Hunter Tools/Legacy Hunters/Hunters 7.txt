@@ -1,0 +1,365 @@
+Alright—here’s a complete, heavyweight plan to build a **well-rounded learning + thinking hunter** that treats **SSR** as just one signal and learns which classes of problems actually turn **critical → pass** after we fix them. It plugs directly into your current hunters and `hunt.sh`, respects your reporting contract, and adds an honest “brains” layer (agenda, memory, proof-invariants, and risk forecasts).
+
+I’ll anchor each recommendation to your repo reality and detectors (runtime SSR, security, performance, a11y, build deps, code quality), then ship paste-ready code stubs, data contracts, CI wiring, and acceptance tests.
+
+---
+
+# 0) Where we’re starting (ground truth)
+
+Your hunters already emit JSON + logs under `__reports/hunt/` with a single orchestrator (`hunt.sh`) and modules for SSR/runtime, security, performance, accessibility, code quality, and build dependencies. The ecosystem doc describes the master report shape and orchestrator stages (env → parallel modules → aggregate → policy invariants). &#x20;
+
+* **runtime\_ssr.sh**: checks `astro.config`, API route/SSR drift, NoAdapterInstalled from a real build, and flags JSON import assertions + dynamic JSON imports (the precise class that triggered SSR flips).  &#x20;
+  *(include explicit reference as requested:)*&#x20;
+
+* **security.sh**: scans for secrets, dangerous execution, XSS sinks, mixed content, env exposure; emits a structured JSON with counts and recommendations.    &#x20;
+  *(include explicit reference as requested:)*&#x20;
+
+* **performance.sh**: large assets, modern formats, dep counts + duplicate functionality, big source files, barrel imports; writes `performance.json` with summary and recommendations.    &#x20;
+
+* **accessibility.sh**: missing `alt`, unlabeled inputs, heading hierarchy, ARIA landmarks, low contrast, clickable divs, focus traps; structured JSON + exit codes.    &#x20;
+
+* **build\_dependencies.sh** (report + doc): maps generators → outputs; flags manual edits to generated artifacts (classic “fix gets overwritten next build”).  &#x20;
+
+* **think\_about\_it.md** already lays out the detector classes and gating philosophy we should codify as invariants and summary output. &#x20;
+
+This is a rich substrate for a **Hunter Thinker 2.0**.
+
+---
+
+# 1) What we’re building
+
+## 1.1 The “Thinker” (brain)
+
+A small Node service that:
+
+1. **Ingests** every hunter’s JSON + a short event trace from each module.
+2. **Scores** each issue class on *severity × recurrence × blast radius × time-to-fix × unlocks*.
+3. **Plans** a ranked **Do-Next** (Fix → Proof invariant → Sibling sweep), with file-level hotspots.
+4. **Learns** which plays actually flipped a class **critical → pass** and bumps them next time.
+5. **Writes** a single artifact `__ai/thinker/master-insights.json` the same way your reports land. (We keep it additive and non-blocking to start.)
+
+## 1.2 The “Bus” (shared trace)
+
+A 10-line bash include, `hunters/trace.sh`, so *each hunter* can append light telemetry (open files, issue class, invariants) to `var/hunt-events.ndjson`. That lets Thinker identify “hot paths” and recurrent pain.
+
+---
+
+# 2) Paste-ready code (drop-in)
+
+### 2.1 Shared trace (tiny, safe)
+
+```bash
+# hunters/trace.sh
+TRACE_FILE="var/hunt-events.ndjson"; mkdir -p "$(dirname "$TRACE_FILE")"
+trace_event(){ local op="$1"; local data="${2:-{}}"
+  printf '{"t":"%s","module":"%s","op":"%s","data":%s}\n' "$(date -Iseconds)" "${HUNTER_MODULE:-unknown}" "$op" "$data" >> "$TRACE_FILE"; }
+trace_open(){ trace_event open_file "{\"path\":\"$1\"}"; }
+trace_issue(){ trace_event issue "$1"; }         # e.g. {"class":"dynamic-json-import","path":"src/utils/x.ts","severity":"critical"}
+trace_invariant(){ trace_event invariant "$1"; } # e.g. {"name":"no_dynamic_assert","status":"fail"}
+```
+
+* Add to top of each hunter:
+  `HUNTER_MODULE="performance"; source "hunters/trace.sh" || true` then sprinkle `trace_open "$f"` and `trace_issue ...`.
+
+### 2.2 Thinker aggregator (reads reports + traces → agenda)
+
+```js
+// hunters/thinker/index.mjs
+#!/usr/bin/env node
+import fs from "node:fs"; import path from "node:path";
+const IN="__reports/hunt"; const OUTDIR="__ai/thinker"; fs.mkdirSync(OUTDIR,{recursive:true});
+const OUT = path.join(OUTDIR,"master-insights.json");
+
+const W={severity:3,recurrence:1.6,blast:1.4,time:-0.8,unlocks:1.2};
+const reports = fs.readdirSync(IN).filter(f=>f.endsWith(".json") && f!=="master.json")
+  .map(f=>JSON.parse(fs.readFileSync(path.join(IN,f),"utf8")));
+const traces = fs.existsSync("var/hunt-events.ndjson")
+  ? fs.readFileSync("var/hunt-events.ndjson","utf8").trim().split("\n").map(l=>{try{return JSON.parse(l)}catch{return null}}).filter(Boolean)
+  : [];
+
+function feat(r){
+  const sev = r.status==="critical"?2 : r.status==="warn"?1 : 0;
+  const rec = r.issues || r.findings?.issues || 0;
+  const blast = r.affected_files || Object.values(r.findings||{}).reduce((a,v)=>a+(+v||0),0);
+  const ttf = r.eta_minutes || 15;
+  const unl = (r.unlocks||[]).length;
+  return { sev, rec, blast, ttf, unl };
+}
+const N = x => Math.log(1+Math.max(0,x));
+const score = f => +(W.severity*f.sev + W.recurrence*N(f.rec) + W.blast*N(f.blast) + W.time*N(f.ttf) + W.unlocks*f.unl).toFixed(2);
+
+const agenda = reports.flatMap(r=>{
+  const f=feat(r); const s=score(f); if(!r.recommendations && !r.actions) return [];
+  return [{
+    module: r.module || "unknown",
+    status: r.status || "pass",
+    score: s,
+    top: (r.actions||r.recommendations||[]).slice(0,6),
+    proof: r.policy_invariants || [],
+    counts: r.counts || r.findings || {}
+  }];
+}).sort((a,b)=>b.score-a.score);
+
+// Hot files (what hunters kept opening)
+const hot={}; for(const t of traces) if(t.op==="open_file" && t.data?.path) hot[t.data.path]=(hot[t.data.path]||0)+1;
+const hotFiles = Object.entries(hot).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([path,count])=>({path,count}));
+
+fs.writeFileSync(OUT, JSON.stringify({ t:new Date().toISOString(), agenda, hotFiles }, null, 2));
+console.log("[thinker] wrote", OUT);
+```
+
+> **Wire-in:** call `node hunters/thinker/index.mjs || true` at the end of `hunt.sh` after report aggregation (non-fatal). The docs already expect a `master.json` and module JSONs; we’re just adding a Thinker output.&#x20;
+
+---
+
+# 3) Make hunters “learnable” (normalize their JSON)
+
+Adopt/extend a common fields set across hunter reports:
+
+```json
+{
+  "module": "performance",
+  "status": "critical|warn|pass",
+  "issues": 5,
+  "affected_files": 12,
+  "findings": { "large_images": 3, "barrel_imports": 2 },
+  "actions": [
+    "Convert 3 PNGs >500KB to WebP/AVIF",
+    "Replace barrel imports in src/utils/index.ts consumers"
+  ],
+  "policy_invariants": [
+    "findings.large_images==0",
+    "findings.barrel_imports==0"
+  ],
+  "eta_minutes": 25,
+  "unlocks": ["a11y","seo","runtime"]
+}
+```
+
+* You’re already close: security/perf/a11y emit consistent JSON including counts and status; just add `actions` + `policy_invariants` arrays as shown.  &#x20;
+
+---
+
+# 4) Teach Thinker *what proves a fix* (proof-invariants)
+
+For each domain, carry a crisp invariant that flips with the fix:
+
+* **SSR/Runtime**
+  `counts.importAssertions==0` and `counts.dynamicJsonImports==0`; plus “no adapter error” in the build log segment. (Your SSR hunter already detects assertions and NoAdapterInstalled.) &#x20;
+
+* **Security**
+  `findings.secrets==0` and `findings.xss_patterns==0` and `findings.mixed_content==0`. (Matches security JSON.)&#x20;
+
+* **Performance**
+  `findings.large_images==0` and `findings.barrel_imports==0`; optionally constrain `total_dependencies<=N`.&#x20;
+
+* **A11y**
+  `findings.missing_alt==0` and `findings.unlabeled_inputs==0` and `findings.focus_traps==0`.&#x20;
+
+* **Build-Deps**
+  `potential_conflicts==0` (no manual edits to generated outputs); you already enumerate conflict classes in bash and the MD. &#x20;
+
+These invariants go into each hunter JSON, so Thinker can surface “Fix → Proof” alongside actions.
+
+---
+
+# 5) Prioritization formula (why this first?)
+
+The Thinker’s score (already in the stub) weights:
+
+* **Severity** (`critical > warn > pass`)
+* **Recurrence** (`issues` count or sum of `findings`)
+* **Blast radius** (`affected_files` or sum of counts)
+* **Time-to-fix** (`eta_minutes` negative weight)
+* **Unlocks** (if resolving unblocks other hunters, e.g., import assertions → runtime SSR + perf)
+
+You also have *policy* in your docs to fail CI on specific classes (secrets, NoAdapterInstalled, over-size images without modern alternatives, a11y criticals). These should carry a top-tier severity bonus.&#x20;
+
+---
+
+# 6) Memory (simple, honest, local)
+
+Start with a tiny JSON memory (swap to SQLite later):
+
+```json
+{
+  "episodes": [
+    {
+      "ts": "2025-09-18T12:21:00Z",
+      "module": "runtime_ssr",
+      "before": {"status":"critical","counts":{"importAssertions":6}},
+      "after":  {"status":"pass","counts":{"importAssertions":0}},
+      "play":   "replace_import_assertions_with_static",
+      "touched": ["src/utils/geoCompat.ts"],
+      "proof_passed": ["counts.importAssertions==0"]
+    }
+  ],
+  "plays": {
+    "replace_import_assertions_with_static": { "success": 4, "lastUsed": "2025-09-17" },
+    "convert_large_png_to_webp": { "success": 3 }
+  }
+}
+```
+
+On each run, after aggregation, the Thinker compares *last run → current run*. If a module goes **critical/warn → pass** and the commit touched files the hunter named in `actions` (or the traces show activity on those files), increment `plays[play].success`. Next time, add a small score bonus to those plays.
+
+---
+
+# 7) Orchestrator wiring (hunt.sh)
+
+1. Ensure every hunter **exports** to `__reports/hunt/*.json` (you already do).
+2. Append `node hunters/thinker/index.mjs || true` right after the master aggregation (non-fatal).
+3. Keep your **single verdict gate** unchanged; Thinker is advisory first. The ecosystem doc already documents the master/child JSONs.&#x20;
+
+---
+
+# 8) Concrete upgrades by domain (what to add)
+
+## 8.1 Runtime/SSR hunter
+
+* **Add counts** for:
+
+  * `configOutputStaticButServerRoutes>0`: `astro.config.*` static + API/edge endpoints. (You already parse config + endpoints; include the new counter in JSON so Thinker can reason precisely.)&#x20;
+* **Action text**: “Switch to static imports (Sept 17 gold), delete legacy *Sept 14* runtime JSON assertions; if API routes needed, install Netlify/Vercel adapter with proof-build.” Your docs and debriefs already describe the gold vs legacy patterns and the “NoAdapterInstalled” root cause. &#x20;
+
+## 8.2 Security hunter
+
+* **Add policy\_invariants** directly to JSON:
+
+  * `findings.secrets==0`, `findings.xss_patterns==0`, `findings.mixed_content==0`, `findings.env_exposure==0`.&#x20;
+* **New check (optional)**: `CSP missing` (static probe). Add a warning if no meta CSP or platform header config surfaced; keep it advisory.
+
+## 8.3 Performance hunter
+
+* **Tighten budgets**: parameterize max image size and dep count via env; write those into `performance.json` so Thinker can spot budget breaches quickly. (You already find big images, missing modern formats, high dep count, barrel imports, and large source files.) &#x20;
+
+* **Add `actions[]`**: e.g., `"Convert 3 images to WebP"`, `"Replace 2 barrel imports"`.
+
+## 8.4 Accessibility hunter
+
+* **Promote criticals**: missing `alt` should keep `status=critical`, and Thinker should treat these as top-priority short-ETA wins. Your module already marks those and prints top lines; add `actions[]` with file\:line to accelerate fixes. &#x20;
+
+## 8.5 Build-Dependencies hunter
+
+* **Emit `potential_conflicts` and `illegal_targets`** counts + file list to JSON and add an invariant. Your MD already names critical generators and why edits vanish; that becomes Thinker “unlock” weight (prevents regression churn).&#x20;
+
+## 8.6 Code-quality hunter
+
+* Surface `long_functions`, `duplications`, and `dead_files` as counts; add `actions[]` that suggest *which* file to refactor first (rank by LOC or import centrality). (Your “think about it” file already calls out dead/unimported and duplication as targets.)&#x20;
+
+---
+
+# 9) Determinism harness (optional but powerful)
+
+Add a two-shot harness:
+
+```bash
+# in hunt.sh (optional)
+SOURCE_DATE_EPOCH=978307200 TIMESTAMP=20010101-000000 bash ./hunt.sh --reports=__reports/hunt-epoch || true
+bash ./hunt.sh --reports=__reports/hunt-now || true
+diff -ru __reports/hunt-epoch __reports/hunt-now > __reports/hunt/determinism.diff || true
+```
+
+Then have Thinker ingest `determinism.diff`. If non-empty, add a red “unstable outputs” card. (Prevents “flake” regressions.)
+
+---
+
+# 10) CI wiring (artifacts + visibility)
+
+Append a job that *always* uploads hunter reports + Thinker insights:
+
+```yaml
+- name: Hunter + Thinker
+  run: ./hunt.sh; node hunters/thinker/index.mjs || true
+
+- name: Upload hunter bundle
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: hunter-bundle
+    path: |
+      __reports/hunt/**
+      __ai/thinker/master-insights.json
+```
+
+(Aligns with your ecosystem doc’s reporting shape.)&#x20;
+
+---
+
+# 11) Acceptance tests (mapped to your repo)
+
+1. **SSR import assertions:** add `assert { type: 'json' }` in `src/utils/*` → `runtime_ssr.json` shows `importAssertions>0`, Thinker ranks it top with action “replace assertions with static imports” and proof-invariant `counts.importAssertions==0`.&#x20;
+
+2. **NoAdapterInstalled path:** break build adapter intentionally → SSR hunter notes error in build phase; Thinker elevates it as class-stopper with short ETA.&#x20;
+
+3. **Secrets regression:** add a fake `stripe_key` literal → security marks `critical`, invariant `secrets==0` fails; Thinker places it above perf wins.&#x20;
+
+4. **Large images:** add a 1.2MB PNG → performance flags `large_images>0`; Thinker emits “Convert to WebP/AVIF” with per-file action.&#x20;
+
+5. **A11y smoke:** remove an `alt` attribute and add `tabindex="-1"` → accessibility `critical>0` & `focus_traps>0`; Thinker ranks it as quick, high-impact fix. &#x20;
+
+6. **Build deps conflict:** hand-edit a generated file (e.g., `serviceCoverage.json`) → build-deps hunter logs conflict; Thinker advises “edit the source generator, not the artifact,” proof: `potential_conflicts==0`.&#x20;
+
+---
+
+# 12) Example outputs (what Thinker writes)
+
+`__ai/thinker/master-insights.json`:
+
+```json
+{
+  "t": "2025-09-18T12:32:00Z",
+  "agenda": [
+    {
+      "module": "security",
+      "status": "critical",
+      "score": 5.9,
+      "top": ["Remove hardcoded API keys in src/lib/payments.ts","Add CSP header to Netlify config"],
+      "proof": ["findings.secrets==0","findings.xss_patterns==0"],
+      "counts": {"secrets":2,"xss_patterns":1,"mixed_content":0}
+    },
+    {
+      "module": "runtime_ssr",
+      "status": "critical",
+      "score": 5.1,
+      "top": ["Replace 6 JSON import assertions with static imports"],
+      "proof": ["counts.importAssertions==0","no_adapter_error==true"],
+      "counts": {"importAssertions":6,"dynamicJsonImports":1}
+    },
+    {
+      "module": "performance",
+      "status": "warn",
+      "score": 3.2,
+      "top": ["Convert 3 PNGs to WebP/AVIF","Replace 2 barrel imports"],
+      "proof": ["findings.large_images==0","findings.barrel_imports==0"],
+      "counts": {"large_images":3,"barrel_imports":2}
+    }
+  ],
+  "hotFiles": [
+    {"path":"src/utils/geoCompat.ts","count":7},
+    {"path":"src/content/homepage.mdx","count":5}
+  ]
+}
+```
+
+---
+
+# 13) Why this helps *the pack*
+
+* **Single brain, many eyes**: Thinker reads all hunter outputs and traces, so *SSR is one signal among many*, not the only hammer. (Your “think” doc asked for this breadth and gating.) &#x20;
+* **Proof or it didn’t happen**: each recommendation ships with **proof-invariants**; success = flipping those to “true”.
+* **Learns real wins**: memory favors fixes that repeatedly move **critical → pass** in your codebase (not theoretical lint).
+* **Low-risk**: additive, non-blocking initially; keep your current `hunt.sh` verdict; add a human-legible agenda on top.
+* **Grounded in your patterns**: static imports (Sept 17 gold) over JSON assertions (Sept 14 legacy), generator conflict prevention, a11y/perf/security contracts—all already reflected in your hunters and docs. &#x20;
+
+---
+
+## Quick add checklist
+
+* [ ] Drop `hunters/trace.sh`; include it in each hunter.
+* [ ] Normalize report fields: add `actions[]` + `policy_invariants[]` everywhere (security/perf/a11y/build-deps/SSR).
+* [ ] Add `hunters/thinker/index.mjs`; call it at the end of `hunt.sh`.
+* [ ] (Optional) Determinism harness + diff artifact.
+* [ ] CI job uploads `__reports/hunt/**` + `__ai/thinker/master-insights.json`.
+
+That’s your **Hunter Thinker 2.0**—a small, honest brain that prioritizes the fastest, most unlocking fixes across SSR, security, performance, accessibility, build safety, and code health, and gets better every week it runs.

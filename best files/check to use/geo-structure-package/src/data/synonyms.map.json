@@ -1,0 +1,9 @@
+{
+  "bond-cleaners": "bond-cleaning",
+  "end-of-lease-cleaning": "bond-cleaning",
+  "vacate-clean": "bond-cleaning",
+  "house-cleaning": "spring-cleaning",
+  "deep-cleaning": "spring-cleaning",
+  "bathroom-cleaning": "bathroom-deep-clean",
+  "shower-screen-restoration": "bathroom-deep-clean"
+}

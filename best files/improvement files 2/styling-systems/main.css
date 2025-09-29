@@ -1,0 +1,318 @@
+/* ──────────────────────────────────────────────────────────
+   src/styles/main.css — Tailwind v4 single entry
+   ────────────────────────────────────────────────────────── */
+@import "tailwindcss";
+
+/* ---------- Tailwind v4 theme (design tokens) ---------- */
+@theme {
+  --color-brand-accent: #0ea5e9;
+  --color-brand-navy: #0c2f5a;
+  --color-base-bg: #f8fafc;
+  --color-base-fg: #0f172a;
+  --color-status-warning: #f59e0b;
+  --color-status-danger: #ef4444;
+  --color-status-ok: #22c55e;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-700: #334155;
+  --color-slate-900: #0f172a;
+  --color-sky-100: #e0f2fe;
+  --color-sky-300: #7dd3fc;
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
+  --shadow-card-hover: 0 10px 16px rgba(2, 6, 23, .10);
+  --ease-swoop: cubic-bezier(.22,1,.36,1);
+}
+
+/* ---------- CSS custom properties (runtime tokens) ---------- */
+@layer base {
+  :root {
+    /* canonical names */
+    --color-brand-accent: var(--color-brand-accent);
+    --color-brand-navy:   var(--color-brand-navy);
+
+    --color-bg-base: var(--color-base-bg);
+    --color-fg-base: var(--color-base-fg);
+
+    --color-status-warning: var(--color-status-warning);
+    --color-status-danger:  var(--color-status-danger);
+    --color-status-ok:      var(--color-status-ok);
+
+    --color-card-border: var(--color-slate-200);
+    --color-card-border-dark: var(--color-slate-700);
+
+    --radius-card: var(--radius-card);
+    --radius-pill: var(--radius-pill);
+    --shadow-card-hover: var(--shadow-card-hover);
+
+    --ease-swoop: var(--ease-swoop);
+    --space-card: 1.25rem; /* 20px */
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bg-base: #0b1220;
+      --color-fg-base: var(--color-slate-100);
+      --color-card-border: var(--color-card-border-dark);
+    }
+  }
+}
+
+/* ---------- Advanced Tailwind v4 Utilities ---------- */
+/* FAQ styles inlined (was faq.css) to prevent secondary Tailwind entry */
+/* Converted to plain CSS (no @apply) for compatibility with current processor */
+.faq-section { max-width: none; }
+.faq-section .faq-item { border:1px solid var(--color-slate-200); box-shadow:0 1px 2px rgba(0,0,0,.05); background:rgba(255,255,255,0.8); backdrop-filter:blur(4px); transition:box-shadow .2s,transform .2s; }
+@media (prefers-color-scheme: dark){ .faq-section .faq-item { border-color: var(--color-slate-700); background: rgba(30,41,59,0.8);} }
+.faq-section .faq-item:hover { box-shadow:0 4px 12px rgba(0,0,0,.12); }
+.faq-section .faq-item summary { cursor:pointer; transition: background-color .15s; padding:.75rem 1rem; list-style:none; }
+.faq-section .faq-item summary:hover { background-color: rgba(241,245,249,0.5); }
+@media (prefers-color-scheme: dark){ .faq-section .faq-item summary:hover { background-color: rgba(51,65,85,0.5);} }
+.faq-section .faq-item summary:focus-visible { outline:2px solid #0284c7; outline-offset:2px; }
+.faq-prose { font-size:.875rem; max-width:none; color:var(--color-fg-base); line-height:1.6; }
+@media (prefers-color-scheme: dark){ .faq-prose { color: #cbd5e1; } }
+.faq-prose a { color:#0284c7; text-decoration:underline; }
+.faq-prose a:hover { color:#0369a1; }
+@media (prefers-color-scheme: dark){ .faq-prose a { color:#38bdf8;} .faq-prose a:hover { color:#7dd3fc;} }
+.faq-prose p { margin-bottom:0.75rem; }
+.faq-prose strong { font-weight:600; }
+
+/* Next-generation focus ring with modern styling */
+/* Replaced Tailwind @utility with plain classes */
+.focus-ring { outline:none; box-shadow:0 0 0 2px rgba(255,255,255,.8),0 0 0 4px var(--color-brand-accent),0 0 0 6px rgba(14,165,233,.1); transition:box-shadow .15s ease-out; }
+
+/* Enhanced prose styling for FAQ content */
+.prose-custom { line-height:1.7; max-width:70ch; text-wrap:pretty; word-spacing:.05em; }
+
+/* Micro-interaction utilities */
+.animate-in { animation-duration:150ms; animation-timing-function:ease-out; animation-fill-mode:both; }
+
+.slide-in-from-top-2 { --tw-enter-translate-y:-0.5rem; animation-name:slideInFromTop; }
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(var(--tw-enter-translate-y, 0));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modern gradient utilities */
+.gradient-accent { background:linear-gradient(135deg,var(--color-brand-accent) 0%, color-mix(in oklch, var(--color-brand-accent) 80%, blue) 100%); }
+
+/* ---------- Base: resets & typography ---------- */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased; background: var(--color-bg-base); color: var(--color-fg-base); }
+
+  a { color: var(--color-brand-accent); text-underline-offset: 2px; }
+  a:hover { text-decoration: underline; }
+
+  h1 { font-size:2rem; font-weight:700; color: var(--color-fg-base); }
+  @media (min-width:768px){ h1 { font-size:2.25rem; } }
+  h2 { font-size:1.5rem; font-weight:600; color: var(--color-fg-base); }
+  @media (min-width:768px){ h2 { font-size:1.875rem; } }
+
+  /* Future-proof H1 sizing in sectioning elements */
+  :is(article,aside,nav,section) h1 { 
+    font-size: clamp(1.875rem, 2.5vw, 2.25rem); 
+    line-height: 1.2; 
+  }
+
+  .skip-link { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); border:0; }
+  .skip-link:focus { position:fixed; top:.5rem; left:.5rem; width:auto; height:auto; margin:0; padding:.5rem 1rem; clip:auto; z-index:1000; background:#fff; color:#0f172a; border-radius:.5rem; box-shadow:0 4px 12px rgba(0,0,0,.15); }
+}
+
+/* ---------- Utilities: helpers + View Transition names ---------- */
+@layer utilities {
+  /* brand/surface helpers */
+  .text-brand   { color: var(--color-brand-accent); }
+  .bg-brand     { background-color: var(--color-brand-accent); }
+  .border-card  { border-color: var(--color-card-border); }
+  .rounded-card { border-radius: var(--radius-card); }
+  .rounded-pill { border-radius: var(--radius-pill); }
+  .shadow-card  { box-shadow: var(--shadow-card-hover); }
+
+  /* precise transitions (avoid `all`) */
+  .smooth-transform { transition: transform .25s var(--ease-swoop), box-shadow .25s var(--ease-swoop); }
+  .smooth-colors    { transition: color .2s ease, background-color .2s ease, border-color .2s ease; }
+
+  /* View Transition region names — attach in markup */
+  .vt-title { view-transition-name: page-title; }
+  .vt-main  { view-transition-name: main-content; }
+  .vt-head  { view-transition-name: header; }
+  .vt-foot  { view-transition-name: footer; }
+  .vt-none  { view-transition-name: none; }
+
+  .no-tap-highlight { -webkit-tap-highlight-color: transparent; }
+}
+
+/* ---------- Components: tokens-driven ---------- */
+@layer components {
+  /* Common button skeleton shared by all button variants (including legacy aliases) */
+  .btn,
+  .btn-primary,            /* legacy alias for brand button */
+  .btn-secondary {         /* legacy alias for outline button */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-pill);
+    transition:
+      transform .25s var(--ease-swoop),
+      box-shadow .25s var(--ease-swoop),
+      color .2s ease,
+      background-color .2s ease,
+      border-color .2s ease;
+    outline: none;
+  }
+
+  /* New, semantic variants */
+  .btn-brand   { color: white; background: var(--color-brand-accent); }
+  .btn-outline { color: var(--color-brand-accent); background: white; border: 2px solid var(--color-brand-accent); }
+
+  /* Legacy button styling (apply brand style to btn-primary) */
+  .btn-primary { color: white; background: var(--color-brand-accent); }
+  .btn-secondary { color: var(--color-brand-accent); background: white; border: 2px solid var(--color-brand-accent); }
+
+  /* Hover effects for new variants */
+  .btn-brand:hover,
+  .btn-primary:hover {            /* legacy alias shares the rule */
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card-hover);
+  }
+  .btn-outline:hover,
+  .btn-secondary:hover {          /* legacy alias shares the rule */
+    color: white;
+    background: var(--color-brand-accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Cards */
+  .card {
+    background: white;
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-card);
+  }
+  .card-hover { 
+    transition: transform .25s var(--ease-swoop), box-shadow .25s var(--ease-swoop); 
+  }
+  .card-hover:hover { 
+    transform: translateY(-2px); 
+    box-shadow: var(--shadow-card-hover); 
+  }
+
+  /* Make the canonical and legacy class share the same declarations */
+  .input,
+  .form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid;
+    border-color: var(--color-slate-300);
+    background: white;
+    transition: box-shadow .2s ease, border-color .2s ease;
+  }
+  .input:focus,
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-brand-accent);
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-brand-accent) 35%, transparent);
+  }
+
+  /* Alerts */
+  .alert { 
+    border-radius: 0.75rem; 
+    padding: 1rem; 
+    border: 1px solid; 
+  }
+  .alert-warning { border-color: color-mix(in oklab, var(--color-status-warning) 35%, white);
+    background: color-mix(in oklab, var(--color-status-warning) 12%, white); color: #7c4a02; }
+  .alert-danger  { border-color: color-mix(in oklab, var(--color-status-danger) 35%, white);
+    background: color-mix(in oklab, var(--color-status-danger) 10%, white); color: #7a1111; }
+  .alert-ok      { border-color: color-mix(in oklab, var(--color-status-ok) 35%, white);
+    background: color-mix(in oklab, var(--color-status-ok) 10%, white); color: #0f5132; }
+
+  /* FAQ / luxe backgrounds (tokenised) */
+  .faq-backdrop {
+    background: linear-gradient(135deg, var(--color-brand-navy) 0%, var(--color-brand-accent) 100%);
+    position: relative; overflow: hidden;
+  }
+  .faq-backdrop::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top, rgba(255,255,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .lux-bg, .faq-lux-bg { background: linear-gradient(135deg, var(--color-slate-100) 0%, #fff 70%); }
+
+  /* Gallery / cards / nav — property-specific transitions */
+  .gallery-item { transition: transform .3s ease-out, box-shadow .3s ease-out; }
+  .gallery-item:hover { transform: scale(1.05); z-index: 10; }
+
+  .testimonial-card {
+    background: white; border-radius: .75rem; padding: 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,.1);
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .testimonial-card:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(0,0,0,.15); }
+
+  .area-card {
+    background: white; border-radius: .5rem; padding: 1rem; border: 1px solid var(--color-slate-200);
+    transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
+  }
+  .area-card:hover {
+    border-color: var(--color-sky-300);
+    background-color: var(--color-sky-100);
+    transform: translateY(-1px);
+  }
+
+  .nav-link {
+    transition: color .2s ease, transform .2s ease;
+    text-decoration: none; color: inherit;
+  }
+  .nav-link:hover { transform: translateY(-1px); color: var(--color-brand-accent); }
+
+  /* Progress bar */
+  .progress-bar { height: .5rem; background: var(--color-slate-200); border-radius: 9999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--color-brand-accent); transition: width .5s ease-out; }
+
+  /* Loading + spinner (tokenised) */
+  .loading { opacity: .6; pointer-events: none; }
+  .spinner {
+    animation: spin 1s linear infinite; width: 1.25rem; height: 1.25rem;
+    border: 2px solid var(--color-sky-100);
+    border-top-color: var(--color-brand-accent);
+    border-radius: 50%;
+  }
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- View Transition styling (named regions only) ---------- */
+::view-transition-old(page-title),
+::view-transition-new(page-title),
+::view-transition-old(main-content),
+::view-transition-new(main-content) {
+  animation-duration: .28s;
+  animation-timing-function: var(--ease-swoop);
+}
+::view-transition-old(header),
+::view-transition-new(header),
+::view-transition-old(footer),
+::view-transition-new(footer) {
+  animation-duration: .18s;
+  animation-timing-function: ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt-title, .vt-main, .vt-head, .vt-foot { view-transition-name: none !important; }
+}

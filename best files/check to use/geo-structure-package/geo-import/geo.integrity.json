@@ -1,0 +1,20 @@
+{
+  "counts": {
+    "adjacency_nodes": 0,
+    "aliases": 345,
+    "cluster_suburbs_total": 346,
+    "clusters": 3,
+    "coords": 345,
+    "index": 345,
+    "lga_groups": 3
+  },
+  "hashes": {
+    "adjacency.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "areas.clusters.json": "584d5009fa414d9db088720e2a7ce4c398fc27fa692f68fb626be1cebf52dfb7",
+    "lgas.groups.json": "7749aa6ce8695fdf43054c0d9492f41860185a59bc31a14d60d4709b677d814d",
+    "suburbs.aliases.json": "e82ac04ae62210a814ddd0b78b54cfc8d4ffc8948840ee99e954703a41cf0691",
+    "suburbs.coords.json": "063d76c2906fa0fc3090719e0a97567d09c4a7e8891efadd5431c1c8e5f7b759",
+    "suburbs.index.json": "c19d20a3263ee8dbe026a33c215e61803c2976898f6f1e217a7b08125bdd624b"
+  },
+  "source": "geo_derived.bundle.json"
+}

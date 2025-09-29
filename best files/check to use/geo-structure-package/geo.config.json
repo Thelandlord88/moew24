@@ -1,0 +1,7 @@
+{
+  "$schema": "./geo.config.schema.json",
+  "site": "https://onendone.com.au",
+  "brand": "One N Done",
+  "services": ["spring-clean", "bathroom-deep-clean", "end-of-lease-clean"],
+  "proximity": { "biasKm": 0, "clusterBoost": 1, "crossPenalty": 0, "maxResults": 12 }
+}

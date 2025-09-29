@@ -1,0 +1,48 @@
+---
+// 🃏 Themed Card Component
+// Flexible container with consistent styling and hover effects
+
+interface Props {
+  variant?: 'default' | 'feature' | 'highlight' | 'interactive';
+  class?: string;
+  href?: string;
+  padding?: 'sm' | 'md' | 'lg';
+}
+
+const { 
+  variant = 'default', 
+  class: className = '',
+  href,
+  padding = 'md'
+} = Astro.props;
+
+// Base card classes
+const baseClasses = "bg-white border border-gray-200 transition-all duration-200";
+
+// Padding variants
+const paddingClasses = {
+  sm: "p-4",
+  md: "p-6",
+  lg: "p-8"
+};
+
+// Variant classes
+const variantClasses = {
+  default: "rounded-xl shadow-sm hover:shadow-md",
+  feature: "rounded-xl shadow-sm hover:shadow-md border-l-4 border-l-[var(--accent-color)]",
+  highlight: "rounded-xl shadow-md bg-gradient-to-br from-white to-gray-50 border-[var(--accent-color)]",
+  interactive: "rounded-xl shadow-sm hover:shadow-lg hover:scale-[1.02] cursor-pointer hover:border-[var(--primary-color)]"
+};
+
+const finalClasses = `${baseClasses} ${paddingClasses[padding]} ${variantClasses[variant]} ${className}`;
+---
+
+{href ? (
+  <a href={href} class={finalClasses}>
+    <slot />
+  </a>
+) : (
+  <div class={finalClasses}>
+    <slot />
+  </div>
+)}

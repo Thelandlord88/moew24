@@ -1,0 +1,1 @@
+../../../../scripts/personalities/intelligence-analyzer-v2.2.mjs

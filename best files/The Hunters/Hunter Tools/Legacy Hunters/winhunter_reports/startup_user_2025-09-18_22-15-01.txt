@@ -1,0 +1,7 @@
+
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
+    CairoShell    REG_SZ    C:\Program Files\Cairo Shell\CairoDesktop.exe
+    MicrosoftEdgeAutoLaunch_727B61CA01106C13969D1D257B864ECC    REG_SZ    "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --win-session-start
+    GoogleDriveFS    REG_SZ    C:\Program Files\Google\Drive File Stream\114.0.1.0\GoogleDriveFS.exe --startup_mode
+    Opera Browser Assistant    REG_SZ    C:\Users\imaba\AppData\Local\Programs\Opera\assistant\browser_assistant.exe
+

@@ -1,0 +1,17 @@
+[
+  {
+    "slug": "bond-cleaning",
+    "title": "Bond Cleaning",
+    "description": "Professional end of lease cleaning services"
+  },
+  {
+    "slug": "spring-cleaning", 
+    "title": "Spring Cleaning",
+    "description": "Comprehensive deep cleaning services"
+  },
+  {
+    "slug": "bathroom-deep-clean",
+    "title": "Bathroom Deep Clean", 
+    "description": "Specialized bathroom cleaning services"
+  }
+]

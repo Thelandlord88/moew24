@@ -1,0 +1,176 @@
+---
+// 🧪 TEST PAGE 1: Bond Cleaning in Brisbane City
+// Professional blue theme with city-focused content
+
+import PageLayout from '../components/PageLayout.astro';
+import Banner from '../components/Banner.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+import { createTheme } from '../themeProvider.js';
+
+const serviceSlug = 'bond-cleaning';
+const suburbSlug = 'brisbane-city';
+
+// Get theme data for this combination
+const theme = createTheme(serviceSlug, suburbSlug);
+const service = theme.service;
+const suburb = theme.suburb;
+
+const title = `${service.name} in ${suburb.name} | OneDone Cleaning`;
+const description = `Professional ${service.name.toLowerCase()} in ${suburb.name}. ${service.description}`;
+---
+
+<PageLayout 
+  serviceSlug={serviceSlug}
+  suburbSlug={suburbSlug}
+  title={title}
+  description={description}
+>
+  <!-- Hero Banner with service/suburb theming -->
+  <Banner 
+    title={`${service.name} in ${suburb.name}`}
+    subtitle={`${service.tagline} • ${service.description}`}
+    variant="hero"
+  >
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+      <Button variant="primary" size="lg">
+        Get Free Quote • {service.priceRange}
+      </Button>
+      <Button variant="outline" size="lg">
+        📞 Call 1300 ONEDONE
+      </Button>
+    </div>
+  </Banner>
+
+  <!-- Service Info Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        
+        <!-- Suburb-specific highlights -->
+        <div class="mb-12 text-center">
+          <h2 class="text-3xl font-bold mb-6 text-gray-900">
+            Why Choose Us in {suburb.name}?
+          </h2>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {suburb.highlights.map(highlight => (
+              <Card variant="feature" class="text-center">
+                <div class="text-lg font-semibold text-[var(--primary-color)] mb-2">
+                  ✓
+                </div>
+                <div class="text-gray-700">
+                  {highlight}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <!-- Service Features -->
+        <div class="mb-12">
+          <h3 class="text-2xl font-bold mb-8 text-center text-gray-900">
+            What's Included in Your {service.name}
+          </h3>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {service.features.map(feature => (
+              <Card class="text-center">
+                <div class="text-[var(--service-accent)] text-xl mb-2">
+                  {service.icon}
+                </div>
+                <div class="font-medium text-gray-800">
+                  {feature}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <!-- Location Details -->
+        <div class="bg-gradient-to-br {service.bgGradient} rounded-2xl p-8 mb-12">
+          <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 class="text-2xl font-bold mb-4 text-[var(--text-color)]">
+                About {suburb.name}
+              </h3>
+              <p class="text-[var(--text-color)] mb-4 opacity-90">
+                {suburb.description}
+              </p>
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <div class="font-semibold text-[var(--text-color)]">Population</div>
+                  <div class="text-[var(--text-color)] opacity-75">{suburb.population.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div class="font-semibold text-[var(--text-color)]">Postcode</div>
+                  <div class="text-[var(--text-color)] opacity-75">{suburb.postcode}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-center">
+              <div class="bg-white bg-opacity-20 rounded-xl p-6">
+                <div class="text-4xl mb-4">{service.icon}</div>
+                <div class="text-2xl font-bold text-[var(--text-color)] mb-2">
+                  {service.priceRange}
+                </div>
+                <div class="text-[var(--text-color)] opacity-75">
+                  Starting price for {suburb.name}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="text-center">
+          <h3 class="text-3xl font-bold mb-6 text-gray-900">
+            Ready to Book Your {service.name}?
+          </h3>
+          <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Get your bond back with our professional {service.name.toLowerCase()} service in {suburb.name}. 
+            100% satisfaction guaranteed.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button variant="primary" size="lg" href="/quote">
+              Get Free Quote Today
+            </Button>
+            <Button variant="secondary" size="lg" href="tel:1300663366">
+              Call 1300 ONEDONE
+            </Button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 text-center">
+      <h3 class="text-2xl font-bold mb-8 text-gray-900">
+        Trusted by {suburb.name} Residents
+      </h3>
+      
+      <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <Card variant="highlight">
+          <div class="text-3xl font-bold text-[var(--primary-color)] mb-2">500+</div>
+          <div class="text-gray-700 font-medium">Happy Customers</div>
+          <div class="text-sm text-gray-500 mt-1">in {suburb.name}</div>
+        </Card>
+        
+        <Card variant="highlight">
+          <div class="text-3xl font-bold text-[var(--primary-color)] mb-2">100%</div>
+          <div class="text-gray-700 font-medium">Bond Success Rate</div>
+          <div class="text-sm text-gray-500 mt-1">guaranteed results</div>
+        </Card>
+        
+        <Card variant="highlight">
+          <div class="text-3xl font-bold text-[var(--primary-color)] mb-2">4.9★</div>
+          <div class="text-gray-700 font-medium">Average Rating</div>
+          <div class="text-sm text-gray-500 mt-1">verified reviews</div>
+        </Card>
+      </div>
+    </div>
+  </section>
+</PageLayout>

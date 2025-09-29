@@ -1,0 +1,37 @@
+{
+  "$id": "geo.linking.config.schema.json",
+  "type": "object",
+  "properties": {
+    "allowedTiersForPages": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["core","expansion","support","maritime","remote"] }
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "primaryMax": { "type": "integer", "minimum": 1 },
+        "secondaryMax": { "type": "integer", "minimum": 0 },
+        "minPrimaryPerPage": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["primaryMax","secondaryMax"]
+    },
+    "neighbor": {
+      "type": "object",
+      "properties": {
+        "preferSameCluster": { "type": "boolean" },
+        "maxCrossCluster": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["preferSameCluster","maxCrossCluster"]
+    },
+    "anchorTemplatesFile": { "type": "string" },
+    "report": {
+      "type": "object",
+      "properties": { "write": { "type": "boolean" } }
+    },
+    "fairness": {
+      "type": "object",
+      "properties": { "minAnchorDiversity": { "type": "number", "minimum": 0, "maximum": 1 } }
+    }
+  },
+  "required": ["allowedTiersForPages","links","neighbor"]
+}

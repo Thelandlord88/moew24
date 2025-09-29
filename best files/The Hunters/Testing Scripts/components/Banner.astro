@@ -1,0 +1,70 @@
+---
+// 🏷️ Banner/Hero Component
+// Full-width banner with service/suburb theming
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  backgroundImage?: string;
+  variant?: 'hero' | 'section' | 'cta';
+  class?: string;
+  overlay?: boolean;
+}
+
+const { 
+  title,
+  subtitle,
+  backgroundImage,
+  variant = 'hero',
+  class: className = '',
+  overlay = true
+} = Astro.props;
+
+// Base banner classes
+const baseClasses = "relative overflow-hidden";
+
+// Variant classes
+const variantClasses = {
+  hero: "py-16 md:py-24",
+  section: "py-12 md:py-16", 
+  cta: "py-8 md:py-12"
+};
+
+// Background and overlay classes
+const bgClasses = backgroundImage 
+  ? "bg-cover bg-center bg-no-repeat"
+  : "bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)]";
+
+const overlayClasses = overlay && backgroundImage 
+  ? "bg-black bg-opacity-50"
+  : "";
+
+const textColorClasses = backgroundImage || variant === 'hero'
+  ? "text-white"
+  : "text-[var(--text-color)]";
+
+const finalClasses = `${baseClasses} ${variantClasses[variant]} ${bgClasses} ${className}`;
+---
+
+<section 
+  class={finalClasses}
+  style={backgroundImage ? `background-image: url(${backgroundImage})` : ''}
+>
+  {overlay && backgroundImage && (
+    <div class={`absolute inset-0 ${overlayClasses}`}></div>
+  )}
+  
+  <div class="relative container mx-auto px-4 text-center">
+    <h1 class={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 ${textColorClasses}`}>
+      {title}
+    </h1>
+    
+    {subtitle && (
+      <p class={`text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90 ${textColorClasses}`}>
+        {subtitle}
+      </p>
+    )}
+    
+    <slot />
+  </div>
+</section>

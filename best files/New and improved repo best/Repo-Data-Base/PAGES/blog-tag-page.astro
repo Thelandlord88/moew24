@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import { allPosts, filterByTag, paginate } from "../../../../lib/blog";
+import PostCard from "../../../../components/PostCard.astro";
+import Pagination from "../../../../components/Pagination.astro";
+
+export async function getStaticPaths() {
+  const posts = await allPosts();
+  const tagCounts = new Map<string, number>();
+  for (const p of posts) for (const t of p.data.tags) {
+    tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+  }
+  const paths: Array<{ params: { tag: string; page: string } }> = [];
+  for (const [t, count] of tagCounts) {
+    const last = Math.max(1, Math.ceil(count / 12));
+    for (let n = 2; n <= last; n++) {
+      paths.push({ params: { tag: t, page: String(n) } });
+    }
+  }
+  return paths;
+}
+
+const { tag, page } = Astro.params as { tag: string; page: string };
+const posts = filterByTag(await allPosts(), tag);
+const pager = paginate(posts, Number(page));
+const base = `/blog/tag/${tag}/`;
+const canonical = new URL(`${base}${page}/`, Astro.site).toString();
+---
+
+<BaseLayout title={`Tag: ${tag} – Page ${page}`} description={`Articles tagged ${tag}`} canonical={canonical}>
+  <h1 class="text-3xl font-bold mb-6">Tag: {tag}</h1>
+
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {pager.data.map((post) => <PostCard post={post} />)}
+  </div>
+
+  <Pagination basePath={base} page={pager.page} lastPage={pager.lastPage} />
+</BaseLayout>

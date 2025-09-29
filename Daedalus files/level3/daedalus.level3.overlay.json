@@ -1,0 +1,30 @@
+{
+  "policies": {
+    "neighborsMax": 8,
+    "neighborsMin": 4,
+    "enforceReciprocity": true,
+    "globalInboundCap": 40,
+    "scoring": {
+      "weightCluster": 1.0,
+      "weightDistance": 1.2,
+      "distanceScaleKm": 12,
+      "weightReciprocalEdge": 0.8,
+      "weightHubDamping": 0.6
+    }
+  },
+  "sitemaps": {
+    "partitionSize": 5000,
+    "path": "public",
+    "includeServices": [
+      "*"
+    ]
+  },
+  "robots": {
+    "userAgent": "*",
+    "disallow": [
+      "/api/",
+      "/__reports/"
+    ],
+    "extra": []
+  }
+}

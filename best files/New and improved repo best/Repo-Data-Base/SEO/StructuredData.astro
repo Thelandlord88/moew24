@@ -1,0 +1,161 @@
+---
+/**
+ * Structured Data Component
+ * JSON-LD schemas for enhanced SEO and rich snippets
+ */
+export interface Props {
+  type: 'article' | 'service' | 'organization' | 'localBusiness';
+  title?: string;
+  description?: string;
+  url?: string;
+  publishDate?: Date;
+  updatedDate?: Date;
+  author?: string;
+  service?: string;
+  suburb?: string;
+  tags?: string[];
+}
+
+const { 
+  type, 
+  title, 
+  description, 
+  url,
+  publishDate,
+  updatedDate,
+  author,
+  service,
+  suburb,
+  tags = []
+} = Astro.props;
+
+import { geoConfig, getSuburb } from '../../lib/geoCompat.ts';
+import business from '../../data/business.json';
+
+const config = geoConfig();
+const site = Astro.site || config.site;
+const currentUrl = url || new URL(Astro.url.pathname, site).href;
+
+// Get suburb coordinates if available
+let suburbData = null;
+if (suburb) {
+  suburbData = getSuburb(suburb);
+}
+
+// Base organization schema
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": business.name,
+  "legalName": business.legalName,
+  "url": business.url,
+  "logo": {
+    "@type": "ImageObject",
+    "url": `${site}/logo.png`
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": business.telephone,
+    "contactType": "customer service",
+    "email": business.email,
+    "availableLanguage": "English"
+  },
+  "address": business.address,
+  "geo": business.geo,
+  "openingHours": business.openingHours,
+  "sameAs": business.sameAs
+};
+
+// Generate appropriate schema based on type
+let schema = {};
+
+if (type === 'article' && title && description) {
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "url": currentUrl,
+    "datePublished": publishDate?.toISOString(),
+    "dateModified": updatedDate?.toISOString() || publishDate?.toISOString(),
+    "author": {
+      "@type": "Organization",
+      "name": author || business.name
+    },
+    "publisher": organizationSchema,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": currentUrl
+    },
+    "keywords": tags.join(', '),
+    ...(service && {
+      "about": {
+        "@type": "Service",
+        "name": service.replace('-', ' '),
+        "provider": organizationSchema
+      }
+    }),
+    ...(suburbData && {
+      "spatialCoverage": {
+        "@type": "Place",
+        "name": suburbData.name,
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": suburbData.lat,
+          "longitude": suburbData.lng
+        }
+      }
+    })
+  };
+} else if (type === 'service' && service) {
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": `${service.replace('-', ' ')} ${suburb ? `in ${suburb.replace('-', ' ')}` : ''}`,
+    "description": description || `Professional ${service.replace('-', ' ')} services`,
+    "provider": organizationSchema,
+    "serviceType": service.replace('-', ' '),
+    "areaServed": suburb ? {
+      "@type": "Place",
+      "name": suburb.replace('-', ' '),
+      ...(suburbData && {
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": suburbData.lat,
+          "longitude": suburbData.lng
+        }
+      })
+    } : business.areaServed,
+    "url": currentUrl,
+    "offers": {
+      "@type": "Offer",
+      "availability": "https://schema.org/InStock",
+      "priceCurrency": "AUD",
+      "priceRange": business.priceRange
+    }
+  };
+} else if (type === 'localBusiness') {
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    ...organizationSchema,
+    "priceRange": business.priceRange,
+    "paymentAccepted": business.paymentAccepted,
+    "hasOfferCatalog": business.hasOfferCatalog,
+    "founder": business.founder,
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "150",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  };
+} else {
+  schema = organizationSchema;
+}
+
+const jsonLd = JSON.stringify(schema, null, 0);
+---
+
+<script type="application/ld+json" set:html={jsonLd}></script>

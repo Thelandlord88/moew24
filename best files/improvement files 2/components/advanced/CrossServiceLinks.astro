@@ -1,0 +1,46 @@
+---
+import { getCrossServiceItemsForSuburb, getLocalGuidesLinks } from '~/lib/links';
+
+interface Props {
+  /** Suburb slug for the *current* page */
+  suburbSlug: string;
+  /** Optional wrapper classes */
+  class?: string;
+  /** Optional heading (sr-only by default) */
+  heading?: string;
+}
+
+const { suburbSlug, class: klass = '', heading = 'Related services and local guides' } = Astro.props;
+
+const items = getCrossServiceItemsForSuburb(suburbSlug);
+// Normalize local guides to array (future‑proof even if facade changes)
+const localGuides = getLocalGuidesLinks(suburbSlug);
+const merged = [
+  ...items.map(i => ({ label: i.label || i.service, href: i.href, here: i.here })),
+  ...localGuides.map(href => ({ label: 'Local guides', href, here: true }))
+];
+---
+<section role="region" class={`mt-8 ${klass}`} aria-label="Related services and local guides">
+  <h2 class="sr-only">{heading}</h2>
+  {merged.length === 0 ? (
+    <ul class="flex flex-wrap gap-2" aria-hidden="true" />
+  ) : (
+    <ul class="flex flex-wrap gap-2">
+      {merged.map((l) => (
+        <li>
+          <a
+            class="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-blue-700 hover:text-blue-900 hover:underline"
+            href={l.href}
+          >
+            {l.label}
+            {l.here === false && (
+              <span class="ml-2 inline-flex items-center rounded-full bg-yellow-50 text-yellow-800 text-[10px] px-2 py-0.5">
+                nearby
+              </span>
+            )}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</section>

@@ -1,0 +1,1 @@
+../../../scripts/daedalus/tools/policy-sweeper.mjs

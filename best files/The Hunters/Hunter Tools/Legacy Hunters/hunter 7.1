@@ -1,0 +1,320 @@
+love this—your pack already has sharp specialists, now let’s add a calm, curious **Hunter Thinker** above them that learns across runs, ranks what to fix next, and proves the class really closed. Below is a complete, drop-in plan tailored to your actual hunters and orchestrator.
+
+---
+
+# 0) What you already have (and how we’ll use it)
+
+* **All-in-one hygiene hunter (`rg-hunt.sh`)**: fast filename/JSON/ESM-CJS/EISDIR checks with a canary and timestamped logs—great for “are the detectors alive?” preflight. We’ll keep this as a quick local gate.&#x20;
+* **Modular orchestrator (`hunt.sh`)**: runs selected modules, totals issues/critical, emits a `master.json` with policy sentinel fields (e.g., `no_adapter_installed`, `security_scan`, `accessibility_check`). This is where we’ll wire the Thinker at the end.&#x20;
+* **Runtime SSR hunter (`hunters/runtime_ssr.sh`)**: checks `astro.config.*`, dynamic imports, JSON import assertions, prerender flags, and does a proof-build to surface `NoAdapterInstalled`. These feed high-signal counts to the Thinker.&#x20;
+* **Security hunter**: secrets, dangerous eval/new Function, XSS primitives, mixed content, env exposure, `.env` hygiene. Thinker will weight these as high severity.&#x20;
+* **Accessibility hunter**: alt text, unlabeled inputs, heading order, landmarks, low-contrast, clickable divs, lang, focus traps. Clear, fixable classes.&#x20;
+* **Build-Dependencies hunter**: maps build scripts/generators → generated files, detects generated files inside `src/`, highlights conflicts with recent edits, and flags heavy pre/postbuild phases. Perfect to prevent “fix overwritten by generator.”&#x20;
+* **Code-Quality hunter**: unused imports, long functions, magic numbers, deep nesting, TODO debt, duplication, parameter lists, error-handling balance. Low-to-medium severity but large blast radius.&#x20;
+* **Performance hunter**: large images, modern formats, dep footprint, duplicate deps, very large source files, barrel imports, CSS sprawl. Great for “fast ROI” fixes.&#x20;
+
+---
+
+# 1) What the **Hunter Thinker** adds (in one sentence)
+
+**Watch + Read + Reason + Recommend + Remember.** It consumes every module’s JSON + light traces, correlates classes, scores by payoff vs effort, outputs a single **Do-Next plan** with proofs, and gradually learns which plays actually flip **critical → pass**.
+
+---
+
+# 2) Data contract each hunter should emit (small but consistent)
+
+Have every module write `__reports/hunt/<module>.json` with (strict JSON):
+
+```json
+{
+  "timestamp": "2025-09-18T02:41:00Z",
+  "module": "security",
+  "status": "critical|warn|pass",
+  "issues": 7,
+  "critical": 2,
+  "affected_files": 11,
+  "counts": { "secrets": 1, "xss": 3, "mixed_content": 2 },
+  "actions": [
+    "Rotate exposed tokens; move secret to env with vault loader",
+    "Replace innerHTML with safe DOM operations in src/pages/help.ts"
+  ],
+  "policy_invariants": [
+    "counts.secrets == 0",
+    "counts.xss == 0"
+  ],
+  "unlocks": ["performance","code_quality"],
+  "eta_minutes": 30
+}
+```
+
+Why this matters: your modules already compute most of these numbers—`security` reports secrets/XSS/mixed content; `runtime_ssr` reports import assertions/dynamic imports/build test; `build_dependencies` reports generators/conflicts; etc. The Thinker just needs them in a common schema to compare apples with apples.    &#x20;
+
+> Keep your **`hunt.sh` master.json** as is—Thinker will also read `summary.total_issues`, `summary.total_critical`, and module statuses.&#x20;
+
+---
+
+# 3) Add tiny, safe telemetry (hunters/trace.sh)
+
+This gives the Thinker context (“what files were hot?”) without affecting exits.
+
+```bash
+# hunters/trace.sh
+TRACE_FILE="var/hunt-events.ndjson"; mkdir -p "$(dirname "$TRACE_FILE")"
+trace_event(){ local op="$1"; shift; local data="${*:-{}}"
+  printf '{"t":"%s","module":"%s","op":"%s","data":%s}\n' \
+    "$(date -Iseconds)" "${HUNTER_MODULE:-unknown}" "$op" "$data" >> "$TRACE_FILE"; }
+trace_open_file(){ trace_event open_file "{\"path\":\"$1\"}"; }
+trace_issue(){ trace_event issue "$1"; }          # {"class":"...", "path":"...", "severity":"..."}
+trace_invariant(){ trace_event invariant "$1"; }  # {"name":"...", "status":"pass|fail"}
+```
+
+Example wiring (top of each module):
+
+```bash
+HUNTER_MODULE="build_dependencies"; source "hunters/trace.sh"
+trace_issue '{"class":"generated-in-src","path":"src/data/serviceCoverage.json","severity":"warn"}'
+```
+
+This is append-only; if it fails, nothing else breaks.
+
+---
+
+# 4) The Thinker (collector + scorer + writer)
+
+Create `thinker/index.mjs`:
+
+```js
+#!/usr/bin/env node
+import fs from 'node:fs'; import path from 'node:path';
+const REPORT='__reports/hunt', OUT='__ai/thinker', TRACE='var/hunt-events.ndjson';
+fs.mkdirSync(OUT,{recursive:true});
+
+const policy = fs.existsSync(`${OUT}/thinker-policy.json`)
+  ? JSON.parse(fs.readFileSync(`${OUT}/thinker-policy.json`,'utf8'))
+  : { weights:{severity:3.0,recurrence:1.6,blastRadius:1.4,timeToFix:-0.8,unlocks:1.2},
+      thresholds:{recommend:2.0, critical:4.0}, caps:{maxAgendaItems:9} };
+
+// Load module reports (skip master.json)
+const reports = fs.readdirSync(REPORT)
+  .filter(f=>f.endsWith('.json') && f!=='master.json')
+  .map(f=>({ name:f.replace(/\.json$/,''), ...JSON.parse(fs.readFileSync(path.join(REPORT,f),'utf8')) }));
+
+// Optional traces → hot file map
+const traces = fs.existsSync(TRACE)
+  ? fs.readFileSync(TRACE,'utf8').trim().split('\n').filter(Boolean).map(l=>{try{return JSON.parse(l)}catch{return null}}).filter(Boolean)
+  : [];
+const hot = {}; for (const t of traces) if (t.op==='open_file'&&t.data?.path) hot[t.data.path]=(hot[t.data.path]||0)+1;
+
+// Features + score
+const N = x => Math.log(1+Math.max(0,x));
+const score = r => {
+  const sev = r.status==='critical'?2:r.status==='warn'?1:0;
+  return policy.weights.severity*sev
+       + policy.weights.recurrence*N(r.issues||0)
+       + policy.weights.blastRadius*N(r.affected_files||r.files||0)
+       + policy.weights.timeToFix*N(r.eta_minutes||10)
+       + policy.weights.unlocks*((r.unlocks?.length)||0);
+};
+
+// Rank and clip
+const agenda = reports
+  .filter(r => Array.isArray(r.actions) && r.actions.length)
+  .map(r => ({
+    module: r.module || r.name, status: r.status, score: +score(r).toFixed(2),
+    actions: r.actions.slice(0,5), proof: r.policy_invariants || [],
+    why: [
+      r.status==='critical'?'severity:2':null,
+      r.issues?`recurrence:${r.issues}`:null,
+      r.affected_files?`blast:${r.affected_files}`:null,
+      (r.unlocks?.length)?`unlocks:${r.unlocks.length}`:null
+    ].filter(Boolean).join(' ')
+  }))
+  .sort((a,b)=>b.score-a.score)
+  .slice(0, policy.caps.maxAgendaItems);
+
+// Write one agenda
+fs.writeFileSync(`${OUT}/master-insights.json`, JSON.stringify({
+  t:new Date().toISOString(),
+  agenda,
+  hotFiles:Object.entries(hot).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([path,count])=>({path,count})),
+  notes:["Prefer class-eliminating fixes; attach a proof-invariant; sweep siblings."]
+}, null, 2));
+
+console.log(`[thinker] wrote ${OUT}/master-insights.json with ${agenda.length} items`);
+```
+
+**Wire it into `hunt.sh`** (last step, non-fatal):
+
+```bash
+# After master report is generated
+section "Thinker Agenda"
+node thinker/index.mjs || warn "Thinker non-fatal"
+okay "__ai/thinker/master-insights.json"
+```
+
+Your orchestrator already prints a proper executive summary and knows the module exit codes; we’re just adding a single ranked plan on top.&#x20;
+
+---
+
+# 5) Cross-module “plays” (classes, fixes, proofs) the Thinker will prioritize
+
+Below are the **classes** your hunters already detect, with **proof-invariants** the Thinker will cite in each agenda item:
+
+### A) SSR & Astro drift (runtime\_ssr)
+
+* **Class**: JSON import assertions / dynamic `import()` under `src/**`; adapter/config drift; failing proof-build with `NoAdapterInstalled`.
+* **Fix**: remove import assertions and dynamic JSON branches in `src/**`, or install/commit to the adapter path; ensure `output:'static'` if SSG is intended.
+* **Proof-invariants**: `counts.import_assertions==0 && counts.dynamic_imports==0 && findings.build_test=='PASSED'`.&#x20;
+
+### B) Build dep overwrites (build\_dependencies)
+
+* **Class**: generators write into `src/` or overwrite recently edited files; overly busy pre/postbuild; undocumented generated assets.
+* **Fix**: move generated outputs to `__generated/` or `data/compiled/`, tag with DO NOT EDIT headers, ensure edits happen to `.source.*`/generator code; thin pre/postbuild.
+* **Proof-invariants**: `counts.potential_conflicts==0 && generated_in_src==0 && phase_bloat<=policy.max`.&#x20;
+
+### C) Secrets/XSS/mixed content (security)
+
+* **Class**: hardcoded tokens, `innerHTML`/`insertAdjacentHTML` sinks, `http://` assets in production.
+* **Fix**: move secrets to env/vault; sanitize or use safe DOM APIs; migrate assets to HTTPS.
+* **Proof-invariants**: `counts.secrets==0 && counts.xss_patterns==0 && counts.mixed_content==0`.&#x20;
+
+### D) A11y barriers (accessibility)
+
+* **Class**: missing `alt`, unlabeled inputs, heading skips, no landmarks, low contrast, clickable `div`.
+* **Fix**: author alt & labels; correct heading order; add `<main>/<nav>` or roles; fix contrast; convert clickable `div`→`button`/`a`.
+* **Proof-invariants**: `missing_alt==0 && unlabeled_inputs==0 && heading_hierarchy_ok==true && landmarks_ok==true`.&#x20;
+
+### E) Perf bloat (performance)
+
+* **Class**: >500KB images, missing WebP/AVIF, bloated deps, duplicate libs (e.g., `moment+dayjs`), barrel imports, huge files, CSS sprawl.
+* **Fix**: compress/resize; add WebP/AVIF; de-dupe libs; split large modules; avoid barrel imports; consolidate CSS.
+* **Proof-invariants**: `large_images==0 && duplicate_deps==0 && large_source_files==0 && barrel_imports==0`.&#x20;
+
+### F) Code quality drift (code\_quality)
+
+* **Class**: unused imports, long functions, magic numbers, deep nesting, duplication, too many params, throw/catch imbalance, TODO ballooning.
+* **Fix**: prune unused; refactor long/over-nested; extract constants; dedupe; reduce params; balance try/catch; convert TODO to tracked issues.
+* **Proof-invariants**: thresholds on each metric (e.g., `long_functions==0`, `magic_numbers<policy.max`, `duplication<policy.max`, `todo_count<policy.warn`).&#x20;
+
+### G) Repo hygiene (rg-hunt.sh fast gate)
+
+* **Class**: filename hazards, strict JSON parse errors, EISDIR/glob reads, ESM/CJS mix, dangerous `!` in npm scripts.
+* **Fix**: rename files, fix JSON, validate fs reads, unify module system, clean scripts.
+* **Proof-invariants**: `json_errors==0 && esm_cjs_conflicts==0 && filename_hazards==0`.&#x20;
+
+---
+
+# 6) Scoring model (why the agenda orders items the way it does)
+
+For each module report `r`:
+
+```
+score(r) =
+  3.0 * severity(r)              # critical=2, warn=1, pass=0
++ 1.6 * log1p(r.issues)          # recurrence
++ 1.4 * log1p(r.affected_files)  # blast radius
+- 0.8 * log1p(r.eta_minutes)     # effort penalty
++ 1.2 * |r.unlocks|              # downstream unlocks
+```
+
+Weights/thresholds live in `__ai/thinker/thinker-policy.json` so you can dial for release mode (favor quick wins) vs stabilization (favor big blast-radius risks).
+
+---
+
+# 7) Memory (small, honest, local)
+
+Add `__ai/thinker/thinker-memory.sqlite` (or start with JSON) with three tables:
+
+* `episodes(run_id, t, total_critical, total_issues)` ← from `master.json`
+* `class_result(run_id, module, class, status)` ← from each module’s counts/status
+* `playbook(class, fix, proof, sibling_sweep, success_count, fail_count, last_success)`
+
+When a class flips **critical→pass** following a recommended action, increment `success_count`. Next time that class appears, apply a small score bump—evidence-based, no black box.
+
+---
+
+# 8) Wiring & scripts
+
+* **`package.json`**:
+
+  ```json
+  {
+    "scripts": {
+      "hunt": "bash ./hunt.sh",
+      "hunt:warn": "bash ./hunt.sh --warn-only",
+      "thinker": "node thinker/index.mjs"
+    }
+  }
+  ```
+* **`hunt.sh`** already lists available modules; keep that list as the source of truth. Append the Thinker call after writing `master.json`.&#x20;
+
+---
+
+# 9) CI: capture both evidence and the plan
+
+```yaml
+- name: Run Hunters (strict)
+  run: bash ./hunt.sh
+- name: Upload Hunter Artifacts
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: hunter-artifacts
+    path: |
+      __reports/hunt/**
+      __ai/thinker/master-insights.json
+```
+
+`master-insights.json` is what reviewers open first; per-module logs/JSON are the proof.
+
+---
+
+# 10) Acceptance tests (copy & try)
+
+1. **Security class surfaces first**: add a fake `STRIPE_SECRET=` in a ts file; `security` flags secrets; Thinker ranks it at the top with `counts.secrets>0` proof target.&#x20;
+2. **SSR class correctly outranks perf**: add `import data from './x.json' assert {type:'json'}` under `src/**`; `runtime_ssr` sets `import_assertions>0`; Thinker shows a critical, high-blast agenda item above perf.&#x20;
+3. **Build-deps conflict blocks foot-gun**: change a file that a generator writes, then run; `build_dependencies` finds the overlap and logs CRITICAL; Thinker tells you to edit the source/generator instead.&#x20;
+4. **A11y batch play**: remove alt text from two images; Thinker emits a “fix alt + label inputs” item with `missing_alt>0`, easy win.&#x20;
+5. **Perf quick wins queue**: drop a 1.2MB PNG; Thinker shows “convert to WebP/AVIF” with `large_images>0`.&#x20;
+6. **Code quality stabilization**: create one 800-line file; Thinker recommends a cut-point refactor with `long_functions>0`/`large_source_files>0` signals.&#x20;
+
+---
+
+# 11) Example agenda the Thinker will produce
+
+```
+CRITICAL — security (score 7.1)
+Fix: Rotate exposed tokens; replace innerHTML sinks with safe DOM APIs.
+Proof: counts.secrets==0 AND counts.xss_patterns==0.
+Sibling sweep: scan src/** for insertAdjacentHTML/outerHTML.
+
+CRITICAL — build_dependencies (score 6.6)
+Fix: Move generator outputs out of src/; edit .source.json or generator.
+Proof: counts.potential_conflicts==0 and no generated_in_src.
+Sibling sweep: tag compiled files with “DO NOT EDIT”.
+
+WARN — runtime_ssr (score 6.2)
+Fix: Remove JSON import assertions in src/** or adopt adapter intentionally.
+Proof: import_assertions==0 AND build_test=='PASSED'.
+Sibling sweep: grep for `assert { type: 'json' }` / dynamic import().
+
+WARN — performance (score 3.0)
+Fix: Convert 1 large PNG to WebP/AVIF; de-dupe moment+dayjs.
+Proof: large_images==0 and duplicate_deps==0.
+```
+
+(Each item shows **Fix → Proof → Sibling Sweep** and why it’s ranked.)
+
+---
+
+# 12) Guardrails & governance
+
+* **Hunters still gate the build**; the Thinker is advisory only. If `security` or `runtime_ssr` marks CRITICAL, your existing exit codes and `master.json` remain the source of truth.&#x20;
+* **Local & observable**: traces in `var/hunt-events.ndjson`; agenda at `__ai/thinker/master-insights.json`; per-module logs in `__reports/hunt/*.log`.
+* **Deterministic**: add `FAKE_NOW` or set CI clock for stable timestamps when diffing artifacts (optional).
+
+---
+
+## TL;DR
+
+Keep the hunters you’ve built; layer on a small, transparent **Thinker** that reads every module’s JSON, scores by severity/recurrence/blast/effort/unlocks, emits **one prioritized plan** with **proof-invariants**, and remembers what actually flips **critical→pass**. This gives the pack a common brain that optimizes for **class elimination** across SSR, build dependencies, security, a11y, performance, code quality, and repo hygiene—without changing how your gates already work.       &#x20;

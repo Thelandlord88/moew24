@@ -1,0 +1,1 @@
+../../../../scripts/daedalus/core/pipeline.mjs

@@ -1,0 +1,128 @@
+---
+/**
+ * SEO Head Component
+ * Comprehensive meta tags, Open Graph, Twitter Cards, and structured data
+ */
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  publishDate?: Date;
+  updatedDate?: Date;
+  author?: string;
+  tags?: string[];
+  service?: string;
+  suburb?: string;
+}
+
+const { 
+  title, 
+  description, 
+  canonical,
+  ogImage = '/og-default.jpg',
+  ogType = 'website',
+  noindex = false,
+  publishDate,
+  updatedDate,
+  author = 'One N Done Bond Clean',
+  tags = [],
+  service,
+  suburb
+} = Astro.props;
+
+import { geoConfig } from '../../lib/geoCompat.ts';
+
+const config = geoConfig();
+const site = Astro.site || config.site;
+const currentUrl = canonical || new URL(Astro.url.pathname, site).href;
+const ogImageUrl = new URL(ogImage, site).href;
+
+// Geo-aware title enhancement
+let enhancedTitle = title;
+if (service && suburb) {
+  enhancedTitle = `${title} | ${suburb.replace('-', ' ')} ${service.replace('-', ' ')} | ${config.brand}`;
+} else if (suburb) {
+  enhancedTitle = `${title} | ${suburb.replace('-', ' ')} | ${config.brand}`;
+} else if (service) {
+  enhancedTitle = `${title} | ${service.replace('-', ' ')} | ${config.brand}`;
+} else {
+  enhancedTitle = `${title} | ${config.brand}`;
+}
+
+// Geo-aware description enhancement
+let enhancedDescription = description;
+if (service && suburb) {
+  enhancedDescription = `${description} Professional ${service.replace('-', ' ')} services in ${suburb.replace('-', ' ')}. ${config.brand} - trusted local cleaning experts.`;
+} else if (suburb) {
+  enhancedDescription = `${description} Local cleaning services in ${suburb.replace('-', ' ')}. ${config.brand} - your trusted cleaning professionals.`;
+}
+---
+
+<!-- Primary Meta Tags -->
+<title>{enhancedTitle}</title>
+<meta name="title" content={enhancedTitle} />
+<meta name="description" content={enhancedDescription} />
+<meta name="author" content={author} />
+<link rel="canonical" href={currentUrl} />
+
+<!-- Robots -->
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+{!noindex && <meta name="robots" content="index, follow" />}
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={currentUrl} />
+<meta property="og:title" content={enhancedTitle} />
+<meta property="og:description" content={enhancedDescription} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:site_name" content={config.brand} />
+<meta property="og:locale" content="en_AU" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={currentUrl} />
+<meta property="twitter:title" content={enhancedTitle} />
+<meta property="twitter:description" content={enhancedDescription} />
+<meta property="twitter:image" content={ogImageUrl} />
+
+<!-- Article specific meta tags -->
+{ogType === 'article' && (
+  <>
+    {publishDate && <meta property="article:published_time" content={publishDate.toISOString()} />}
+    {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+    {author && <meta property="article:author" content={author} />}
+    {tags.map(tag => <meta property="article:tag" content={tag} />)}
+  </>
+)}
+
+<!-- Geo-specific meta tags -->
+{suburb && (
+  <>
+    <meta name="geo.region" content="AU-QLD" />
+    <meta name="geo.placename" content={suburb.replace('-', ' ')} />
+    <meta name="ICBM" content="geo coordinates will be injected by geo component" />
+  </>
+)}
+
+<!-- Service-specific meta tags -->
+{service && <meta name="service.type" content={service.replace('-', ' ')} />}
+
+<!-- Additional SEO meta tags -->
+<meta name="language" content="en-AU" />
+<meta name="coverage" content="Worldwide" />
+<meta name="distribution" content="Global" />
+<meta name="rating" content="General" />
+
+<!-- Preconnect to external domains -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Theme -->
+<meta name="theme-color" content="#2563eb" />
+<meta name="msapplication-TileColor" content="#2563eb" />
+
+<!-- Sitemap -->
+<link rel="sitemap" href="/sitemap.xml" />

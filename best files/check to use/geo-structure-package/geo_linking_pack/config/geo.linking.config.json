@@ -1,0 +1,9 @@
+{
+  "$schema": "./schemas/geo.linking.config.schema.json",
+  "allowedTiersForPages": ["core", "expansion"],
+  "links": { "primaryMax": 8, "secondaryMax": 6, "minPrimaryPerPage": 3 },
+  "neighbor": { "preferSameCluster": true, "maxCrossCluster": 2 },
+  "anchorTemplatesFile": "config/anchor.templates.json",
+  "report": { "write": true },
+  "fairness": { "minAnchorDiversity": 0.55 }
+}

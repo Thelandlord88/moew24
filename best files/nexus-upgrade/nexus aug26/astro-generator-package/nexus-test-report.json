@@ -1,0 +1,43 @@
+{
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "startTime": "2025-09-27T09:10:56.357Z",
+    "successRate": "100.0%",
+    "completedAt": "2025-09-27T09:10:56.363Z"
+  },
+  "tests": [
+    {
+      "name": "testPropValidation",
+      "passed": true,
+      "details": "Full prop validation and computation working",
+      "timestamp": "2025-09-27T09:10:56.359Z"
+    },
+    {
+      "name": "testDesignTokens",
+      "passed": true,
+      "details": "Design tokens fully functional",
+      "timestamp": "2025-09-27T09:10:56.360Z"
+    },
+    {
+      "name": "testEnhancedPropsGenerator",
+      "passed": true,
+      "details": "Props generator fully functional",
+      "timestamp": "2025-09-27T09:10:56.360Z"
+    },
+    {
+      "name": "testComponentFactory",
+      "passed": true,
+      "details": "Component factory working",
+      "timestamp": "2025-09-27T09:10:56.362Z"
+    },
+    {
+      "name": "testFileStructure",
+      "passed": true,
+      "details": "All required files present",
+      "timestamp": "2025-09-27T09:10:56.362Z"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,1 @@
+../../../../src/pages/api/systems/manifest.json.js

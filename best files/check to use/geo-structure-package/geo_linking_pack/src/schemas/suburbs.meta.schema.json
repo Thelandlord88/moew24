@@ -1,0 +1,27 @@
+{
+  "$id": "suburbs.meta.schema.json",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "nodes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "tier": { "type": "string", "enum": ["core","expansion","support","maritime","remote"] },
+          "policyExempt": { "type": "array", "items": { "type": "string" } },
+          "bridgePriority": { "type": "boolean" }
+        },
+        "required": ["tier"]
+      }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "generated": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+  "required": ["nodes"]
+}

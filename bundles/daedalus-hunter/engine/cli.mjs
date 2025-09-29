@@ -1,0 +1,1 @@
+../../../scripts/daedalus/cli.mjs

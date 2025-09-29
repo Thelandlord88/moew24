@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import { allPosts, filterByRegion, paginate } from "../../../../lib/blog";
+import PostCard from "../../../../components/PostCard.astro";
+import Pagination from "../../../../components/Pagination.astro";
+
+export async function getStaticPaths() {
+  const posts = await allPosts();
+  const counts = new Map<string, number>();
+  for (const p of posts) {
+    if (!p.data.region) continue;
+    counts.set(p.data.region, (counts.get(p.data.region) ?? 0) + 1);
+  }
+  const paths: Array<{ params: { region: string; page: string } }> = [];
+  for (const [r, count] of counts) {
+    const last = Math.max(1, Math.ceil(count / 12));
+    for (let n = 2; n <= last; n++) {
+      paths.push({ params: { region: r, page: String(n) } });
+    }
+  }
+  return paths;
+}
+
+const { region, page } = Astro.params as { region: string; page: string };
+const posts = filterByRegion(await allPosts(), region);
+const pager = paginate(posts, Number(page));
+const base = `/blog/region/${region}/`;
+const canonical = new URL(`${base}${page}/`, Astro.site).toString();
+---
+
+<BaseLayout title={`Region: ${region.toUpperCase()} – Page ${page}`} description={`Articles for ${region}`} canonical={canonical}>
+  <h1 class="text-3xl font-bold mb-6">Region: {region.toUpperCase()}</h1>
+
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {pager.data.map((post) => <PostCard post={post} />)}
+  </div>
+
+  <Pagination basePath={base} page={pager.page} lastPage={pager.lastPage} />
+</BaseLayout>

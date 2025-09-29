@@ -1,0 +1,1 @@
+../../../../scripts/daedalus/plugins/08-optimize-links.mjs

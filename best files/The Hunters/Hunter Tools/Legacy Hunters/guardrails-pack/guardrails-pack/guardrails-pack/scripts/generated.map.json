@@ -1,0 +1,28 @@
+{
+  "rules": [
+    {
+      "output": "src/data/serviceCoverage.json",
+      "inputs": [
+        "src/data/serviceCoverage.source.json",
+        "scripts/expand-coverage.mjs"
+      ],
+      "gen": "node scripts/expand-coverage.mjs --write"
+    },
+    {
+      "output": "src/data/crossServiceMap.json",
+      "inputs": [
+        "src/data/serviceCoverage.source.json",
+        "scripts/build-cross-service-map.mjs"
+      ],
+      "gen": "node scripts/build-cross-service-map.mjs --write"
+    },
+    {
+      "output": "src/data/faqs.compiled.json",
+      "inputs": [
+        "src/faqs",
+        "scripts/build-faqs.mjs"
+      ],
+      "gen": "node scripts/build-faqs.mjs --write"
+    }
+  ]
+}

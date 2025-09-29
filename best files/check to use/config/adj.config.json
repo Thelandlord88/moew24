@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/adj.config.schema.json",
+  "params": {
+  "K_BASE": 9,
+  "MAX_KM": 11,
+  "MAX_KM_EXT": 16,
+  "MIN_DEGREE": 3,
+  "PCT_PRUNE": 97,
+  "MAX_CROSS_CLUSTER_PER_NODE": 2,
+  "LOCALIZE": false
+  },
+  "paths": {
+    "COORDS_PATH": "src/data/suburbs.coords.json",
+    "AREAS_PATH": "src/data/areas.clusters.json",
+    "LGAS_PATH": "src/data/lgas.groups.json",
+    "OUT_PATH": "src/data/adjacency.json",
+    "REPORT_PATH": "__reports/adjacency.build.json",
+    "HISTORY_PATH": "__history/adjacency-history.json"
+  },
+  "policy": {
+    "degrees": { "meanMin": 4, "meanMax": 8, "minFloor": 2 },
+    "components": { "max": 5, "largestRatioMin": 0.85 },
+    "crossCluster": { "maxRatioWarn": 0.08, "maxRatioError": 0.12 }
+  }
+}

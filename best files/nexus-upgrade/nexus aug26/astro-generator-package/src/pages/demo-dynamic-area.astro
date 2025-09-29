@@ -1,0 +1,171 @@
+---
+// src/pages/demo-dynamic-area.astro
+// Demo page to show dynamic area generation
+import { astroPropsGenerator } from '~/lib/astroPropsGenerator.js';
+
+// Generate props for a sample area (Brisbane/Ipswich)
+const sampleAreaProps = {
+    title: "Dynamic Area Demo - Ipswich | Company Name",
+    metaDescription: "Demo of dynamically generated area page for Ipswich in Brisbane region.",
+    suburb: {
+        name: "Ipswich",
+        slug: "ipswich",
+        lat: -27.622857,
+        lng: 152.76033,
+        postcode: "4305"
+    },
+    cluster: {
+        name: "Brisbane",
+        slug: "brisbane"
+    },
+    services: ["bond-cleaning", "spring-cleaning", "bathroom-deep-clean"]
+};
+
+const { title, metaDescription, suburb, cluster, services } = sampleAreaProps;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={metaDescription}>
+    
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header { 
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white; 
+            padding: 2rem; 
+            border-radius: 10px; 
+            margin-bottom: 2rem;
+        }
+        .services-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 1.5rem; 
+            margin: 2rem 0;
+        }
+        .service-card { 
+            background: #f8f9fa; 
+            padding: 1.5rem; 
+            border-radius: 8px; 
+            border-left: 4px solid #28a745;
+            transition: transform 0.2s;
+        }
+        .service-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .service-card a { 
+            text-decoration: none; 
+            color: #495057;
+        }
+        .cluster-info { 
+            background: #e3f2fd; 
+            padding: 1.5rem; 
+            border-radius: 8px; 
+            margin: 1rem 0;
+        }
+        .demo-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Badge -->
+    <div class="demo-badge">🚀 DYNAMIC GENERATION DEMO</div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <h1>{title}</h1>
+        <p>{metaDescription}</p>
+        <div style="margin-top: 1rem; opacity: 0.9;">
+            📍 {suburb.name} • {cluster.name} Area • {suburb.postcode}
+        </div>
+    </header>
+
+    <!-- Cluster Information -->
+    <div class="cluster-info">
+        <h2>🗺️ About {cluster.name}</h2>
+        <p><strong>{suburb.name}</strong> is part of our <strong>{cluster.name}</strong> service area. 
+           We provide comprehensive cleaning services throughout this region with local expertise and understanding.</p>
+        <p><strong>Area Coverage:</strong> {cluster.slug} region</p>
+        <p><strong>Coordinates:</strong> {suburb.lat}, {suburb.lng}</p>
+    </div>
+
+    <!-- Services Grid -->
+    <h2>🛠️ Available Services in {suburb.name}</h2>
+    <div class="services-grid">
+        {services.map(service => (
+            <div class="service-card">
+                <a href={`/services/${service}/${suburb.slug}/`}>
+                    <h3>{service.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</h3>
+                    <p>Professional {service.replace('-', ' ')} services in {suburb.name}. 
+                       Click to view detailed information, pricing, and availability.</p>
+                    <div style="margin-top: 1rem; font-weight: bold; color: #28a745;">
+                        View {service.replace(/-/g, ' ')} details →
+                    </div>
+                </a>
+            </div>
+        ))}
+    </div>
+
+    <!-- Technical Demo Info -->
+    <div style="margin-top: 3rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+        <h3>🔧 Area Page Demo - Technical Details</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <div>
+                <strong>Dynamic Generation:</strong><br>
+                • Route Pattern: /areas/{cluster.slug}/{suburb.slug}/<br>
+                • Current: /areas/{cluster.slug}/{suburb.slug}/<br>
+                • Data Source: astroPropsGenerator
+            </div>
+            <div>
+                <strong>Geographic Context:</strong><br>
+                • Coordinates: {suburb.lat}, {suburb.lng}<br>
+                • Postcode: {suburb.postcode}<br>
+                • Service Area: {cluster.name}
+            </div>
+            <div>
+                <strong>Service Integration:</strong><br>
+                • Available Services: {services.length}<br>
+                • Auto-linked Pages: {services.length}<br>
+                • Cross-navigation: ✅ Dynamic
+            </div>
+        </div>
+    </div>
+
+    <!-- What This Demonstrates -->
+    <div style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px;">
+        <h3>💡 What This Demo Shows</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div>
+                <strong>🎯 Dynamic Content:</strong><br>
+                All text, links, and metadata are generated automatically from templates using suburb and service data.
+            </div>
+            <div>
+                <strong>🗺️ Geographic Intelligence:</strong><br>
+                Coordinates, postcodes, and regional context are pulled from your data files automatically.
+            </div>
+            <div>
+                <strong>🔗 Automated Navigation:</strong><br>
+                Cross-links between services and suburbs are generated based on your adjacency data.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

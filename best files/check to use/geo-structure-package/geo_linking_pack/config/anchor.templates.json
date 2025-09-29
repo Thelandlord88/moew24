@@ -1,0 +1,9 @@
+[
+  { "id": "nearby-1", "intent": "nearby", "text": "Cleaning in {suburb} — book today" },
+  { "id": "nearby-2", "intent": "nearby", "text": "End of lease cleaning for {suburb} homes" },
+  { "id": "nearby-3", "intent": "nearby", "text": "Bond clean specialists in {suburb}" },
+  { "id": "cluster-1", "intent": "cluster", "text": "Trusted cleaners around {cluster} — {suburb}" },
+  { "id": "cluster-2", "intent": "cluster", "text": "Local to {cluster}: premium cleaning in {suburb}" },
+  { "id": "cta-1", "intent": "cta", "text": "Get a fast quote for {suburb}" },
+  { "id": "cta-2", "intent": "cta", "text": "Book your {suburb} clean now" }
+]

@@ -1,0 +1,1 @@
+../../../../scripts/personalities/test-suite.mjs

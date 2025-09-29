@@ -1,0 +1,1 @@
+../../../../scripts/daedalus/plugins/07-auto-fix-graph.mjs

@@ -1,0 +1,402 @@
+
+[1m== Environment ==[0m
+[32m✓ pwd: /workspaces/moew24[0m
+[32m✓ rg: ripgrep 14.1.0[0m
+[32m✓ node: v22.17.0[0m
+[32m✓ tsc: Version 5.9.2 (via npx)[0m
+
+[1m== Self-Test Canary ==[0m
+[32m✓ detectors caught canary filenames[0m
+  • __tmp/rg-canary.242315/file with spaces.js
+  • __tmp/rg-canary.242315/hash#name.ts
+  • __tmp/rg-canary.242315/weird–dash.md
+
+[1m== Filename Hygiene ==[0m
+[33m⚠ problematic filenames: 24 (showing up to 50)[0m
+  • ./Hunt sh silly/FAQ HUNT.txt
+  • ./Hunt sh silly/background terminal.txt
+  • ./Hunt sh silly/copoilt learning.txt
+  • ./Hunt sh silly/css script suggestion.txt
+  • ./Hunt sh silly/hunter build files troubleshooting/css repo hunter/root-causes (1).md
+  • ./Hunt sh silly/hunters question and curiousness.txt
+  • ./Hunt sh silly/hunters/Hunters 7.txt
+  • ./Hunt sh silly/hunters/New folder/extra hunters.txt
+  • ./Hunt sh silly/hunters/New folder/seo gpt.txt
+  • ./Hunt sh silly/hunters/crawling/seo_crawlability (1).sh
+  • ./Hunt sh silly/hunters/hunter 7 .txt
+  • ./Hunt sh silly/hunters/hunter 7.1
+  • ./Hunt sh silly/hunters/hunters 7.1
+  • ./Hunt sh silly/hunters/july22 hunter convo.txt
+  • ./Hunt sh silly/self-test .txt
+  • ./Hunt sh silly/upstream coach.txt
+  • ./Hunt sh silly/upstream thoughts and issues.txt
+  • ./geo setup package/Startup/bulk ui.txt
+  • ./geo setup package/Startup/conversation history.txt
+  • ./geo setup package/Startup/deploy-geo-system (1).sh
+  • ./geo setup package/Startup/geo scaffold ui.txt
+  • ./geo setup package/Startup/geo scaffolding ui2gp.txt
+  • ./personalities/level2Deadalus/conversation summary data dump.txt
+  • ./very good maybe dodgy.txt
+
+[1m== JSON Validation ==[0m
+  JSON_SUMMARY: errors=0
+[32m✓ json parse: ok[0m
+
+[1m== JSON Comments (forbidden except tsconfig*) ==[0m
+[33m⚠ json comment-like lines: 35 (sample below)[0m
+  • hunter.personality.json:26:        "__reports/daedalus/*",
+  • hunter.personality.json:132:      "Reports present in __reports/daedalus/*",
+  • personalities/level2Deadalus/hunter.learning.personality.v1_0_1.json:26:        "__reports/daedalus/*",
+  • personalities/level2Deadalus/hunter.learning.personality.v1_0_1.json:106:      "Reports present in __reports/daedalus/*",
+  • reports/audit/protective-complexity.json:25:          "match": "grep -Ei 'adapter|SSR|prerender|middleware|astro' -n .debug-exit1/run-*/command.log 2>/dev/null || true"
+  • reports/audit/protective-complexity.json:150:          "match": "grep -Ei 'adapter|SSR|prerender|middleware|astro' -n .debug-exit1/run-*/command.log 2>/dev/null || true"
+  • reports/audit/protective-complexity.json:205:          "match": "deletions: [\"public/_redirects (non-evidenced lines)\", \"scripts/*alias*.mjs\"],"
+  • reports/audit/protective-complexity.json:669:          "scripts/*alias*.mjs"
+  • personalities/level2Deadalus/daedalus.learning.personality.v1_0_1.json:159:    "ledger": "__reports/daedalus/*",
+  • personalities/level2Deadalus/daedalus.learning.personality.v1_0_1.json:203:      "Reports present in __reports/daedalus/*",
+  • daedalus.personality.json:192:    "ledger": "__reports/daedalus/*",
+  • daedalus.personality.json:236:      "Reports present in __reports/daedalus/*",
+  • personalities/level2Deadalus/personality_overlay_plus/profiles/hunter.json:26:        "__reports/daedalus/*",
+  • personalities/level2Deadalus/personality_overlay_plus/profiles/hunter.json:106:      "Reports present in __reports/daedalus/*",
+  • personalities/level2Deadalus/personality_overlay_plus/profiles/daedalus.json:159:    "ledger": "__reports/daedalus/*",
+  • personalities/level2Deadalus/personality_overlay_plus/profiles/daedalus.json:203:      "Reports present in __reports/daedalus/*",
+  • personalities/hunter.learning.personality.v1_0_1.json:26:        "__reports/daedalus/*",
+  • personalities/hunter.learning.personality.v1_0_1.json:106:      "Reports present in __reports/daedalus/*",
+  • personalities/daedalus_personalities_pack/profiles/hunter.json:26:        "__reports/daedalus/*",
+  • personalities/daedalus_personalities_pack/profiles/hunter.json:106:      "Reports present in __reports/daedalus/*",
+  • personalities/daedalus_personalities_pack/profiles/daedalus.json:159:    "ledger": "__reports/daedalus/*",
+  • personalities/daedalus_personalities_pack/profiles/daedalus.json:203:      "Reports present in __reports/daedalus/*",
+  • personalities/daedalus.learning.personality.v1_0_1.json:159:    "ledger": "__reports/daedalus/*",
+  • personalities/daedalus.learning.personality.v1_0_1.json:203:      "Reports present in __reports/daedalus/*",
+  • __ai/visibility-flags.json:34:    "routeGlob": "^/services/(spring-clean|bathroom-deep-clean)/.*/$",
+  • Hunt sh silly/css-audit.config.json:2:  "srcGlobs": ["src/**/*.{astro,html,js,jsx,ts,tsx,mjs,mdx}"],
+  • Hunt sh silly/css-audit.config.json:3:  "cssGlobs": ["src/**/*.css"],
+  • Hunt sh silly/hunters/hunter-pack/__ai/thinker/master-insights.json:10:        "Remove JSON import assertions in src/** and switch to static data imports or build-time generation",
+  • Hunt sh silly/hunters/hunter-pack/__ai/thinker/master-insights.json:11:        "Remove dynamic JSON import() under src/** or adopt an adapter and output:'server' intentionally",
+  • daedalus.personality.backup.json:159:    "ledger": "__reports/daedalus/*",
+  • daedalus.personality.backup.json:203:      "Reports present in __reports/daedalus/*",
+  • profiles/hunter.json:26:        "__reports/daedalus/*",
+  • profiles/hunter.json:106:      "Reports present in __reports/daedalus/*",
+  • profiles/daedalus.json:159:    "ledger": "__reports/daedalus/*",
+  • profiles/daedalus.json:203:      "Reports present in __reports/daedalus/*",
+
+[1m== EISDIR / Glob Suspects ==[0m
+[33m⚠ possible dir/glob passed to readFile*: 40 (sample up to 50)[0m
+  • scripts/transparent-suite.mjs:67:async function readJson(p) { try { return JSON.parse(await fsp.readFile(p, 'utf8')); } catch { return null; } }
+  • scripts/transparent-suite.mjs:217:      const html = await fsp.readFile(p, 'utf8');
+  • scripts/transparent-suite.mjs:232:    const raw = await fsp.readFile(p, 'utf8');
+  • scripts/geo/doctor.mjs:4:function load(p){ if (!fs.existsSync(p)) throw new Error(`Missing data: ${p}`); return JSON.parse(fs.readFileSync(p,'utf8')); }
+  • flexible_repo_doctor_common_ground_scanner_fixer_scripts_flexible_repo_doctor.js:41:const read = (p) => fs.readFileSync(p, 'utf8');
+  • scripts/visibility/panic.mjs:4:const cfg=JSON.parse(fs.readFileSync(p,'utf8'));
+  • scripts/visibility/run-all.mjs:15:const read=(p)=>fs.readFileSync(p,'utf8');
+  • scripts/visibility/geo-doctor.mjs:5:const readJSON=(p)=>{if(!fs.existsSync(p)) die(`Missing ${p}`); return JSON.parse(fs.readFileSync(p,'utf8'));};
+  • scripts/visibility/internal-404-report.mjs:6:for (const f of walk('dist')){ const html=fs.readFileSync(f,'utf8'); const doc=new Window().document; doc.body.innerHTML=html; for (const a of doc.querySelectorAll('a[href]')) {const href=a.getAttribute('href')||''; if(/^\/[a-z0-9/_-]*$/i.test(href)) links.add(href);} }
+  • one_n_done_geo_suite.js:72:async function tryReadJSON(p) { try { return JSON.parse(await fsp.readFile(p, 'utf8')); } catch { return null; } }
+  • one_n_done_geo_suite.js:265:      const html = await fsp.readFile(p, 'utf8');
+  • scripts/invariants/sitemap-check.mjs:11:  const html=fs.readFileSync(f,'utf8'); const win=new Window(); const doc=win.document; doc.body.innerHTML=html;
+  • scripts/invariants/similarity-check.mjs:7:function textOf(f){ const html=fs.readFileSync(f,'utf8'); const win=new Window(); const doc=win.document; doc.body.innerHTML=html;
+  • scripts/guards/anchors.mjs:14:  const html = fs.readFileSync(p,'utf8');
+  • scripts/guards/no-hidden-keywords.mjs:10:  const html = fs.readFileSync(p,'utf8');
+  • scripts/daedalus/tools/policy-sweeper.mjs:46:async function loadJSON(p){ return JSON.parse(await readFile(p, 'utf8')); }
+  • scripts/seed-smoke-from-coverage.mjs:19:async function readJson(p){ try { return JSON.parse(await fsp.readFile(p,'utf8')); } catch { return null; } }
+  • scripts/seo/report.mjs:26:  const html = fs.readFileSync(p, 'utf8');
+  • scripts/seo/seo-report.mjs:7:  const html=fs.readFileSync(f,'utf8'); const doc=new Window().document; doc.body.innerHTML=html;
+  • personalities/level2Deadalus/policy_sweeper_overlay_v2/scripts/daedalus/tools/policy-sweeper.mjs:33:async function loadJSON(p){ return JSON.parse(await readFile(p, 'utf8')); }
+  • personalities/level2Deadalus/policy_sweeper_overlay/scripts/daedalus/tools/policy-sweeper.mjs:46:async function loadJSON(p){ return JSON.parse(await readFile(p, 'utf8')); }
+  • transparent_suite_v_2.js:67:async function readJson(p) { try { return JSON.parse(await fsp.readFile(p, 'utf8')); } catch { return null; } }
+  • transparent_suite_v_2.js:217:      const html = await fsp.readFile(p, 'utf8');
+  • transparent_suite_v_2.js:232:    const raw = await fsp.readFile(p, 'utf8');
+  • transparent_suite.js:66:async function readJson(p) { try { return JSON.parse(await fsp.readFile(p, 'utf8')); } catch { return null; } }
+  • transparent_suite.js:216:      const html = await fsp.readFile(p, 'utf8');
+  • phases/phase0/one_n_done_geo_suite.js:72:async function tryReadJSON(p) { try { return JSON.parse(await fsp.readFile(p, 'utf8')); } catch { return null; } }
+  • phases/phase0/one_n_done_geo_suite.js:265:      const html = await fsp.readFile(p, 'utf8');
+  • phases/phase0/transparent_suite_v_2.js:67:async function readJson(p) { try { return JSON.parse(await fsp.readFile(p, 'utf8')); } catch { return null; } }
+  • phases/phase0/transparent_suite_v_2.js:217:      const html = await fsp.readFile(p, 'utf8');
+  • phases/phase0/transparent_suite_v_2.js:232:    const raw = await fsp.readFile(p, 'utf8');
+  • Hunt sh silly/scripts_css_audit.js:115:  try { return JSON.parse(fs.readFileSync(p, 'utf8')); }
+  • phases/phase0/transparent_suite.js:66:async function readJson(p) { try { return JSON.parse(await fsp.readFile(p, 'utf8')); } catch { return null; } }
+  • phases/phase0/transparent_suite.js:216:      const html = await fsp.readFile(p, 'utf8');
+  • Hunt sh silly/hunters/guardrails-pack/guardrails-pack/guardrails-pack/scripts/check-generated.mjs:27:    const raw = fs.readFileSync(p, "utf8");
+  • Hunt sh silly/hunters/guardrails-pack/guardrails-pack/guardrails-pack/scripts/run-generators.mjs:22:    const raw = fs.readFileSync(p, "utf8");
+  • Hunt sh silly/hunters/geo_sot_toolkit/scripts/geo/gate.ts:10:function readJson(p: string) { return JSON.parse(readFileSync(p, "utf8")); }
+  • geo setup package/Startup/geo-mindmap/geo-docs-and-scripts/scripts/data/adjacency-from-csv.mjs:12:const readJSON = async (p) => JSON.parse(await fs.readFile(p, "utf8"));
+  • geo setup package/Startup/geo-mindmap/geo-docs-and-scripts/scripts/data/validate-adj.mjs:7:const readJSON = async (p) => JSON.parse(await fs.readFile(p, "utf8"));
+  • geo setup package/Startup/geo-mindmap/geo-docs-and-scripts/scripts/data/geojson-to-clusters.mjs:13:  try { return JSON.parse(await fs.readFile(p, "utf8")); } catch { return null; }
+
+[1m== ESM/CJS Mismatches ==[0m
+[33m⚠ esm/cjs mixed patterns: 3 (sample up to 50)[0m
+  • phases/phase0/daedalus_level1/scripts/daedalus/core/context.mjs:11:  return JSON.parse(require('node:fs').readFileSync(pathStr, 'utf8'));
+  • ai-enterprise-deployment.mjs:187:  "geo:monitor": "node -e \"console.log(JSON.stringify(JSON.parse(require('fs').readFileSync('dist/monitoring-dashboard.json')), null, 2))\"",
+  • geo setup package/daedalus_level1/scripts/daedalus/core/context.mjs:11:  return JSON.parse(require('node:fs').readFileSync(pathStr, 'utf8'));
+
+[1m== npm Script Hazards (! in scripts) ==[0m
+[32m✓ no risky '!' found in npm scripts[0m
+
+[1m== TODO / FIXME / HACK ==[0m
+[33m⚠ found TODO/FIXME/HACK: 99 (sample up to 50)[0m
+  • scripts/audit-protective-complexity.mjs:5: *   multi-config sprawl, TODO/HACK landmines, legacy closet leaks, and feature flags.
+  • scripts/audit-protective-complexity.mjs:119:    description: "TODO/FIXME/TEMP/HACK/WORKAROUND/HOTFIX/DEBT markers",
+  • scripts/audit-protective-complexity.mjs:120:    rg: ["(TODO|FIXME|TEMP|HACK|WORKAROUND|HOTFIX|DEBT)", "--glob", "!dist", "--glob", "!node_modules"],
+  • scripts/audit-protective-complexity.mjs:121:    fallback: { regex: /(TODO|FIXME|TEMP|HACK|WORKAROUND|HOTFIX|DEBT)/ },
+  • bootstrap.sh:960:# ========== 19) README + OWNER TODO ==========
+  • ACTION_ITEMS.md:49:- [ ] Review TODO markers in bootstrap.sh:960
+  • reports/audit/protective-complexity.json:443:      "description": "TODO/FIXME/TEMP/HACK/WORKAROUND/HOTFIX/DEBT markers",
+  • reports/audit/protective-complexity.json:449:          "match": "# ========== 19) README + OWNER TODO =========="
+  • reports/audit/protective-complexity.json:454:          "match": "*   multi-config sprawl, TODO/HACK landmines, legacy closet leaks, and feature flags."
+  • reports/audit/protective-complexity.json:459:          "match": "description: \"TODO/FIXME/TEMP/HACK/WORKAROUND/HOTFIX/DEBT markers\","
+  • reports/audit/protective-complexity.json:464:          "match": "rg: [\"(TODO|FIXME|TEMP|HACK|WORKAROUND|HOTFIX|DEBT)\", \"--glob\", \"!dist\", \"--glob\", \"!node_modules\"],"
+  • reports/audit/protective-complexity.json:469:          "match": "fallback: { regex: /(TODO|FIXME|TEMP|HACK|WORKAROUND|HOTFIX|DEBT)/ },"
+  • ACHIEVEMENT_DEBRIEF.md:207:- Review TODO markers in bootstrap.sh
+  • Hunt sh silly/rg-hunt.sh:279:# 7) TODO / FIXME / HACK sweep (non-fatal)
+  • Hunt sh silly/rg-hunt.sh:281:section "TODO / FIXME / HACK"
+  • Hunt sh silly/rg-hunt.sh:282:TODO_MATCHES=$(rg -n --pcre2 "\b(TODO|FIXME|HACK)\b" "${RG_EXCL[@]}" || true)
+  • Hunt sh silly/rg-hunt.sh:285:  warn "found TODO/FIXME/HACK: $CNT_TODO (sample up to $MAX_RESULTS)"
+  • Hunt sh silly/rg-hunt.sh:288:  okay "no TODO/FIXME/HACK markers spotted"
+  • Hunt sh silly/rg-hunt.sh:411:printf "${BOLD}TODO/FIXME/HACK:${RST} %d\n" "$CNT_TODO"
+  • Hunt sh silly/hunter build files troubleshooting/css repo hunter/root-causes.md:28:- TODO debt threshold management with CI enforcement
+  • Hunt sh silly/hunter build files troubleshooting/css repo hunter/README-upstream-session.md:90:2. Establish TODO debt cleanup rotation
+  • Hunt sh silly/hunter build files troubleshooting/css repo hunter/root-causes (1).md:28:- TODO debt threshold management with CI enforcement
+  • Hunt sh silly/hunter build files troubleshooting/css repo hunter/file-transformation-tree.md:27:│   │   └─ Rules: TODO debt, unsafe patterns, type safety
+  • Hunt sh silly/hunter build files troubleshooting/css repo hunter/file-transformation-tree.md:258:  - TODO debt assessment and cleanup
+  • Hunt sh silly/hunter build files troubleshooting/css repo hunter/file-transformation-tree.md:281:□ Establish TODO debt cleanup rotation schedule
+  • Hunt sh silly/hunter build files troubleshooting/hunt.sh.monolithic-backup:279:# 7) TODO / FIXME / HACK sweep (non-fatal)
+  • Hunt sh silly/hunter build files troubleshooting/hunt.sh.monolithic-backup:281:section "TODO / FIXME / HACK"
+  • Hunt sh silly/hunter build files troubleshooting/hunt.sh.monolithic-backup:282:TODO_MATCHES=$(rg -n --pcre2 "\b(TODO|FIXME|HACK)\b" "${RG_EXCL[@]}" || true)
+  • Hunt sh silly/hunter build files troubleshooting/hunt.sh.monolithic-backup:285:  warn "found TODO/FIXME/HACK: $CNT_TODO (sample up to $MAX_RESULTS)"
+  • Hunt sh silly/hunter build files troubleshooting/hunt.sh.monolithic-backup:288:  okay "no TODO/FIXME/HACK markers spotted"
+  • Hunt sh silly/hunter build files troubleshooting/hunt.sh.monolithic-backup:411:printf "${BOLD}TODO/FIXME/HACK:${RST} %d\n" "$CNT_TODO"
+  • Hunt sh silly/faq-hunt-serious.txt:5:Your script sets the baseline: environment capture, JSON sweeps, comment-in-JSON tripwires, EISDIR filename hygiene, ESM/CJS mismatch scans, npm “bang” hazards, TODO/FIXME scans, and optional `tsc --noEmit`—all logged into `__reports/rg-hunt.<stamp>.log`. That’s a clean, deterministic **triage pass** you can keep as the top slice.&#x20;
+  • Hunt sh silly/self-test .txt:343:    "acceptedAnswer": { "@type": "Answer", "text": "TODO: Write 120–180 words that resolve the query. Include exactly one internal link and a one-sentence CTA." }
+  • Hunt sh silly/self-test .txt:347:`A: TODO\n`;
+  • Hunt sh silly/hunters/crawling/upstream-curious-learning-guide.md:414:git log --oneline --grep="TODO\|FIXME\|HACK" | head -20
+  • Hunt sh silly/hunters/crawling/upstream-curious-learning-guide.md:419:find src/ -name "*.ts" -exec grep -l "TODO" {} \; | wc -l
+  • Hunt sh silly/hunters/crawling/upstream-curious-learning-guide.md:448:  todoComments: /TODO|FIXME|HACK/gi,
+  • Hunt sh silly/FAQ HUNT.txt:9:* **Solid repo triage:** JSON parsing sweep, ESM/CJS mismatch checks, TODO markers, optional `tsc --noEmit`, and EISDIR trip-wires. Clean output to `__reports/rg-hunt.<stamp>.log`. (We’ll keep this as the “crime scene sweep”.)&#x20;
+  • Hunt sh silly/hunters/crawling/hunter-action-plan-missing-hunters.md:273:echo "Scanning for TODO/FIXME markers..."
+  • Hunt sh silly/hunters/crawling/hunter-action-plan-missing-hunters.md:274:TODO_COUNT=$(grep -r "TODO\|FIXME\|XXX\|HACK" src/ --include="*.ts" --include="*.js" --include="*.astro" | wc -l)
+  • Hunt sh silly/hunters/crawling/hunter-action-plan-missing-hunters.md:277:    echo "⚠️ Found $TODO_COUNT TODO/FIXME marker(s)"
+  • Hunt sh silly/hunters/crawling/hunter-action-plan-missing-hunters.md:278:    grep -r "TODO\|FIXME\|XXX\|HACK" src/ --include="*.ts" --include="*.js" --include="*.astro" | head -5
+  • Hunt sh silly/hunters/crawling/hunter-action-plan-missing-hunters.md:287:    echo "• Address TODO items or convert to GitHub issues"
+  • Hunt sh silly/hunters/rg-hunt.sh:279:# 7) TODO / FIXME / HACK sweep (non-fatal)
+  • Hunt sh silly/hunters/rg-hunt.sh:281:section "TODO / FIXME / HACK"
+  • Hunt sh silly/hunters/rg-hunt.sh:282:TODO_MATCHES=$(rg -n --pcre2 "\b(TODO|FIXME|HACK)\b" "${RG_EXCL[@]}" || true)
+  • Hunt sh silly/hunters/rg-hunt.sh:285:  warn "found TODO/FIXME/HACK: $CNT_TODO (sample up to $MAX_RESULTS)"
+  • Hunt sh silly/hunters/rg-hunt.sh:288:  okay "no TODO/FIXME/HACK markers spotted"
+  • Hunt sh silly/hunters/rg-hunt.sh:411:printf "${BOLD}TODO/FIXME/HACK:${RST} %d\n" "$CNT_TODO"
+  • Hunt sh silly/hunters/july22 hunter convo.txt:3:GitHub Copilot: I'll gather repository state and differences between the current branch and main, plus scan for TODO/FIXME markers to identify pending work. 
+
+[1m== Astro SSR Patterns & Deep Triggers ==[0m
+[33m⚠ potential SSR triggers found: 76 (NoAdapterInstalled debugging)[0m
+  • Hunt sh silly/background terminal.txt:122:// import netlify from '@astrojs/netlify';
+  • Hunt sh silly/hunter build files troubleshooting/HUNTER_ASTRO_ENHANCEMENT.md:139:  -e '@astrojs/netlify|@astrojs/vercel|@astrojs/node|@astrojs/cloudflare'
+  • Hunt sh silly/hunters question and curiousness.txt:181:  * If SSR is intended: install adapter (`@astrojs/netlify` or `@astrojs/vercel`), add to `astro.config.mjs`, and commit minimal config.
+  • astro-adapter-fix.sh:31:target_adapter="@astrojs/netlify"
+  • astro-adapter-fix.sh:32:adapter_import="import netlify from '@astrojs/netlify';"
+  • astro-adapter-fix.sh:36:if ! jq -re '.devDependencies["@astrojs/netlify"] // .dependencies["@astrojs/netlify"]' package.json >/dev/null 2>&1; then
+  • astro-adapter-fix.sh:51:import netlify from '@astrojs/netlify';
+  • astro-adapter-fix.sh:62:  if ! grep -q "@astrojs/netlify" "$cfg"; then
+  • package.json:61:    "@astrojs/netlify": "^6.5.10",
+  • package-lock.json:14:        "@astrojs/netlify": "^6.5.10",
+  • package-lock.json:96:    "node_modules/@astrojs/netlify": {
+  • package-lock.json:98:      "resolved": "https://registry.npmjs.org/@astrojs/netlify/-/netlify-6.5.10.tgz",
+  • package-lock.json:116:    "node_modules/@astrojs/netlify/node_modules/fsevents": {
+  • package-lock.json:130:    "node_modules/@astrojs/netlify/node_modules/vite": {
+  • Hunt sh silly/hunters/july22 hunter convo.txt:4214:Thelandlord88: 07:31:18 [@astrojs/netlify] Enabling sessions with Netlify Blobs
+  • Hunt sh silly/hunters/july22 hunter convo.txt:4252:Ran terminal command: NODE_ENV=development DEBUG=@astrojs/netlify npx astro dev --port 4322 --host 0.0.0.0 2>&1 | head -30
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8217:Ran terminal command: echo "=== 20. INSTALLING NETLIFY ADAPTER ===" && npm install @astrojs/netlify
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8229:Thelandlord88: hybrid doesnt work with the new astro. I dont know if @astrojs/netlify does ether.
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8275:Let me try removing the import of `@astrojs/netlify` from the config in case it's still being detected: 
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8279:Found it! The `@astrojs/netlify` import is still there even though we commented out the adapter. Let me remove that import: 
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8419:Found it! The `@astrojs/netlify` package is still installed even though we commented out the import. Astro might be detecting the installed adapter package and expecting it to be used! 
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8421:Ran terminal command: echo "🎯 FOUND THE REAL CULPRIT!" && echo "========================" && echo && echo "@astrojs/netlify package is still INSTALLED" && echo "Even though we commented out the import, Astro might detect the package" && echo && echo "Let's test by temporarily uninstalling it:"
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8423:Ran terminal command: echo "=== TEMPORARILY UNINSTALLING NETLIFY ADAPTER ===" && npm uninstall @astrojs/netlify && echo "✅ Adapter uninstalled" && echo "Testing build..."
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8429:Ran terminal command: echo "Reinstalling Netlify adapter..." && npm install @astrojs/netlify@^6.5.10 && echo "✅ Reinstalled"
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8744:Ran terminal command: echo "=== MANUAL DEEP SSR TRIGGER HUNT ===" && echo "1. Checking for adapter imports..." && rg -n '@astrojs/netlify|@astrojs/vercel|@astrojs/node|@astrojs/cloudflare' . | head -5
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8778:Ran terminal command: echo "Let me run specific deep SSR patterns manually first..." && echo && echo "1. Checking for adapter imports (even commented)..." && rg '@astrojs/netlify|@astrojs/vercel|@astrojs/node|@astrojs/cloudflare' . --exclude-dir=node_modules | head -5
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8780:Ran terminal command: echo "1. Checking for adapter imports..." && rg '@astrojs/netlify|@astrojs/vercel|@astrojs/node|@astrojs/cloudflare' . -g '!node_modules' | head -5
+  • Hunt sh silly/hunters/july22 hunter convo.txt:8823:   - Check if `@astrojs/netlify` being installed triggers detection
+  • Hunt sh silly/hunters/july22 hunter convo.txt:9072:Ran terminal command: echo "🚨 FOUND SMOKING GUN!" && echo "===================" && echo && echo "The build.log shows:" && echo "• [@astrojs/netlify] Generated SSR Function" && echo "• [build] Server built in 4.18s" && echo && echo "This suggests a PREVIOUS BUILD used SSR!" && echo "Let's check when this log was created..." && ls -la build.log
+  • Hunt sh silly/hunters/july22 hunter convo.txt:9092:- `[@astrojs/netlify] Generated SSR Function`
+  • scripts/astro-adapter-fix.sh:31:target_adapter="@astrojs/netlify"
+  • scripts/astro-adapter-fix.sh:32:adapter_import="import netlify from '@astrojs/netlify';"
+  • scripts/astro-adapter-fix.sh:36:if ! jq -re '.devDependencies["@astrojs/netlify"] // .dependencies["@astrojs/netlify"]' package.json >/dev/null 2>&1; then
+  • scripts/astro-adapter-fix.sh:51:import netlify from '@astrojs/netlify';
+  • scripts/astro-adapter-fix.sh:62:  if ! grep -q "@astrojs/netlify" "$cfg"; then
+  • astro.config.ts:1:import netlify from '@astrojs/netlify';
+  • Hunt sh silly/rg-hunt.sh:306:  { rg -n "USE_SSR|ENABLE_SSR|SSR_MODE|NETLIFY.*=.*1|VERCEL.*=.*1" "${RG_EXCL[@]}" || true; } ;\
+  • Hunt sh silly/hunter build files troubleshooting/HUNTER_ASTRO_ENHANCEMENT.md:143:  -e 'USE_SSR|ENABLE_SSR|SSR_MODE|NETLIFY.*=.*1|VERCEL.*=.*1'
+  • Hunt sh silly/hunter build files troubleshooting/HUNTER_ASTRO_ENHANCEMENT.md:158:### **Critical Discovery: USE_NETLIFY=1**
+  • Hunt sh silly/hunter build files troubleshooting/HUNTER_ASTRO_ENHANCEMENT.md:160:🎯 **PRIME SUSPECT IDENTIFIED**: The hunter found `USE_NETLIFY=1` environment variable in:
+  • Hunt sh silly/hunter build files troubleshooting/HUNTER_ASTRO_ENHANCEMENT.md:164:   "build": "npm run build:faqs && USE_NETLIFY=1 astro build && ..."
+  • Hunt sh silly/hunter build files troubleshooting/HUNTER_ASTRO_ENHANCEMENT.md:167:2. **Documentation references**: README.md mentions Netlify adapter when `USE_NETLIFY=1`
+  • Hunt sh silly/hunter build files troubleshooting/HUNTER_ASTRO_ENHANCEMENT.md:174:- `USE_NETLIFY=1` may signal Astro to expect Netlify adapter
+  • Hunt sh silly/hunter build files troubleshooting/HUNTER_ASTRO_ENHANCEMENT.md:232:**Primary Target**: `USE_NETLIFY=1` environment variable
+  • Hunt sh silly/hunter build files troubleshooting/HUNTER_ASTRO_ENHANCEMENT.md:244:*Hunter enhanced for deep SSR trigger detection. Prime suspect identified: USE_NETLIFY=1 environment variable.*
+  • Hunt sh silly/hunter build files troubleshooting/hunt.sh.monolithic-backup:306:  { rg -n "USE_SSR|ENABLE_SSR|SSR_MODE|NETLIFY.*=.*1|VERCEL.*=.*1" "${RG_EXCL[@]}" || true; } ;\
+  • Hunt sh silly/hunters/rg-hunt.sh:306:  { rg -n "USE_SSR|ENABLE_SSR|SSR_MODE|NETLIFY.*=.*1|VERCEL.*=.*1" "${RG_EXCL[@]}" || true; } ;\
+  • Hunt sh silly/hunters/New folder/net.txt:1:NETLIFY_AUTH_TOKEN=nfp_7ch4y1cWJi2PfehD3XENQtErSBPmqs6R9b73
+  • Hunt sh silly/hunters/july22 hunter convo.txt:4443:Ran terminal command: USE_NETLIFY=1 astro build 2>&1 | head -20
+  • Hunt sh silly/hunters/july22 hunter convo.txt:4447:Ran terminal command: USE_NETLIFY=1 npx astro build --verbose
+  📋 For SSR debugging: check output:'static' in astro.config.mjs
+
+[1m== TypeScript Typecheck ==[0m
+Version 5.9.2
+tsc: The TypeScript Compiler - Version 5.9.2
+
+COMMON COMMANDS
+
+  tsc
+  Compiles the current project (tsconfig.json in the working directory.)
+
+  tsc app.ts util.ts
+  Ignoring tsconfig.json, compiles the specified files with default compiler options.
+
+  tsc -b
+  Build a composite project in the working directory.
+
+  tsc --init
+  Creates a tsconfig.json with the recommended settings in the working directory.
+
+  tsc -p ./path/to/tsconfig.json
+  Compiles the TypeScript project located at the specified path.
+
+  tsc --help --all
+  An expanded version of this information, showing all possible compiler options
+
+  tsc --noEmit
+  tsc --target esnext
+  Compiles the current project, with additional settings.
+
+COMMAND LINE FLAGS
+
+--help, -h
+Print this message.
+
+--watch, -w
+Watch input files.
+
+--all
+Show all compiler options.
+
+--version, -v
+Print the compiler's version.
+
+--init
+Initializes a TypeScript project and creates a tsconfig.json file.
+
+--project, -p
+Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.
+
+--showConfig
+Print the final configuration instead of building.
+
+--build, -b
+Build one or more projects and their dependencies, if out of date
+
+COMMON COMPILER OPTIONS
+
+--pretty
+Enable color and formatting in TypeScript's output to make compiler errors easier to read.
+type: boolean
+default: true
+
+--declaration, -d
+Generate .d.ts files from TypeScript and JavaScript files in your project.
+type: boolean
+default: `false`, unless `composite` is set
+
+--declarationMap
+Create sourcemaps for d.ts files.
+type: boolean
+default: false
+
+--emitDeclarationOnly
+Only output d.ts files and not JavaScript files.
+type: boolean
+default: false
+
+--sourceMap
+Create source map files for emitted JavaScript files.
+type: boolean
+default: false
+
+--noEmit
+Disable emitting files from a compilation.
+type: boolean
+default: false
+
+--target, -t
+Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
+one of: es5, es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext
+default: es5
+
+--module, -m
+Specify what module code is generated.
+one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, node18, node20, nodenext, preserve
+default: undefined
+
+--lib
+Specify a set of bundled library declaration files that describe the target runtime environment.
+one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext, dom, dom.iterable, dom.asynciterable, webworker, webworker.importscripts, webworker.iterable, webworker.asynciterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2016.intl, es2017.arraybuffer, es2017.date, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2019.intl, es2020.bigint/esnext.bigint, es2020.date, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2020.number, es2021.promise, es2021.string, es2021.weakref/esnext.weakref, es2021.intl, es2022.array, es2022.error, es2022.intl, es2022.object, es2022.string, es2022.regexp, es2023.array, es2023.collection, es2023.intl, es2024.arraybuffer, es2024.collection, es2024.object/esnext.object, es2024.promise, es2024.regexp/esnext.regexp, es2024.sharedmemory, es2024.string/esnext.string, esnext.array, esnext.collection, esnext.intl, esnext.disposable, esnext.promise, esnext.decorators, esnext.iterator, esnext.float16, esnext.error, esnext.sharedmemory, decorators, decorators.legacy
+default: undefined
+
+--allowJs
+Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.
+type: boolean
+default: false
+
+--checkJs
+Enable error reporting in type-checked JavaScript files.
+type: boolean
+default: false
+
+--jsx
+Specify what JSX code is generated.
+one of: preserve, react, react-native, react-jsx, react-jsxdev
+default: undefined
+
+--outFile
+Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.
+
+--outDir
+Specify an output folder for all emitted files.
+
+--removeComments
+Disable emitting comments.
+type: boolean
+default: false
+
+--strict
+Enable all strict type-checking options.
+type: boolean
+default: false
+
+--types
+Specify type package names to be included without being referenced in a source file.
+
+--esModuleInterop
+Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
+type: boolean
+default: false
+
+You can learn about all of the compiler options at https://aka.ms/tsc
+
+[33m⚠ tsc reported errors (see output above)[0m
+
+[1m== Runtime Tap Summary ==[0m
+[36mℹ no fs-tap log found; run code/tests with: node -r ./scripts/dev/fs-tap.mjs …[0m
+
+[1m== Fix‑It Brief ==[0m
+  wrote __reports/hunt-fixit.md
+
+[1m== Summary ==[0m
+[1mFiles with bad names:[0m 24
+[1mJSON parse errors:[0m 0
+[1mJSON comment-like:[0m 35
+[1mEISDIR/glob suspects:[0m 40
+[1mESM/CJS mismatches:[0m 3
+[1mnpm '!' scripts:[0m 0
+[1mTODO/FIXME/HACK:[0m 99
+[1mSSR triggers found:[0m 76
+[1mRuntime FS tap hits:[0m 0
+[32m✓ Hunt clean[0m

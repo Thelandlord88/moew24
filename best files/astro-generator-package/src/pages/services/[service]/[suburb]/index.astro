@@ -1,0 +1,204 @@
+---
+// src/pages/services/[service]/[suburb]/index.astro
+import { astroPropsGenerator } from '~/lib/astroPropsGenerator.js';
+
+// Generate dynamic paths for all service/suburb combinations
+export async function getStaticPaths() {
+    console.log('🔄 Generating dynamic service paths...');
+    const paths = await astroPropsGenerator.generateServicePaths();
+    console.log(`✅ Generated ${paths.length} dynamic pages`);
+    return paths;
+}
+
+// Get the props generated for this specific page
+const { title, metaDescription, suburb, service, cluster, availableServices, adjacentSuburbs, structuredData } = Astro.props;
+
+// Generate some sample content using our template system
+import { suburbProvider } from '~/lib/suburbProvider.js';
+const faqAnswer = suburbProvider.getContentTemplate('faqAnswer', suburb, service);
+const cardTitle = suburbProvider.getContentTemplate('cardTitle', suburb, service);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={metaDescription}>
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData, null, 2)}></script>
+    
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            padding: 2rem; 
+            border-radius: 10px; 
+            margin-bottom: 2rem;
+        }
+        .grid { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr; 
+            gap: 2rem; 
+            margin-bottom: 2rem;
+        }
+        .card { 
+            background: #f8f9fa; 
+            padding: 1.5rem; 
+            border-radius: 8px; 
+            border-left: 4px solid #667eea;
+        }
+        .sidebar { 
+            background: #ffffff; 
+            padding: 1.5rem; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .service-links a, .suburb-links a { 
+            display: block; 
+            padding: 0.5rem 1rem; 
+            margin: 0.25rem 0; 
+            background: #e9ecef; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            color: #495057;
+            transition: background-color 0.2s;
+        }
+        .service-links a:hover, .suburb-links a:hover { 
+            background: #667eea; 
+            color: white;
+        }
+        .coordinates { 
+            font-size: 0.9em; 
+            color: #6c757d; 
+            margin-top: 1rem;
+        }
+        .highlight { 
+            background: #fff3cd; 
+            padding: 1rem; 
+            border-radius: 4px; 
+            border-left: 4px solid #ffc107;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <h1>{title}</h1>
+        <p>{metaDescription}</p>
+        <div class="coordinates">
+            📍 Location: {suburb.lat}, {suburb.lng} | Postcode: {suburb.postcode}
+            {cluster && <span> | Cluster: {cluster.name}</span>}
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="grid">
+        <!-- Main Content -->
+        <main>
+            <div class="card">
+                <h2>🏠 {cardTitle}</h2>
+                <p><strong>FAQ:</strong> {faqAnswer}</p>
+                
+                <div class="highlight">
+                    <h3>🎯 Dynamic Generation Demo</h3>
+                    <p><strong>This page was automatically generated!</strong></p>
+                    <ul>
+                        <li><strong>Service:</strong> {service}</li>
+                        <li><strong>Suburb:</strong> {suburb.name} ({suburb.slug})</li>
+                        <li><strong>Coordinates:</strong> {suburb.lat}, {suburb.lng}</li>
+                        <li><strong>Adjacent Areas:</strong> {adjacentSuburbs.length} nearby suburbs</li>
+                        <li><strong>Available Services:</strong> {availableServices.length} other services</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>📋 Service Details</h3>
+                    <p>Professional {service.replace('-', ' ')} services in {suburb.name}. Our experienced team provides:</p>
+                    <ul>
+                        <li>✅ Comprehensive cleaning checklist</li>
+                        <li>✅ 100% bond back guarantee</li>
+                        <li>✅ Local {suburb.name} expertise</li>
+                        <li>✅ Same-day availability</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Other Services in This Suburb -->
+            {availableServices.length > 0 && (
+                <div class="service-links">
+                    <h3>🛠️ Other Services in {suburb.name}</h3>
+                    {availableServices.map(otherService => (
+                        <a href={`/services/${otherService}/${suburb.slug}/`}>
+                            {otherService.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} in {suburb.name}
+                        </a>
+                    ))}
+                </div>
+            )}
+
+            <!-- Nearby Suburbs for Same Service -->
+            {adjacentSuburbs.length > 0 && (
+                <div class="suburb-links">
+                    <h3>🗺️ Nearby Areas</h3>
+                    <p>Also serving {service.replace('-', ' ')} in:</p>
+                    {adjacentSuburbs.map(adjacent => (
+                        <a href={`/services/${service}/${adjacent.slug}/`}>
+                            {service.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} in {adjacent.name}
+                        </a>
+                    ))}
+                </div>
+            )}
+
+            <!-- Geographic Context -->
+            {cluster && (
+                <div class="card" style="margin-top: 1rem;">
+                    <h4>📍 Geographic Area</h4>
+                    <p><strong>Cluster:</strong> {cluster.name}</p>
+                    <p><strong>Region:</strong> {cluster.slug}</p>
+                    <p>Part of our {cluster.name} service area coverage.</p>
+                </div>
+            )}
+        </aside>
+    </div>
+
+    <!-- Footer with Technical Info -->
+    <footer style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+        <h4>🔧 Technical Demo Information</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <div>
+                <strong>Page Generation:</strong><br>
+                • Route: /services/{service}/{suburb.slug}/<br>
+                • Generated via: astroPropsGenerator<br>
+                • Data source: SuburbProvider
+            </div>
+            <div>
+                <strong>Dynamic Content:</strong><br>
+                • Title: Template-generated<br>
+                • Meta: Template-generated<br>
+                • FAQ: Template-generated<br>
+                • Links: Auto-generated from adjacency
+            </div>
+            <div>
+                <strong>SEO Integration:</strong><br>
+                • Structured Data: ✅ Included<br>
+                • Geographic Data: ✅ Coordinates<br>
+                • Service Context: ✅ Dynamic<br>
+                • Link Building: ✅ Automated
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

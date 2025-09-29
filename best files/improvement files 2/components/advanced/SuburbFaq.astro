@@ -1,0 +1,58 @@
+---
+import FaqSection from "./FaqSection.astro";
+
+const {
+  suburbSlug,
+  serviceSlug,
+  heading = "Frequently asked questions",
+  id = "faq",
+  maxItems = 8,
+  className = ""
+} = Astro.props;
+
+if (!suburbSlug) {
+  throw new Error("[SuburbFaq] suburbSlug is required to render suburb-specific FAQs");
+}
+
+type FaqItem = { q: string; a: string };
+type CompiledFaq = {
+  suburbs?: Record<string, FaqItem[]>;
+  services?: Record<string, FaqItem[]>;
+  generic?: FaqItem[];
+};
+
+// Safe import with fallback
+let compiledFaqs: CompiledFaq;
+try {
+  const faqData = await import("~/data/faqs.compiled.json");
+  compiledFaqs = faqData.default || faqData;
+} catch (error) {
+  console.warn("[SuburbFaq] Could not load compiled FAQs:", error.message);
+  compiledFaqs = { suburbs: {}, services: {}, generic: [] };
+}
+
+const data = compiledFaqs || {};
+const sourceSuburb  = data.suburbs?.[suburbSlug]   || [];
+const sourceService = serviceSlug ? (data.services?.[serviceSlug] || []) : [];
+const sourceGeneric = data.generic || [];
+
+function dedupe(items: FaqItem[]): FaqItem[] {
+  const seen = new Set<string>();
+  return items.filter(it => {
+    const key = (it.q || "").trim().toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+const items = dedupe([...sourceSuburb, ...sourceService, ...sourceGeneric]).slice(0, maxItems);
+const ctxHeading = `${heading} – ${suburbSlug.replace(/-/g, " ").replace(/\b\w/g, s => s.toUpperCase())}`;
+---
+
+<FaqSection
+  items={items}
+  heading={ctxHeading}
+  id={id}
+  className={className}
+/>

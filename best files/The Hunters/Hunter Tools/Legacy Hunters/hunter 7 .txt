@@ -1,0 +1,222 @@
+Awesome — with the new files, we can wire a **Hunter Thinker 2.0** that sits on top of your six modular hunters, reads their JSON, watches execution traces, and produces a ranked, evidence-linked “Do Next” plan. It slots straight into your existing `hunt.sh` flow (no rewrites), and it treats **SSR** as one signal among many (security, performance, a11y, code quality, build dependency safety). Below is a complete, paste-ready blueprint: contracts, event tracing, a tiny learning loop, policy invariants, CI wiring, and acceptance tests mapped to what your hunters already do.
+
+---
+
+# What you already have (the substrate)
+
+* A modular orchestrator that sets `REPORT_DIR`, chooses modules, and runs them as first-class hunters: **runtime\_ssr**, **security**, **performance**, **accessibility**, **code\_quality**, **build\_dependencies**.&#x20;
+* `runtime_ssr` checks for **SSG mode** vs adapter drift, flags **dynamic imports** and **import assertions**, validates **API routes** (`prerender = true`), and even runs a **build proof** to catch `NoAdapterInstalled`.   &#x20;
+* `security` hunts **hardcoded secrets**, **eval/new Function/setTimeout(“string”)**, **XSS sinks**, **mixed content**, **env exposure**, plus `.env` handling—then emits a structured JSON with counts + recommendations.      &#x20;
+* Docs capture the **6-hunter architecture** and already propose an **orchestrator** layer for cross-hunter prioritization/UX—exactly what the Thinker formalizes. &#x20;
+* You’ve even added **.astro SSR pattern** detection (prerender=false, Astro.request/locals, APIRoute) in your `rg-hunt` flow—great signals to ingest.&#x20;
+
+---
+
+# Add a thin “intelligence” layer (no rewrites)
+
+## 1) Standardize the report contract (tiny shim)
+
+Each hunter already writes JSON. We’ll converge on a small superset so the Thinker can rank apples-to-apples:
+
+```json
+{
+  "module": "security",
+  "status": "critical|warn|pass",
+  "issues": 5,
+  "critical": 2,
+  "counts": { "secrets": 1, "dangerous_code": 2, "xss_patterns": 2 },
+  "actions": [
+    "Replace innerHTML with safe DOM APIs in src/components/X.tsx",
+    "Move API keys to process.env and load via server-only code"
+  ],
+  "policy_invariants": ["counts.secrets==0","counts.xss_patterns==0"],
+  "eta_minutes": 20,
+  "unlocks": ["performance","accessibility"]
+}
+```
+
+* **Why it fits your code:** `runtime_ssr` and `security` already emit `status`, `counts`, `recommendations`—we’re only adding `actions`, `policy_invariants`, and `eta_minutes` so the Thinker can *schedule* work. &#x20;
+
+> Fast path: add a tiny post-processor at the end of each hunter to attach `policy_invariants` (e.g., no import assertions; no secrets) and a **short action list**.
+
+## 2) Event tracing (what the pack “looked at”)
+
+Add a shared `hunters/trace.sh` (10 lines) and call it in hunters at interesting moments:
+
+```bash
+# hunters/trace.sh
+TRACE_FILE="var/hunt-events.ndjson"; mkdir -p "$(dirname "$TRACE_FILE")"
+trace_event(){ local op="$1"; shift; local json="${*:-{}}"
+  printf '{"t":"%s","module":"%s","op":"%s","data":%s}\n' \
+    "$(date -Iseconds)" "${HUNTER_MODULE:-unknown}" "$op" "$json" >> "$TRACE_FILE"; }
+trace_open(){ trace_event open_file "{\"path\":\"$1\"}"; }
+trace_issue(){ trace_event issue "$1"; }             # e.g. {"class":"xss","path":"src/x.tsx"}
+trace_invariant(){ trace_event invariant "$1"; }     # e.g. {"name":"noImportAssertions","status":"fail"}
+```
+
+Now the Thinker can learn what humans touched and which invariants flipped to **pass** afterward.
+
+## 3) The Thinker (aggregator + tiny learning)
+
+Drop-in Node script that reads `__reports/hunt/*.json` + `var/hunt-events.ndjson`, scores items, and writes a ranked plan:
+
+```js
+// thinkers/agenda.mjs
+#!/usr/bin/env node
+import fs from "node:fs"; import path from "node:path";
+const R="__reports/hunt"; const OUT="__ai/thinker"; fs.mkdirSync(OUT,{recursive:true});
+const W={sev:3, rec:1.6, blast:1.4, ttf:-0.8, unl:1.2};  // weights
+
+const reports = fs.readdirSync(R).filter(f=>f.endsWith(".json") && f!=="master.json")
+  .map(f=>JSON.parse(fs.readFileSync(path.join(R,f),"utf8")));
+const trace = fs.existsSync("var/hunt-events.ndjson")
+  ? fs.readFileSync("var/hunt-events.ndjson","utf8").trim().split("\n").map(l=>{try{return JSON.parse(l)}catch{return null}}).filter(Boolean)
+  : [];
+
+const feat = r => ({ sev:r.status==="critical"?2:r.status==="warn"?1:0, rec:r.issues||0, br:r.critical||0, ttf:r.eta_minutes||15, unl:(r.unlocks||[]).length });
+const N = x => Math.log(1+Math.max(0,x));
+const score = f => W.sev*f.sev + W.rec*N(f.rec) + W.blast*N(f.br) + W.ttf*N(f.ttf) + W.unl*f.unl;
+
+const agenda = reports.flatMap(r => (r.actions||[]).length ? [{ module:r.module, status:r.status, score:+score(feat(r)).toFixed(2), actions:r.actions.slice(0,5), proof:r.policy_invariants||[] }] : [])
+  .sort((a,b)=>b.score-a.score);
+
+const hot={}; for(const t of trace) if(t.op==="open_file"&&t.data?.path) hot[t.data.path]=(hot[t.data.path]||0)+1;
+
+fs.writeFileSync(path.join(OUT,"master-insights.json"), JSON.stringify({ t:new Date().toISOString(), agenda, hotFiles:Object.entries(hot).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([path,count])=>({path,count})) }, null, 2));
+console.log("[thinker] wrote __ai/thinker/master-insights.json");
+```
+
+> Wire it at the **end** of `hunt.sh` (non-fatal). The orchestrator already collects module output in `__reports/hunt`, so no structural changes are needed.&#x20;
+
+## 4) Policy invariants (single verdict, wider scope)
+
+Keep your “single verdict” habit but broaden the gate:
+
+* **SSR**: `import_assertions==0`, `dynamic_imports==0`, `build_test=="PASSED"`. &#x20;
+* **Security**: `secrets==0` and `xss_patterns==0` and `.env` is safe. &#x20;
+* **Build-deps**: no high-risk generator writes into `src/` and no “manual edit newer than last generate” conflicts. (Matches your hunter/report classification.) &#x20;
+
+The Thinker will show each recommendation as **Fix → Proof (invariant) → Sibling Sweep** so changes are self-verifying.
+
+## 5) Tiny, honest memory (bias toward proven plays)
+
+Store a small JSON (or SQLite) map of “playbooks” that repeatedly moved a module **critical → pass** in the next run when the touched files matched the hunter’s `actions`. Increment `success_count` for those plays; give them a small agenda boost next time.
+
+**Examples of plays seeds (from your docs/code):**
+
+* “Replace import assertions with static imports” (fixes SSR + unlocks perf/a11y scans).&#x20;
+* “Edit sources, not generated artifacts” (prevents silent overwrite).&#x20;
+
+---
+
+# Quick wins to add right now
+
+1. **Promote your `.astro` signals** into `runtime_ssr.json`
+   Ingest the `rg-hunt` Astro patterns (prerender=false, Astro.request/locals, APIRoute) into `runtime_ssr`’s `findings`, so the proof is consolidated in one report.&#x20;
+
+2. **Attach `policy_invariants` + `eta_minutes` in every hunter**
+   `security` → `["counts.secrets==0","counts.xss_patterns==0"]`;
+   `performance` → `["counts.large_images==0","counts.bundleKb<=budget"]`;
+   `accessibility` → `["counts.criticalA11y==0"]`.
+   (They already output counts; this is just a few extra JSON fields.)&#x20;
+
+3. **Build-Deps guardrails in strict mode**
+   Use the classification in your report (“high-risk generators modify `src/`”) as hard-fail invariant in CI.&#x20;
+
+4. **Execution order hinting** (orchestrator)
+   When **runtime\_ssr** is `critical`, short-circuit expensive scans (perf/a11y) and surface a single SSR play first; once green, re-run the rest. This mirrors your own “priority intelligence” concept.&#x20;
+
+---
+
+# Paste-ready snippets
+
+## A) Add Thinker to `hunt.sh` (end of file)
+
+```bash
+# After all modules finish and master.json is written
+if command -v node >/dev/null 2>&1 && [ -f "thinkers/agenda.mjs" ]; then
+  node thinkers/agenda.mjs || true
+fi
+echo "See: __ai/thinker/master-insights.json (ranked plan)"
+```
+
+## B) Add actions + invariants in `security.sh` (final JSON write)
+
+```bash
+# ...before EOF in the JSON here-doc
+  "actions": [
+    "Move secrets to environment variables and never commit .env",
+    "Replace innerHTML/insertAdjacentHTML with safe DOM APIs",
+    "Guard process.env usage behind server-only modules"
+  ],
+  "policy_invariants": ["counts.secrets==0","counts.xss_patterns==0","counts.env_exposure==0"],
+  "eta_minutes": 20,
+  "unlocks": ["performance","accessibility"]
+```
+
+(Your file already prints `findings`, `status`, and `recommendations`, so this is additive.)&#x20;
+
+## C) Emit actions in `runtime_ssr.sh`
+
+```bash
+# Build a small ACTIONS array before final here-doc:
+ACTIONS=()
+grep -q "assert.*type.*json" <<<"$IMPORT_ASSERTIONS" && ACTIONS+=("Replace JSON import assertions with static imports (Sept 17 gold pattern)")
+[ -n "$DYNAMIC_IMPORTS" ] && ACTIONS+=("Eliminate dynamic imports in src/; push to build-time")
+ACTIONS+=("Ensure all API routes export const prerender = true")
+
+# Then inside the JSON:
+  "actions": [$(printf '"%s",' "${ACTIONS[@]}" | sed 's/,$//')],
+  "policy_invariants": ["findings.import_assertions==0","findings.dynamic_imports==0","findings.build_test==\"PASSED\""],
+  "eta_minutes": 30,
+  "unlocks": ["performance","accessibility","security"]
+```
+
+(The fixes mirror your gold vs legacy import patterns.)&#x20;
+
+---
+
+# Cross-hunter correlations the Thinker should encode
+
+* **SSR → Everything**: When SSR is red, perf/a11y scans are noisy; prioritize SSR first, then re-run others (sequential orchestration).&#x20;
+* **Security → Perf**: eliminating `innerHTML` often lowers JS churn and DOM cost; show “unlocks: performance”.&#x20;
+* **Build-deps → Stability**: block “fix overwritten next build” by failing on high-risk generator writes into `src/`.&#x20;
+
+---
+
+# CI wiring
+
+```yaml
+- name: Run hunters (strict)
+  run: bash ./hunt.sh
+
+- name: Upload hunter evidence
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: hunter-bundle
+    path: |
+      __reports/hunt/**
+      var/hunt-events.ndjson
+      __ai/thinker/master-insights.json
+```
+
+---
+
+# Acceptance tests (prove it helps the pack)
+
+1. **Import assertion added** to `src/utils/*` → `runtime_ssr` becomes **critical**, agenda ranks an SSR fix first; after commit replacing with static imports, next run flips to **pass**; Thinker records a play success.&#x20;
+2. **Hardcoded secret** introduced → `security` becomes **critical**, agenda shows secret removal first, invariant `counts.secrets==0` proves fix.&#x20;
+3. **Generator modifies src/** → build-deps invariant fails (hard block), agenda points to “move generator outputs out of src/”.&#x20;
+4. **APIRoute missing prerender** → agenda shows “add `export const prerender = true`” with proof via `runtime_ssr` counts.&#x20;
+5. **Mixed content** added to a template → security warns; fixing to HTTPS flips `mixed_content==0`.&#x20;
+
+---
+
+## Why this will *feel* better day-to-day
+
+* You keep the same **hunters and reports**, but now get a single, ranked **Do-Next** with proofs and sweep hints.
+* It honors your **single-verdict** discipline while broadening the *invariants* that guard real-world regressions.
+* It learns which **plays** actually turn **critical → pass** in *your* repo and nudges the team toward those first.
+
+If you want, I can also include a tiny `hunters/orchestrator.sh` skeleton later to encode execution order/short-circuiting—but you can ship Thinker 2.0 **today** with the shims and script above, and it’ll immediately start helping the pack.

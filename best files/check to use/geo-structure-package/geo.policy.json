@@ -1,0 +1,12 @@
+{
+  "maxComponents": 1,
+  "allowed_islands": [
+    "bulwer",
+    "moreton-island",
+    "kooringal",
+    "cowan-cowan"
+  ],
+  "severityOverrides": {
+    "graph_components.count": "info"
+  }
+}

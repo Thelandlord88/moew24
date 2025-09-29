@@ -1,0 +1,1 @@
+../../../../scripts/daedalus/plugins/05-internal-links.mjs

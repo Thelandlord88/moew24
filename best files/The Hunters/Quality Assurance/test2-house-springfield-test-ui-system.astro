@@ -1,0 +1,231 @@
+---
+// 🧪 TEST PAGE 2: House Cleaning in Springfield Lakes  
+// Fresh green theme with family-focused content
+
+import PageLayout from '../components/PageLayout.astro';
+import Banner from '../components/Banner.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+import { createTheme } from '../themeProvider.js';
+
+const serviceSlug = 'house-cleaning';
+const suburbSlug = 'springfield-lakes';
+
+// Get theme data for this combination
+const theme = createTheme(serviceSlug, suburbSlug);
+const service = theme.service;
+const suburb = theme.suburb;
+
+const title = `${service.name} in ${suburb.name} | OneDone Cleaning`;
+const description = `Professional ${service.name.toLowerCase()} in ${suburb.name}. ${service.description}`;
+---
+
+<PageLayout 
+  serviceSlug={serviceSlug}
+  suburbSlug={suburbSlug}
+  title={title}
+  description={description}
+>
+  <!-- Hero Banner with green theme and family focus -->
+  <Banner 
+    title={`${service.name} in ${suburb.name}`}
+    subtitle={`${service.tagline} • Perfect for busy families in this beautiful lakeside community`}
+    variant="hero"
+  >
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+      <Button variant="primary" size="lg">
+        Book Regular Cleaning • {service.priceRange}
+      </Button>
+      <Button variant="outline" size="lg">
+        ✨ See Our Family Packages
+      </Button>
+    </div>
+  </Banner>
+
+  <!-- Family-Focused Service Info -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        
+        <!-- Springfield Lakes specific highlights -->
+        <div class="mb-12 text-center">
+          <h2 class="text-3xl font-bold mb-6 text-gray-900">
+            Perfect for {suburb.name} Families
+          </h2>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {suburb.highlights.map(highlight => (
+              <Card variant="feature" class="text-center">
+                <div class="text-lg font-semibold text-[var(--primary-color)] mb-2">
+                  🏡
+                </div>
+                <div class="text-gray-700">
+                  {highlight}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <!-- Service Features with family focus -->
+        <div class="mb-12">
+          <h3 class="text-2xl font-bold mb-8 text-center text-gray-900">
+            Our {service.name} Service Includes
+          </h3>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {service.features.map(feature => (
+              <Card class="text-center">
+                <div class="text-[var(--service-accent)] text-xl mb-2">
+                  {service.icon}
+                </div>
+                <div class="font-medium text-gray-800">
+                  {feature}
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <!-- Family-friendly scheduling -->
+        <div class="bg-gradient-to-br {service.bgGradient} rounded-2xl p-8 mb-12">
+          <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 class="text-2xl font-bold mb-4 text-[var(--text-color)]">
+                Flexible Scheduling for Busy Families
+              </h3>
+              <p class="text-[var(--text-color)] mb-6 opacity-90">
+                We understand life in {suburb.name} is busy. That's why we offer flexible scheduling 
+                options that work around your family's routine.
+              </p>
+              
+              <div class="space-y-3">
+                <div class="flex items-center gap-3 text-[var(--text-color)]">
+                  <div class="w-6 h-6 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-sm">✓</span>
+                  </div>
+                  <span>School hours cleaning available</span>
+                </div>
+                <div class="flex items-center gap-3 text-[var(--text-color)]">
+                  <div class="w-6 h-6 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-sm">✓</span>
+                  </div>
+                  <span>Weekend appointments</span>
+                </div>
+                <div class="flex items-center gap-3 text-[var(--text-color)]">
+                  <div class="w-6 h-6 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <span class="text-sm">✓</span>
+                  </div>
+                  <span>Same cleaner every visit</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-center">
+              <div class="bg-white bg-opacity-20 rounded-xl p-6">
+                <div class="text-4xl mb-4">{service.icon}</div>
+                <div class="text-2xl font-bold text-[var(--text-color)] mb-2">
+                  {service.priceRange}
+                </div>
+                <div class="text-[var(--text-color)] opacity-75 mb-4">
+                  Regular cleaning packages
+                </div>
+                <div class="text-sm text-[var(--text-color)] opacity-75">
+                  Special rates for {suburb.name} families
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location spotlight -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <Card variant="highlight" padding="lg">
+            <h4 class="text-xl font-bold mb-3 text-gray-900">About {suburb.name}</h4>
+            <p class="text-gray-600 mb-4">{suburb.description}</p>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <div class="font-semibold text-gray-700">Population</div>
+                <div class="text-gray-500">{suburb.population.toLocaleString()}</div>
+              </div>
+              <div>
+                <div class="font-semibold text-gray-700">Postcode</div>
+                <div class="text-gray-500">{suburb.postcode}</div>
+              </div>
+            </div>
+          </Card>
+          
+          <Card variant="highlight" padding="lg">
+            <h4 class="text-xl font-bold mb-3 text-[var(--primary-color)]">Family Packages</h4>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-center gap-2">
+                <span class="text-[var(--primary-color)]">✓</span>
+                Weekly family home cleaning
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[var(--primary-color)]">✓</span>
+                School holiday deep cleans
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[var(--primary-color)]">✓</span>
+                Child-safe cleaning products
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-[var(--primary-color)]">✓</span>
+                Toy room organization
+              </li>
+            </ul>
+          </Card>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="text-center">
+          <h3 class="text-3xl font-bold mb-6 text-gray-900">
+            Ready for a Cleaner Home?
+          </h3>
+          <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Join hundreds of {suburb.name} families who trust us with their home cleaning. 
+            More time for what matters most.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button variant="primary" size="lg" href="/quote">
+              Get Your Free Quote
+            </Button>
+            <Button variant="secondary" size="lg" href="/family-packages">
+              View Family Packages
+            </Button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Community Trust Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 text-center">
+      <h3 class="text-2xl font-bold mb-8 text-gray-900">
+        Trusted by {suburb.name} Families
+      </h3>
+      
+      <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <Card variant="highlight">
+          <div class="text-3xl font-bold text-[var(--primary-color)] mb-2">250+</div>
+          <div class="text-gray-700 font-medium">Happy Families</div>
+          <div class="text-sm text-gray-500 mt-1">regular customers</div>
+        </Card>
+        
+        <Card variant="highlight">
+          <div class="text-3xl font-bold text-[var(--primary-color)] mb-2">5⭐</div>
+          <div class="text-gray-700 font-medium">Family Rating</div>
+          <div class="text-sm text-gray-500 mt-1">trusted service</div>
+        </Card>
+        
+        <Card variant="highlight">
+          <div class="text-3xl font-bold text-[var(--primary-color)] mb-2">3+</div>
+          <div class="text-gray-700 font-medium">Years Serving</div>
+          <div class="text-sm text-gray-500 mt-1">{suburb.name} community</div>
+        </Card>
+      </div>
+    </div>
+  </section>
+</PageLayout>

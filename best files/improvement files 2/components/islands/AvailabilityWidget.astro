@@ -1,0 +1,207 @@
+---
+/**
+ * Server Island for Real-time Availability
+ * This component uses Astro's new Server Islands feature
+ * to provide dynamic content while keeping the page static
+ */
+
+interface Props {
+  service?: string;
+  suburb?: string;
+}
+
+const { service, suburb } = Astro.props;
+
+// Simulate dynamic data (in real app, this would come from your database/API)
+const availabilityData = {
+  'bond-cleaning': {
+    nextAvailable: '2-3 days',
+    demand: 'high',
+    bookingsToday: 8,
+  },
+  'bathroom-deep-clean': {
+    nextAvailable: 'same day',
+    demand: 'medium',
+    bookingsToday: 3,
+  },
+  'spring-cleaning': {
+    nextAvailable: '1-2 days',
+    demand: 'low',
+    bookingsToday: 1,
+  },
+};
+
+const currentService = service || 'bond-cleaning';
+const availability = availabilityData[currentService as keyof typeof availabilityData];
+
+// Get current time for dynamic updates
+const now = new Date();
+const timeSlots = [
+  '9:00 AM', '10:30 AM', '1:00 PM', '2:30 PM', '4:00 PM'
+];
+
+// Simulate real-time pricing (would come from your pricing engine)
+const basePrices = {
+  'bond-cleaning': { min: 280, max: 580 },
+  'bathroom-deep-clean': { min: 120, max: 180 },
+  'spring-cleaning': { min: 200, max: 450 },
+};
+
+const pricing = basePrices[currentService as keyof typeof basePrices];
+---
+
+<div 
+  class="bg-gradient-to-r from-sky-50 to-blue-50 rounded-xl p-6 border border-sky-200"
+  server:defer
+  data-island="availability"
+>
+  <!-- Real-time Availability -->
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-lg font-bold text-slate-900">Live Availability</h3>
+    <div class="flex items-center gap-2">
+      <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+      <span class="text-sm text-slate-600">Updated just now</span>
+    </div>
+  </div>
+
+  <!-- Service Status -->
+  <div class="grid md:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white rounded-lg p-4 text-center">
+      <div class="text-2xl font-bold text-sky-600">{availability.nextAvailable}</div>
+      <div class="text-sm text-slate-600">Next Available</div>
+    </div>
+    
+    <div class="bg-white rounded-lg p-4 text-center">
+      <div class="text-2xl font-bold text-orange-600">{availability.bookingsToday}</div>
+      <div class="text-sm text-slate-600">Bookings Today</div>
+    </div>
+    
+    <div class="bg-white rounded-lg p-4 text-center">
+      <div class={`text-2xl font-bold ${
+        availability.demand === 'high' ? 'text-red-600' : 
+        availability.demand === 'medium' ? 'text-orange-600' : 'text-green-600'
+      }`}>
+        {availability.demand.toUpperCase()}
+      </div>
+      <div class="text-sm text-slate-600">Demand</div>
+    </div>
+  </div>
+
+  <!-- Dynamic Pricing -->
+  <div class="bg-white rounded-lg p-4 mb-4">
+    <h4 class="font-semibold text-slate-900 mb-2">Estimated Pricing</h4>
+    <div class="flex items-center justify-between">
+      <div>
+        <span class="text-2xl font-bold text-green-600">${pricing.min}</span>
+        <span class="text-slate-500"> - </span>
+        <span class="text-2xl font-bold text-green-600">${pricing.max}</span>
+      </div>
+      <div class="text-right">
+        <div class="text-sm text-slate-600">Based on property size</div>
+        <div class="text-xs text-slate-500">Fixed price guarantee</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Today's Time Slots -->
+  <div class="bg-white rounded-lg p-4">
+    <h4 class="font-semibold text-slate-900 mb-3">Available Time Slots Today</h4>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+      {timeSlots.map((slot, index) => {
+        const isAvailable = Math.random() > 0.3; // Simulate availability
+        const isPast = index < 2; // Simulate past slots
+        
+        return (
+          <button
+            class={`p-2 rounded-lg text-sm font-medium transition-colors ${
+              isPast ? 'bg-slate-100 text-slate-400 cursor-not-allowed' :
+              isAvailable ? 'bg-green-100 text-green-800 hover:bg-green-200' :
+              'bg-red-100 text-red-800 cursor-not-allowed'
+            }`}
+            disabled={!isAvailable || isPast}
+          >
+            {slot}
+          </button>
+        );
+      })}
+    </div>
+    <p class="text-xs text-slate-500 mt-2">
+      Times shown for {suburb || 'your area'}. Exact timing confirmed after booking.
+    </p>
+  </div>
+
+  <!-- Urgency Indicator -->
+  {availability.demand === 'high' && (
+    <div class="mt-4 bg-red-50 border border-red-200 rounded-lg p-3">
+      <div class="flex items-center gap-2 text-red-800">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="font-medium">High Demand Alert</span>
+      </div>
+      <p class="text-sm text-red-700 mt-1">
+        Limited availability remaining. Book now to secure your preferred time.
+      </p>
+    </div>
+  )}
+</div>
+
+<script>
+  // Client-side updates for real-time feel
+  document.addEventListener('astro:page-load', () => {
+    const island = document.querySelector('[data-island="availability"]');
+    if (island) {
+      // Update timestamp every 30 seconds
+      setInterval(() => {
+        const timestamp = island.querySelector('[data-timestamp]');
+        if (timestamp) {
+          timestamp.textContent = 'Updated just now';
+        }
+      }, 30000);
+      
+      // Add click handlers for time slots
+      const timeSlots = island.querySelectorAll('button:not([disabled])');
+      timeSlots.forEach(button => {
+        button.addEventListener('click', () => {
+          // Scroll to quote form
+          const quoteForm = document.getElementById('quote');
+          if (quoteForm) {
+            quoteForm.scrollIntoView({ behavior: 'smooth' });
+            
+            // Pre-fill time preference in form
+            const messageField = quoteForm.querySelector('textarea[name="message"]');
+            if (messageField && !messageField.value) {
+              messageField.value = `Preferred time: ${button.textContent}`;
+            }
+          }
+        });
+      });
+    }
+  });
+</script>
+
+<style>
+  /* Server Island specific styles */
+  [data-island="availability"] {
+    view-transition-name: availability-widget;
+  }
+  
+  /* Loading states */
+  [data-island="availability"]:not([data-loaded]) {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  
+  [data-island="availability"]:not([data-loaded])::after {
+    content: "Loading availability...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+</style>

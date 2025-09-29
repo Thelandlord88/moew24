@@ -1,0 +1,10 @@
+[
+  {"from":"moreton-bay","to":["port-of-brisbane","wynnum"]},
+  {"from":"kooringal","to":["moreton-island","port-of-brisbane"]},
+  {"from":"lake-manchester","to":["kholo","banks-creek","upper-brookfield"]},
+  {"from":"bulwer","to":["cowan-cowan","moreton-island"]},
+  {"from":"england-creek","to":["banks-creek","pine-mountain"]},
+  {"from":"grandchester","to":["calvert","rosewood"]},
+  {"from":"mount-mort","to":["mount-walker-west","rosewood"]},
+  {"from":"peak-crossing","to":["goolman","south-ripley"]}
+]

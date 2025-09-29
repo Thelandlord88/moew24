@@ -1,0 +1,5378 @@
+# Geo Readiness Report (published)
+
+GeneratedAt: 2025-09-17T06:28:12.723Z
+
+## Summary (Top by readiness)
+
+```
+slug               state      score  class    words  neighbors  images  coords?  titleOK  metaOK
+----               -----      -----  -----    -----  ---------  ------  -------  -------  ------
+karalee            published  35.0   Blocked  16     6          0       true     false    false 
+brookwater         published  35.0   Blocked  0      7          1       true     false    false 
+browns-plains      published  35.0   Blocked  0      6          1       true     false    false 
+forest-lake        published  35.0   Blocked  0      7          1       true     false    false 
+indooroopilly      published  35.0   Blocked  0      9          1       true     false    false 
+kenmore            published  35.0   Blocked  0      6          1       true     false    false 
+redbank            published  35.0   Blocked  0      7          1       true     false    false 
+redbank-plains     published  35.0   Blocked  0      7          1       true     false    false 
+springfield        published  35.0   Blocked  0      9          1       true     false    false 
+springfield-lakes  published  35.0   Blocked  0      7          1       true     false    false 
+springwood         published  35.0   Blocked  0      7          1       true     false    false 
+anstead            published  25.0   Blocked  0      7          0       true     false    false 
+ashgrove           published  25.0   Blocked  0      7          0       true     false    false 
+auchenflower       published  25.0   Blocked  0      7          0       true     false    false 
+augustine-heights  published  25.0   Blocked  0      9          0       true     false    false 
+bahrs-scrub        published  25.0   Blocked  0      9          0       true     false    false 
+bannockburn        published  25.0   Blocked  0      6          0       true     false    false 
+bardon             published  25.0   Blocked  0      6          0       true     false    false 
+beenleigh          published  25.0   Blocked  0      8          0       true     false    false 
+belivah            published  25.0   Blocked  0      6          0       true     false    false 
+bellbird-park      published  25.0   Blocked  0      9          0       true     false    false 
+bellbowrie         published  25.0   Blocked  0      7          0       true     false    false 
+bethania           published  25.0   Blocked  0      9          0       true     false    false 
+booval             published  25.0   Blocked  0      9          0       true     false    false 
+boronia-heights    published  25.0   Blocked  0      6          0       true     false    false 
+brassall           published  25.0   Blocked  0      7          0       true     false    false 
+brookfield         published  25.0   Blocked  0      5          0       true     false    false 
+bundamba           published  25.0   Blocked  0      7          0       true     false    false 
+camira             published  25.0   Blocked  0      9          0       true     false    false 
+cedar-creek        published  25.0   Blocked  0      4          0       true     false    false 
+chapel-hill        published  25.0   Blocked  0      6          0       true     false    false 
+chelmer            published  25.0   Blocked  0      7          0       true     false    false 
+collingwood-park   published  25.0   Blocked  0      8          0       true     false    false 
+crestmead          published  25.0   Blocked  0      7          0       true     false    false 
+daisy-hill         published  25.0   Blocked  0      7          0       true     false    false 
+darra              published  25.0   Blocked  0      8          0       true     false    false 
+deebing-heights    published  25.0   Blocked  0      4          0       true     false    false 
+dinmore            published  25.0   Blocked  0      8          0       true     false    false 
+doolandella        published  25.0   Blocked  0      8          0       true     false    false 
+durack             published  25.0   Blocked  0      8          0       true     false    false 
+east-ipswich       published  25.0   Blocked  0      9          0       true     false    false 
+edens-landing      published  25.0   Blocked  0      8          0       true     false    false 
+ellen-grove        published  25.0   Blocked  0      7          0       true     false    false 
+fig-tree-pocket    published  25.0   Blocked  0      9          0       true     false    false 
+goodna             published  25.0   Blocked  0      9          0       true     false    false 
+graceville         published  25.0   Blocked  0      9          0       true     false    false 
+greenbank          published  25.0   Blocked  0      3          0       true     false    false 
+heritage-park      published  25.0   Blocked  0      9          0       true     false    false 
+hillcrest          published  25.0   Blocked  0      7          0       true     false    false 
+holmview           published  25.0   Blocked  0      9          0       true     false    false 
+```
+
+## Findings & Questions
+
+### karalee — Blocked (35.0)
+- words: 16 | neighbors: 6 | images: 0 | coords: -27.560894,152.825497
+- SEO: titleOK=false metaOK=false
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 16 words (< 600) for karalee?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/karalee.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for karalee.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/karalee.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for karalee.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - artifact: src/content/suburbs/karalee.json
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for karalee.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - artifact: src/content/suburbs/karalee.json
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: OK
+  - ℹ️ **Info** [UNIQUENESS_OK] — Uniqueness acceptable (TTR=0.875). Add landmark references?
+    - owner: content
+    - artifact: src/content/suburbs/karalee.json
+    - label: geo-copy
+    - confidence: 0.3
+
+### brookwater — Blocked (35.0)
+- words: 0 | neighbors: 7 | images: 1 | coords: -27.657845,152.895804
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for brookwater?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/brookwater.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for brookwater.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for brookwater.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for brookwater.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for brookwater.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for brookwater.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### browns-plains — Blocked (35.0)
+- words: 0 | neighbors: 6 | images: 1 | coords: -27.662214,153.054053
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for browns-plains?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/browns-plains.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for browns-plains.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for browns-plains.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for browns-plains.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for browns-plains.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for browns-plains.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### forest-lake — Blocked (35.0)
+- words: 0 | neighbors: 7 | images: 1 | coords: -27.621665,152.963352
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for forest-lake?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/forest-lake.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for forest-lake.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for forest-lake.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for forest-lake.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for forest-lake.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for forest-lake.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### indooroopilly — Blocked (35.0)
+- words: 0 | neighbors: 9 | images: 1 | coords: -27.507341,152.979802
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for indooroopilly?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/indooroopilly.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for indooroopilly.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for indooroopilly.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for indooroopilly.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for indooroopilly.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for indooroopilly.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### kenmore — Blocked (35.0)
+- words: 0 | neighbors: 6 | images: 1 | coords: -27.516545,152.937948
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for kenmore?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/kenmore.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for kenmore.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for kenmore.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for kenmore.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for kenmore.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for kenmore.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### redbank — Blocked (35.0)
+- words: 0 | neighbors: 7 | images: 1 | coords: -27.602654,152.873553
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for redbank?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/redbank.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for redbank.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for redbank.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for redbank.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for redbank.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for redbank.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### redbank-plains — Blocked (35.0)
+- words: 0 | neighbors: 7 | images: 1 | coords: -27.651723,152.85222
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for redbank-plains?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/redbank-plains.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for redbank-plains.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for redbank-plains.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for redbank-plains.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for redbank-plains.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for redbank-plains.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### springfield — Blocked (35.0)
+- words: 0 | neighbors: 9 | images: 1 | coords: -27.652534,152.910054
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for springfield?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/springfield.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for springfield.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for springfield.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for springfield.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for springfield.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for springfield.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### springfield-lakes — Blocked (35.0)
+- words: 0 | neighbors: 7 | images: 1 | coords: -27.685437,152.917909
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for springfield-lakes?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/springfield-lakes.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for springfield-lakes.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for springfield-lakes.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for springfield-lakes.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for springfield-lakes.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for springfield-lakes.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### springwood — Blocked (35.0)
+- words: 0 | neighbors: 7 | images: 1 | coords: -27.620219,153.138252
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for springwood?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/springwood.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: OK
+  - ⚠️ **Warn** [IMAGES_ALT_MISSING] — Images lack descriptive alt text for springwood.
+    - suggestion: Add meaningful alt text incl. suburb where appropriate.
+    - owner: media
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for springwood.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for springwood.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for springwood.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for springwood.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### anstead — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.537821,152.861621
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for anstead?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/anstead.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for anstead.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/anstead.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for anstead.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for anstead.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for anstead.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for anstead.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### ashgrove — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.443107,152.983982
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for ashgrove?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/ashgrove.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for ashgrove.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/ashgrove.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for ashgrove.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for ashgrove.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for ashgrove.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for ashgrove.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### auchenflower — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.473929,152.995195
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for auchenflower?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/auchenflower.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for auchenflower.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/auchenflower.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for auchenflower.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for auchenflower.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for auchenflower.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for auchenflower.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### augustine-heights — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.66141,152.880424
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for augustine-heights?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/augustine-heights.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for augustine-heights.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/augustine-heights.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for augustine-heights.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for augustine-heights.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for augustine-heights.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for augustine-heights.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### bahrs-scrub — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.738749,153.171587
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for bahrs-scrub?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/bahrs-scrub.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for bahrs-scrub.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/bahrs-scrub.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for bahrs-scrub.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for bahrs-scrub.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for bahrs-scrub.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for bahrs-scrub.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### bannockburn — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.759853,153.192152
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for bannockburn?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/bannockburn.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for bannockburn.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/bannockburn.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for bannockburn.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for bannockburn.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for bannockburn.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for bannockburn.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### bardon — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.460071,152.978179
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for bardon?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/bardon.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for bardon.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/bardon.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for bardon.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for bardon.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for bardon.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for bardon.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### beenleigh — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.715099,153.193765
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for beenleigh?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/beenleigh.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for beenleigh.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/beenleigh.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for beenleigh.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for beenleigh.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for beenleigh.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for beenleigh.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### belivah — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.758196,153.174986
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for belivah?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/belivah.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for belivah.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/belivah.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for belivah.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for belivah.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for belivah.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for belivah.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### bellbird-park — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.636717,152.886597
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for bellbird-park?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/bellbird-park.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for bellbird-park.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/bellbird-park.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for bellbird-park.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for bellbird-park.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for bellbird-park.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for bellbird-park.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### bellbowrie — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.559165,152.883516
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for bellbowrie?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/bellbowrie.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for bellbowrie.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/bellbowrie.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for bellbowrie.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for bellbowrie.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for bellbowrie.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for bellbowrie.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### bethania — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.687077,153.156609
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for bethania?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/bethania.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for bethania.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/bethania.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for bethania.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for bethania.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for bethania.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for bethania.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### booval — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.613652,152.79247
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for booval?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/booval.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for booval.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/booval.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for booval.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for booval.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for booval.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for booval.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### boronia-heights — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.688498,153.019645
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for boronia-heights?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/boronia-heights.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for boronia-heights.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/boronia-heights.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for boronia-heights.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for boronia-heights.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for boronia-heights.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for boronia-heights.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### brassall — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.590114,152.736342
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for brassall?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/brassall.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for brassall.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/brassall.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for brassall.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for brassall.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for brassall.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for brassall.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### brookfield — Blocked (25.0)
+- words: 0 | neighbors: 5 | images: 0 | coords: -27.483489,152.903485
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for brookfield?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/brookfield.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for brookfield.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/brookfield.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for brookfield.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for brookfield.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for brookfield.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for brookfield.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### bundamba — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.600852,152.810163
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for bundamba?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/bundamba.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for bundamba.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/bundamba.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for bundamba.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for bundamba.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for bundamba.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for bundamba.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### camira — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.634565,152.920909
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for camira?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/camira.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for camira.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/camira.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for camira.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for camira.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for camira.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for camira.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### cedar-creek — Blocked (25.0)
+- words: 0 | neighbors: 4 | images: 0 | coords: -27.818059,153.16007
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for cedar-creek?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/cedar-creek.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for cedar-creek.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/cedar-creek.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for cedar-creek.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for cedar-creek.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for cedar-creek.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for cedar-creek.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### chapel-hill — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.498681,152.948747
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for chapel-hill?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/chapel-hill.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for chapel-hill.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/chapel-hill.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for chapel-hill.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for chapel-hill.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for chapel-hill.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for chapel-hill.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### chelmer — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.512845,152.975269
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for chelmer?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/chelmer.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for chelmer.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/chelmer.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for chelmer.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for chelmer.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for chelmer.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for chelmer.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### collingwood-park — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.622169,152.855248
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for collingwood-park?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/collingwood-park.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for collingwood-park.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/collingwood-park.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for collingwood-park.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for collingwood-park.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for collingwood-park.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for collingwood-park.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### crestmead — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.687965,153.084781
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for crestmead?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/crestmead.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for crestmead.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/crestmead.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for crestmead.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for crestmead.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for crestmead.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for crestmead.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### daisy-hill — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.63021,153.157777
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for daisy-hill?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/daisy-hill.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for daisy-hill.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/daisy-hill.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for daisy-hill.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for daisy-hill.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for daisy-hill.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for daisy-hill.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### darra — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.568327,152.952469
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for darra?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/darra.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for darra.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/darra.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for darra.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for darra.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for darra.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for darra.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### deebing-heights — Blocked (25.0)
+- words: 0 | neighbors: 4 | images: 0 | coords: -27.687189,152.758872
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for deebing-heights?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/deebing-heights.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for deebing-heights.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/deebing-heights.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for deebing-heights.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for deebing-heights.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for deebing-heights.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for deebing-heights.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### dinmore — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.596515,152.833114
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for dinmore?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/dinmore.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for dinmore.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/dinmore.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for dinmore.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for dinmore.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for dinmore.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for dinmore.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### doolandella — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.613198,152.98561
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for doolandella?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/doolandella.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for doolandella.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/doolandella.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for doolandella.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for doolandella.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for doolandella.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for doolandella.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### durack — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.589518,152.986128
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for durack?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/durack.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for durack.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/durack.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for durack.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for durack.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for durack.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for durack.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### east-ipswich — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.607753,152.776439
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for east-ipswich?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/east-ipswich.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for east-ipswich.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/east-ipswich.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for east-ipswich.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for east-ipswich.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for east-ipswich.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for east-ipswich.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### edens-landing — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.702894,153.168597
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for edens-landing?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/edens-landing.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for edens-landing.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/edens-landing.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for edens-landing.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for edens-landing.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for edens-landing.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for edens-landing.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### ellen-grove — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.61536,152.943896
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for ellen-grove?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/ellen-grove.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for ellen-grove.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/ellen-grove.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for ellen-grove.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for ellen-grove.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for ellen-grove.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for ellen-grove.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### fig-tree-pocket — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.528494,152.962354
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for fig-tree-pocket?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/fig-tree-pocket.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for fig-tree-pocket.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/fig-tree-pocket.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for fig-tree-pocket.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for fig-tree-pocket.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for fig-tree-pocket.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for fig-tree-pocket.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### goodna — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.6111,152.893016
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for goodna?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/goodna.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for goodna.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/goodna.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for goodna.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for goodna.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for goodna.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for goodna.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### graceville — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.521706,152.982124
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for graceville?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/graceville.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for graceville.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/graceville.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for graceville.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for graceville.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for graceville.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for graceville.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### greenbank — Blocked (25.0)
+- words: 0 | neighbors: 3 | images: 0 | coords: -27.701076,152.959863
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for greenbank?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/greenbank.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+  - ℹ️ **Info** [NEIGHBORS_MIN_EDGE] — Exactly minimum neighbors (3) for greenbank. Improve relevance?
+    - owner: data
+    - artifact: src/data/adjacency.json
+    - label: geo-data
+    - confidence: 0.4
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for greenbank.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/greenbank.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for greenbank.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for greenbank.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for greenbank.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for greenbank.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### heritage-park — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.682451,153.061289
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for heritage-park?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/heritage-park.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for heritage-park.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/heritage-park.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for heritage-park.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for heritage-park.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for heritage-park.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for heritage-park.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### hillcrest — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.668404,153.026293
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for hillcrest?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/hillcrest.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for hillcrest.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/hillcrest.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for hillcrest.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for hillcrest.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for hillcrest.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for hillcrest.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### holmview — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.715565,153.170969
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for holmview?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/holmview.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for holmview.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/holmview.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for holmview.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for holmview.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for holmview.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for holmview.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### inala — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.594559,152.97121
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for inala?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/inala.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for inala.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/inala.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for inala.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for inala.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for inala.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for inala.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### ipswich — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.622857,152.76033
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for ipswich?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/ipswich.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for ipswich.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/ipswich.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for ipswich.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for ipswich.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for ipswich.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for ipswich.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### jamboree-heights — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.556293,152.934056
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for jamboree-heights?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/jamboree-heights.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for jamboree-heights.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/jamboree-heights.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for jamboree-heights.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for jamboree-heights.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for jamboree-heights.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for jamboree-heights.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### jindalee — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.53399,152.938202
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for jindalee?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/jindalee.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for jindalee.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/jindalee.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for jindalee.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for jindalee.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for jindalee.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for jindalee.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### karana-downs — Blocked (25.0)
+- words: 0 | neighbors: 3 | images: 0 | coords: -27.542208,152.819004
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for karana-downs?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/karana-downs.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+  - ℹ️ **Info** [NEIGHBORS_MIN_EDGE] — Exactly minimum neighbors (3) for karana-downs. Improve relevance?
+    - owner: data
+    - artifact: src/data/adjacency.json
+    - label: geo-data
+    - confidence: 0.4
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for karana-downs.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/karana-downs.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for karana-downs.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for karana-downs.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for karana-downs.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for karana-downs.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### kenmore-hills — Blocked (25.0)
+- words: 0 | neighbors: 5 | images: 0 | coords: -27.49473,152.92784
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for kenmore-hills?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/kenmore-hills.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for kenmore-hills.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/kenmore-hills.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for kenmore-hills.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for kenmore-hills.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for kenmore-hills.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for kenmore-hills.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### kholo — Blocked (25.0)
+- words: 0 | neighbors: 4 | images: 0 | coords: -27.512012,152.781253
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for kholo?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/kholo.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for kholo.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/kholo.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for kholo.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for kholo.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for kholo.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for kholo.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### kingston — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.659549,153.112949
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for kingston?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/kingston.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for kingston.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/kingston.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for kingston.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for kingston.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for kingston.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for kingston.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### lake-manchester — Blocked (25.0)
+- words: 0 | neighbors: 3 | images: 0 | coords: -27.44497,152.779434
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for lake-manchester?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/lake-manchester.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+  - ℹ️ **Info** [NEIGHBORS_MIN_EDGE] — Exactly minimum neighbors (3) for lake-manchester. Improve relevance?
+    - owner: data
+    - artifact: src/data/adjacency.json
+    - label: geo-data
+    - confidence: 0.4
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for lake-manchester.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/lake-manchester.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for lake-manchester.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for lake-manchester.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for lake-manchester.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for lake-manchester.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### logan-central — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.643832,153.107176
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for logan-central?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/logan-central.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for logan-central.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/logan-central.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for logan-central.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for logan-central.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for logan-central.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for logan-central.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### logan-reserve — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.717366,153.107219
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for logan-reserve?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/logan-reserve.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for logan-reserve.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/logan-reserve.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for logan-reserve.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for logan-reserve.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for logan-reserve.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for logan-reserve.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### logan-village — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.784931,153.115988
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for logan-village?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/logan-village.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for logan-village.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/logan-village.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for logan-village.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for logan-village.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for logan-village.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for logan-village.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### loganholme — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.684081,153.186592
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for loganholme?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/loganholme.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for loganholme.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/loganholme.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for loganholme.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for loganholme.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for loganholme.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for loganholme.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### loganlea — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.676775,153.132611
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for loganlea?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/loganlea.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for loganlea.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/loganlea.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for loganlea.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for loganlea.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for loganlea.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for loganlea.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### marsden — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.674342,153.098264
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for marsden?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/marsden.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for marsden.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/marsden.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for marsden.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for marsden.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for marsden.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for marsden.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### meadowbrook — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.663926,153.14475
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for meadowbrook?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/meadowbrook.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for meadowbrook.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/meadowbrook.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for meadowbrook.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for meadowbrook.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for meadowbrook.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for meadowbrook.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### middle-park — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.555977,152.922262
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for middle-park?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/middle-park.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for middle-park.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/middle-park.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for middle-park.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for middle-park.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for middle-park.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for middle-park.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### milton — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.468629,153.005163
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for milton?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/milton.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for milton.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/milton.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for milton.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for milton.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for milton.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for milton.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### moggill — Blocked (25.0)
+- words: 0 | neighbors: 5 | images: 0 | coords: -27.579891,152.877143
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for moggill?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/moggill.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for moggill.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/moggill.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for moggill.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for moggill.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for moggill.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for moggill.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### mount-crosby — Blocked (25.0)
+- words: 0 | neighbors: 4 | images: 0 | coords: -27.528461,152.811247
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for mount-crosby?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/mount-crosby.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for mount-crosby.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/mount-crosby.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for mount-crosby.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for mount-crosby.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for mount-crosby.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for mount-crosby.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### mount-ommaney — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.546058,152.93216
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for mount-ommaney?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/mount-ommaney.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for mount-ommaney.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/mount-ommaney.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for mount-ommaney.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for mount-ommaney.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for mount-ommaney.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for mount-ommaney.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### mount-warren-park — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.731045,153.205402
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for mount-warren-park?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/mount-warren-park.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for mount-warren-park.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/mount-warren-park.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for mount-warren-park.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for mount-warren-park.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for mount-warren-park.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for mount-warren-park.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### newtown — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.616314,152.776746
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for newtown?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/newtown.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for newtown.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/newtown.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for newtown.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for newtown.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for newtown.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for newtown.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### north-booval — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.598853,152.790219
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for north-booval?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/north-booval.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for north-booval.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/north-booval.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for north-booval.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for north-booval.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for north-booval.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for north-booval.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### one-mile — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.63456,152.74022
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for one-mile?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/one-mile.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for one-mile.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/one-mile.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for one-mile.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for one-mile.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for one-mile.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for one-mile.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### oxley — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.561814,152.975587
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for oxley?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/oxley.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for oxley.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/oxley.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for oxley.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for oxley.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for oxley.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for oxley.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### paddington — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.460396,152.997554
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for paddington?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/paddington.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for paddington.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/paddington.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for paddington.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for paddington.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for paddington.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for paddington.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### park-ridge — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.705398,153.062316
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for park-ridge?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/park-ridge.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for park-ridge.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/park-ridge.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for park-ridge.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for park-ridge.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for park-ridge.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for park-ridge.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### park-ridge-south — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.727443,153.039416
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for park-ridge-south?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/park-ridge-south.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for park-ridge-south.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/park-ridge-south.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for park-ridge-south.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for park-ridge-south.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for park-ridge-south.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for park-ridge-south.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### pinjarra-hills — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.537991,152.908668
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for pinjarra-hills?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/pinjarra-hills.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for pinjarra-hills.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/pinjarra-hills.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for pinjarra-hills.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for pinjarra-hills.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for pinjarra-hills.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for pinjarra-hills.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### pullenvale — Blocked (25.0)
+- words: 0 | neighbors: 5 | images: 0 | coords: -27.517383,152.884127
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for pullenvale?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/pullenvale.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for pullenvale.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/pullenvale.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for pullenvale.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for pullenvale.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for pullenvale.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for pullenvale.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### raceview — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.639046,152.778026
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for raceview?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/raceview.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for raceview.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/raceview.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for raceview.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for raceview.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for raceview.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for raceview.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### red-hill — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.452134,153.002394
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for red-hill?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/red-hill.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for red-hill.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/red-hill.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for red-hill.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for red-hill.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for red-hill.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for red-hill.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### regents-park — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.676673,153.041546
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for regents-park?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/regents-park.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for regents-park.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/regents-park.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for regents-park.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for regents-park.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for regents-park.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for regents-park.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### richlands — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.588818,152.953531
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for richlands?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/richlands.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for richlands.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/richlands.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for richlands.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for richlands.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for richlands.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for richlands.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### riverhills — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.561909,152.908724
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for riverhills?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/riverhills.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for riverhills.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/riverhills.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for riverhills.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for riverhills.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for riverhills.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for riverhills.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### riverview — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.591473,152.84162
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for riverview?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/riverview.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for riverview.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/riverview.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for riverview.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for riverview.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for riverview.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for riverview.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### rochedale-south — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.599563,153.13166
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for rochedale-south?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/rochedale-south.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for rochedale-south.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/rochedale-south.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for rochedale-south.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for rochedale-south.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for rochedale-south.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for rochedale-south.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### sadliers-crossing — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.613494,152.745172
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for sadliers-crossing?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/sadliers-crossing.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for sadliers-crossing.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/sadliers-crossing.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for sadliers-crossing.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for sadliers-crossing.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for sadliers-crossing.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for sadliers-crossing.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### seventeen-mile-rocks — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.548128,152.957239
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for seventeen-mile-rocks?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/seventeen-mile-rocks.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for seventeen-mile-rocks.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/seventeen-mile-rocks.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for seventeen-mile-rocks.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for seventeen-mile-rocks.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for seventeen-mile-rocks.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for seventeen-mile-rocks.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### shailer-park — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.64973,153.1775
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for shailer-park?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/shailer-park.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for shailer-park.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/shailer-park.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for shailer-park.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for shailer-park.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for shailer-park.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for shailer-park.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### sherwood — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.530843,152.981436
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for sherwood?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/sherwood.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for sherwood.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/sherwood.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for sherwood.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for sherwood.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for sherwood.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for sherwood.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### silkstone — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.622372,152.789238
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for silkstone?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/silkstone.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for silkstone.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/silkstone.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for silkstone.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for silkstone.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for silkstone.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for silkstone.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### sinnamon-park — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.543894,152.949239
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for sinnamon-park?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/sinnamon-park.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for sinnamon-park.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/sinnamon-park.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for sinnamon-park.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for sinnamon-park.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for sinnamon-park.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for sinnamon-park.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### slacks-creek — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.641288,153.133835
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for slacks-creek?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/slacks-creek.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for slacks-creek.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/slacks-creek.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for slacks-creek.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for slacks-creek.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for slacks-creek.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for slacks-creek.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### st-lucia — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.498997,153.00443
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for st-lucia?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/st-lucia.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for st-lucia.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/st-lucia.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for st-lucia.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for st-lucia.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for st-lucia.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for st-lucia.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### sumner — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.565486,152.933339
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for sumner?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/sumner.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for sumner.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/sumner.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for sumner.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for sumner.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for sumner.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for sumner.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### tamborine — Blocked (25.0)
+- words: 0 | neighbors: 5 | images: 0 | coords: -27.847398,153.108426
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for tamborine?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/tamborine.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for tamborine.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/tamborine.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for tamborine.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for tamborine.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for tamborine.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for tamborine.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### tanah-merah — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.671695,153.170315
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for tanah-merah?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/tanah-merah.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for tanah-merah.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/tanah-merah.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for tanah-merah.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for tanah-merah.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for tanah-merah.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for tanah-merah.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### taringa — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.493347,152.981166
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for taringa?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/taringa.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for taringa.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/taringa.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for taringa.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for taringa.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for taringa.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for taringa.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### the-gap — Blocked (25.0)
+- words: 0 | neighbors: 5 | images: 0 | coords: -27.445549,152.941474
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for the-gap?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/the-gap.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for the-gap.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/the-gap.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for the-gap.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for the-gap.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for the-gap.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for the-gap.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### toowong — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.481153,152.984182
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for toowong?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/toowong.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for toowong.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/toowong.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for toowong.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for toowong.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for toowong.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for toowong.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### underwood — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.608775,153.111333
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for underwood?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/underwood.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for underwood.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/underwood.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for underwood.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for underwood.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for underwood.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for underwood.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### upper-brookfield — Blocked (25.0)
+- words: 0 | neighbors: 3 | images: 0 | coords: -27.473013,152.851109
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for upper-brookfield?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/upper-brookfield.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+  - ℹ️ **Info** [NEIGHBORS_MIN_EDGE] — Exactly minimum neighbors (3) for upper-brookfield. Improve relevance?
+    - owner: data
+    - artifact: src/data/adjacency.json
+    - label: geo-data
+    - confidence: 0.4
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for upper-brookfield.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/upper-brookfield.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for upper-brookfield.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for upper-brookfield.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for upper-brookfield.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for upper-brookfield.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### upper-kedron — Blocked (25.0)
+- words: 0 | neighbors: 4 | images: 0 | coords: -27.418402,152.91674
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for upper-kedron?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/upper-kedron.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for upper-kedron.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/upper-kedron.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for upper-kedron.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for upper-kedron.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for upper-kedron.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for upper-kedron.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### veresdale — Blocked (25.0)
+- words: 0 | neighbors: 4 | images: 0 | coords: -27.909575,152.977224
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for veresdale?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/veresdale.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for veresdale.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/veresdale.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for veresdale.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for veresdale.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for veresdale.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for veresdale.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### veresdale-scrub — Blocked (25.0)
+- words: 0 | neighbors: 5 | images: 0 | coords: -27.90486,153.006905
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for veresdale-scrub?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/veresdale-scrub.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for veresdale-scrub.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/veresdale-scrub.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for veresdale-scrub.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for veresdale-scrub.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for veresdale-scrub.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for veresdale-scrub.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### wacol — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.586915,152.920781
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for wacol?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/wacol.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for wacol.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/wacol.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for wacol.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for wacol.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for wacol.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for wacol.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### waterford — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.708403,153.142063
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for waterford?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/waterford.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for waterford.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/waterford.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for waterford.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for waterford.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for waterford.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for waterford.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### waterford-west — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.692503,153.127057
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for waterford-west?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/waterford-west.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for waterford-west.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/waterford-west.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for waterford-west.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for waterford-west.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for waterford-west.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for waterford-west.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### west-ipswich — Blocked (25.0)
+- words: 0 | neighbors: 9 | images: 0 | coords: -27.620047,152.748579
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for west-ipswich?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/west-ipswich.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for west-ipswich.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/west-ipswich.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for west-ipswich.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for west-ipswich.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for west-ipswich.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for west-ipswich.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### westlake — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.548421,152.912688
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for westlake?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/westlake.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for westlake.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/westlake.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for westlake.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for westlake.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for westlake.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for westlake.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### windaroo — Blocked (25.0)
+- words: 0 | neighbors: 8 | images: 0 | coords: -27.745862,153.193414
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for windaroo?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/windaroo.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for windaroo.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/windaroo.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for windaroo.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for windaroo.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for windaroo.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for windaroo.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### wolffdene — Blocked (25.0)
+- words: 0 | neighbors: 6 | images: 0 | coords: -27.781171,153.173148
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for wolffdene?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/wolffdene.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for wolffdene.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/wolffdene.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for wolffdene.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for wolffdene.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for wolffdene.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for wolffdene.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### woodend — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.60554,152.753036
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for woodend?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/woodend.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for woodend.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/woodend.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for woodend.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for woodend.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for woodend.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for woodend.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### woodridge — Blocked (25.0)
+- words: 0 | neighbors: 7 | images: 0 | coords: -27.628454,153.105687
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for woodridge?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/woodridge.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for woodridge.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/woodridge.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for woodridge.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for woodridge.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for woodridge.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for woodridge.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### yamanto — Blocked (25.0)
+- words: 0 | neighbors: 5 | images: 0 | coords: -27.653096,152.740842
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for yamanto?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/yamanto.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for yamanto.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/yamanto.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for yamanto.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for yamanto.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for yamanto.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for yamanto.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+
+### yarrabilba — Blocked (25.0)
+- words: 0 | neighbors: 4 | images: 0 | coords: -27.823319,153.12377
+- SEO: titleOK=false metaOK=false
+- content file: **missing**
+- since (days): 0
+
+- **contentWords**: ⚠️
+  - ❌ **Critical** [CONTENT_TOO_SHORT] — Why is content only 0 words (< 600) for yarrabilba?
+    - suggestion: Add local intro, FAQs, checklist, trust block; reach min.
+    - owner: content
+    - artifact: src/content/suburbs/yarrabilba.json
+    - label: geo-copy
+    - confidence: 0.9
+- **coords**: OK
+- **neighbors**: OK
+- **images**: ⚠️
+  - ⚠️ **Warn** [IMAGES_MISSING] — No images for yarrabilba.
+    - suggestion: Add at least one unique hero or gallery image.
+    - owner: media
+    - artifact: src/content/suburbs/yarrabilba.json
+    - label: geo-media
+    - confidence: 0.7
+- **seo**: ⚠️
+  - ⚠️ **Warn** [SEO_TITLE_LEN] — Title length outside 35–65 for yarrabilba.
+    - suggestion: Refine to service + suburb, people-first.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+  - ⚠️ **Warn** [SEO_META_LEN] — Meta description outside 120–170 for yarrabilba.
+    - suggestion: Add compelling, helpful summary.
+    - owner: seo
+    - label: geo-seo
+    - confidence: 0.6
+- **uniqueness**: ⚠️
+  - ⚠️ **Warn** [LOW_TTR] — Low TTR=0 for yarrabilba.
+    - suggestion: Add specific local nouns & details.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6
+  - ⚠️ **Warn** [HIGH_STOPWORDS] — High stopword ratio=1 for yarrabilba.
+    - suggestion: Tighten language; reduce filler.
+    - owner: content
+    - label: geo-copy
+    - confidence: 0.6

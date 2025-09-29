@@ -1,0 +1,163 @@
+{
+  "domain": "visual-engineering",
+  "version": "1.0.0",
+  "last_updated": "2024-06-15",
+  "stack": {
+    "framework": "Astro 5",
+    "css": "Tailwind CSS v4 (JIT engine)",
+    "tooling": ["Vite 5", "PostCSS 8", "UnoCSS (optional)"]
+  },
+  "core_principles": [
+    {
+      "id": "ve-principle-1",
+      "name": "Islands of Interactivity",
+      "description": "Use Astro islands for interactivity only where needed. Default to static HTML.",
+      "anti_pattern": "Hydrating entire pages unnecessarily",
+      "logos_implementation_hint": "// ASTRO: island component with client:load only on interactive elements"
+    },
+    {
+      "id": "ve-principle-2",
+      "name": "Utility-First, Not Utility-Only",
+      "description": "Use Tailwind for rapid UI, but extract repeated patterns into semantic components or `@layer` rules.",
+      "anti_pattern": "Long, unreadable class strings with no abstraction",
+      "logos_implementation_hint": "/* TAILWIND: Extract to @layer components or Astro component */"
+    },
+    {
+      "id": "ve-principle-3",
+      "name": "Design Token Driven",
+      "description": "All visual properties (colors, spacing, radii) must derive from design tokens in `tailwind.config.ts`.",
+      "anti_pattern": "Hardcoded hex values or pixel sizes in templates",
+      "logos_implementation_hint": "// DESIGN TOKEN: Use theme('spacing.4') not '16px'"
+    }
+  ],
+  "failure_patterns": [
+    {
+      "id": "fp-astro-001",
+      "name": "Hydration Bloat",
+      "symptoms": [
+        "Page loads slowly despite static content",
+        "Large JS bundles from client:* directives",
+        "Lighthouse performance score < 70"
+      ],
+      "root_causes": [
+        "Overuse of `client:load` instead of `client:idle` or `client:media`",
+        "Interactive islands wrapping non-interactive content"
+      ],
+      "interventions": [
+        "Audit with `astro build --verbose`",
+        "Replace `client:load` with `client:idle` where possible",
+        "Split islands to minimal interactive scope"
+      ],
+      "kairos_reframing": "This isn’t a performance issue—it’s a misalignment between content strategy and interactivity strategy."
+    },
+    {
+      "id": "fp-tailwind-001",
+      "name": "Class String Entropy",
+      "symptoms": [
+        "PRs with 200+ character class strings",
+        "Inconsistent spacing (e.g., `p-4` vs `px-3 py-5` for same intent)",
+        "Design drift across components"
+      ],
+      "root_causes": [
+        "No shared design token system",
+        "No component abstraction discipline"
+      ],
+      "interventions": [
+        "Define spacing scale in `theme.extend.spacing`",
+        "Create Astro components for common UI patterns (e.g., `<Button>`, `<Card>`)",
+        "Use `@layer components` for complex utilities"
+      ],
+      "kairos_reframing": "This isn’t messy code—it’s unstructured visual language."
+    }
+  ],
+  "design_tokens": {
+    "color": {
+      "primary": "hsl(var(--color-primary) / <alpha-value>)",
+      "surface": "hsl(var(--color-surface) / <alpha-value>)",
+      "text": "hsl(var(--color-text) / <alpha-value>)"
+    },
+    "spacing": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "8": "2rem",
+      "12": "3rem",
+      "16": "4rem"
+    },
+    "radius": {
+      "none": "0px",
+      "sm": "0.125rem",
+      "md": "0.375rem",
+      "lg": "0.5rem",
+      "xl": "0.75rem",
+      "full": "9999px"
+    }
+  },
+  "astro5_patterns": [
+    {
+      "name": "Content Collection + MDX",
+      "use_case": "Blog, docs, marketing pages",
+      "code_snippet": "import { getCollection } from 'astro:content';\nconst posts = await getCollection('blog');",
+      "best_practice": "Use Zod schema for frontmatter validation"
+    },
+    {
+      "name": "View Transitions API",
+      "use_case": "Smooth page-to-page animations",
+      "code_snippet": "<html view-transition>\n<!-- Astro auto-injects transition styles -->",
+      "best_practice": "Pair with `@astrojs/view-transitions` integration"
+    },
+    {
+      "name": "Server-Only Utilities",
+      "use_case": "API keys, DB calls, private logic",
+      "code_snippet": "import { server$ } from 'astro:server';\nconst fetchData = server$(() => { /* private */ });",
+      "best_practice": "Never import server$ utilities in client components"
+    }
+  ],
+  "tailwind4_patterns": [
+    {
+      "name": "Arbitrary Properties",
+      "use_case": "One-off styles without CSS bloat",
+      "code_snippet": "class=\"[mask-image:linear-gradient(...)]\"",
+      "caution": "Avoid if reusable—extract to @layer or component"
+    },
+    {
+      "name": "Container Queries",
+      "use_case": "Component-responsive design (not viewport)",
+      "code_snippet": "class=\"@container md:@lg:text-xl\"",
+      "best_practice": "Wrap component in <div class=\"container\">"
+    },
+    {
+      "name": "Variants with `group`/`peer`",
+      "use_case": "Interactive state coordination",
+      "code_snippet": "class=\"group peer peer-checked:group-[]:text-red-500\"",
+      "best_practice": "Use semantic class names for complex variants"
+    }
+  ],
+  "validation_rules": [
+    {
+      "id": "vr-001",
+      "check": "No hardcoded colors in Astro templates",
+      "pattern": "regex: #[0-9a-fA-F]{3,6}|rgb\\(|hsl\\(",
+      "severity": "error",
+      "fix": "Replace with Tailwind color classes or CSS variables"
+    },
+    {
+      "id": "vr-002",
+      "check": "No client:load on non-interactive islands",
+      "pattern": "client:load without interactive elements (buttons, inputs)",
+      "severity": "warning",
+      "fix": "Use client:idle or remove hydration"
+    },
+    {
+      "id": "vr-003",
+      "check": "Max 5 utility classes before abstraction",
+      "pattern": "class=\"[^\"]{100,}\"",
+      "severity": "warning",
+      "fix": "Extract to Astro component or @layer"
+    }
+  ]
+}

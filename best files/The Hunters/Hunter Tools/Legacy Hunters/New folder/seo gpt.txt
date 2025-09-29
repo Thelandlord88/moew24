@@ -1,0 +1,479 @@
+#!/usr/bin/env bash
+# Hunter — SEO Crawlability v2 (Upstream/Script Hunter aligned)
+# Purpose: Make every page crawlable AND worth crawling, archetype-aware, with proof-invariants.
+# Outputs:
+#   __reports/hunt/seo_crawl.json     (machine facts)
+#   __reports/hunt/seo_crawl.sarif    (for PR annotations)
+#   __reports/hunt/seo_crawl.summary.md (human summary)
+#
+# Policy:
+#   Reads optional .huntrc.json -> { "seo": { targetLevel, maxDepth, minWords, allow: { orphans:[], noindex:[] }, routes: { suburb:["/suburbs/","/areas/"], service:["/services/"], blog:["/blog/","/posts/"] } } }
+#
+# Exit:
+#   If STRICT=1 -> fail when any RED class is present:
+#     - noindex (not allowlisted), orphan, too-deep (> maxDepth), missing canonical, below target content level, not in sitemap (indexable), or invalid archetype schema
+#
+# Portability:
+#   - No grep -P; parsing done in Node helper
+#   - Works on macOS CI (BSD sed not required)
+#
+# Usage:
+#   STRICT=1 bash hunters/seo_crawlability_v2.sh
+#   TARGET_LEVEL=premium MAX_DEPTH=2 STRICT=1 bash hunters/seo_crawlability_v2.sh
+
+set -euo pipefail
+export LC_ALL=C
+
+ROOT="${1:-.}"
+cd "$ROOT"
+
+OUT_DIR="__reports/hunt"
+DIST_DIR="${DIST_DIR:-dist}"
+REPORT_JSON="$OUT_DIR/seo_crawl.json"
+REPORT_SARIF="$OUT_DIR/seo_crawl.sarif"
+SUMMARY_MD="$OUT_DIR/seo_crawl.summary.md"
+POLICY_FILE="${POLICY_FILE:-.huntrc.json}"
+
+TARGET_LEVEL="${TARGET_LEVEL:-}"   # can be overridden by policy
+MAX_DEPTH="${MAX_DEPTH:-}"         # can be overridden by policy
+FORCE_BUILD="${FORCE_BUILD:-0}"
+STRICT="${STRICT:-0}"
+
+mkdir -p "$OUT_DIR"
+
+# --- preflight ---
+if ! command -v node >/dev/null 2>&1; then
+  echo "❌ node is required for seo_crawlability_v2"
+  exit 2
+fi
+
+# Build (best-effort)
+BUILD_LOG="$OUT_DIR/seo-build.log"
+if [[ ! -d "$DIST_DIR" || "$FORCE_BUILD" == "1" ]]; then
+  if command -v npx >/dev/null 2>&1; then
+    echo "🔧 Building site (astro build)..."
+    ( npx --no-install astro build --verbose || true ) >"$BUILD_LOG" 2>&1 || true
+  else
+    echo "(warn) npx not found; skipping astro build" >"$BUILD_LOG"
+  fi
+fi
+
+# --- Node helper does all parsing & scoring ---
+node <<'NODE' > /dev/null
+const fs = require('fs');
+const path = require('path');
+
+const OUT_DIR     = process.env.OUT_DIR || '__reports/hunt';
+const DIST_DIR    = process.env.DIST_DIR || 'dist';
+const JSON_OUT    = process.env.REPORT_JSON || '__reports/hunt/seo_crawl.json';
+const SARIF_OUT   = process.env.REPORT_SARIF || '__reports/hunt/seo_crawl.sarif';
+const SUMMARY_MD  = process.env.SUMMARY_MD || '__reports/hunt/seo_crawl.summary.md';
+const POLICY_FILE = process.env.POLICY_FILE || '.huntrc.json';
+
+function readPolicy() {
+  let p = {};
+  try {
+    const j = JSON.parse(fs.readFileSync(POLICY_FILE, 'utf8'));
+    p = j.seo || {};
+  } catch {}
+  const defaults = {
+    targetLevel: (process.env.TARGET_LEVEL || 'enhanced').toLowerCase(),
+    maxDepth: Number(process.env.MAX_DEPTH || 3),
+    minWords: { basic: 200, enhanced: 400, premium: 600 },
+    routes: { suburb: ['/suburbs/', '/areas/'], service: ['/services/'], blog: ['/blog/', '/posts/'] },
+    allow: { orphans: [], noindex: [] }
+  };
+  // Merge with priority to explicit env overrides
+  const merged = {
+    targetLevel: (p.targetLevel || defaults.targetLevel).toLowerCase(),
+    maxDepth: typeof p.maxDepth === 'number' ? p.maxDepth : defaults.maxDepth,
+    minWords: Object.assign({}, defaults.minWords, p.minWords || {}),
+    routes: Object.assign({}, defaults.routes, p.routes || {}),
+    allow: Object.assign({}, defaults.allow, p.allow || {})
+  };
+  return merged;
+}
+const POLICY = readPolicy();
+
+function walk(dir) {
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
+  for (const n of fs.readdirSync(dir)) {
+    const p = path.join(dir, n);
+    const s = fs.statSync(p);
+    if (s.isDirectory()) out.push(...walk(p));
+    else if (n.toLowerCase().endsWith('.html')) out.push(p);
+  }
+  return out;
+}
+
+function cleanText(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<noscript[\s\S]*?<\/noscript>/gi, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function words(text) {
+  const m = text.match(/\b[\p{L}\p{N}][\p{L}\p{N}'’-]*\b/gu) || [];
+  return m.length;
+}
+
+function routeFromFile(f) {
+  let r = f.replace(/\\/g, '/');
+  r = r.substring(DIST_DIR.length + (r.startsWith(DIST_DIR + '/') ? 1 : 0));
+  if (r.endsWith('/index.html')) r = r.slice(0, -'/index.html'.length) + '/';
+  else if (r.endsWith('.html')) r = '/' + r.slice(0, -'.html'.length);
+  if (!r.startsWith('/')) r = '/' + r;
+  return r.endsWith('/') ? r : r + '/';
+}
+
+function pageTypeFromPath(route) {
+  if (route === '/') return 'home';
+  if ((POLICY.routes.suburb || []).some(prefix => route.includes(prefix))) return 'suburb';
+  if ((POLICY.routes.service || []).some(prefix => route.includes(prefix))) return 'service';
+  if ((POLICY.routes.blog || []).some(prefix => route.includes(prefix))) return 'blog';
+  return 'generic';
+}
+
+function analyzeHTML(html) {
+  const getAttr = (tag, name) => {
+    const m = new RegExp(`${name}\\s*=\\s*"(.*?)"|${name}\\s*=\\s*'(.*?)'`, 'i').exec(tag);
+    return m ? (m[1] ?? m[2] ?? '') : '';
+  };
+
+  const titleMatch    = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const metaDescTag   = (html.match(/<meta[^>]+name=["']description["'][^>]*>/i) || [])[0] || '';
+  const metaRobotsTag = (html.match(/<meta[^>]+name=["']robots["'][^>]*>/i) || [])[0] || '';
+  const canonicalTag  = (html.match(/<link[^>]+rel=["']canonical["'][^>]*>/i) || [])[0] || '';
+  const h1s           = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map(m => m[1].replace(/<[^>]+>/g, '').trim());
+  const headingsSeq   = [...html.matchAll(/<h([1-6])\b[^>]*>/gi)].map(m => Number(m[1]));
+  const imgs          = [...html.matchAll(/<img\b[^>]*>/gi)].map(m => m[0]);
+  const anchors       = [...html.matchAll(/<a\b[^>]*href=(["'])(.*?)\1/gi)].map(m => m[2]);
+
+  const robotsContent = getAttr(metaRobotsTag, 'content').toLowerCase();
+  const noindex = /(^|,|\s)noindex(,|\s|$)/.test(robotsContent);
+  const nofollow = /(^|,|\s)nofollow(,|\s|$)/.test(robotsContent);
+
+  // JSON-LD types
+  const ldMatches = [...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
+  const ldTypes = [];
+  for (const m of ldMatches) {
+    try {
+      const j = JSON.parse(m[1]);
+      const types = Array.isArray(j)
+        ? j.flatMap(x => (x['@type'] ? (Array.isArray(x['@type']) ? x['@type'] : [x['@type']]) : []))
+        : (j['@type'] ? (Array.isArray(j['@type']) ? j['@type'] : [j['@type']]) : []);
+      ldTypes.push(...types.map(String));
+    } catch {}
+  }
+
+  // Heading order heuristic
+  let badHeadingOrder = false; let last = 0;
+  for (const h of headingsSeq) { if (last && h > last + 1) { badHeadingOrder = true; break; } last = h; }
+
+  // Internal links (strip query/fragment; ignore external)
+  const internalLinks = anchors
+    .filter(h => h && !/^https?:\/\//i.test(h) && !/^mailto:/i.test(h) && !/^#/i.test(h))
+    .map(h => h.replace(/#.*$/, '').replace(/\?.*$/, ''));
+
+  // Media & text metrics
+  const imgNoAlt = imgs.filter(tag => !/\balt=/.test(tag)).length;
+  const text = cleanText(html);
+  const wc = words(text);
+
+  return {
+    title: (titleMatch && titleMatch[1]) ? titleMatch[1].trim() : '',
+    titleLen: ((titleMatch && titleMatch[1]) ? titleMatch[1] : '').trim().length,
+    description: getAttr(metaDescTag, 'content'),
+    descLen: (getAttr(metaDescTag, 'content') || '').length,
+    canonical: getAttr(canonicalTag, 'href'),
+    robots: robotsContent, noindex, nofollow,
+    h1Count: h1s.length, h1: h1s[0] || '',
+    headingOrderOk: !badHeadingOrder,
+    imgMissingAlt: imgNoAlt,
+    textWords: wc,
+    internalLinks,
+    jsonLdTypes: [...new Set(ldTypes)]
+  };
+}
+
+function classifyLevel(metrics, archetype) {
+  const min = POLICY.minWords || { basic:200, enhanced:400, premium:600 };
+  const baseOk = {
+    canon: !!metrics.canonical,
+    title: metrics.titleLen >= 10,
+    desc: metrics.descLen >= 50,
+    h1: metrics.h1Count >= 1,
+    heading: metrics.headingOrderOk,
+    imgAlt: metrics.imgMissingAlt === 0,
+    links: (metrics.internalLinks || []).length >= 2
+  };
+  const baseScore = Object.values(baseOk).reduce((a,b)=>a+(b?1:0),0);
+  const w = metrics.textWords;
+  let wordsScore = 0;
+  if (w >= (min.premium||600)) wordsScore = 3;
+  else if (w >= (min.enhanced||400)) wordsScore = 2;
+  else if (w >= (min.basic||200)) wordsScore = 1;
+
+  let level = 'basic';
+  if (baseScore >= 5 && wordsScore >= 1) level = 'basic';
+  if (baseScore >= 6 && wordsScore >= 2) level = 'enhanced';
+  if (baseScore >= 6 && wordsScore >= 3) level = 'premium';
+
+  // Archetype schema expectations
+  const needSchema = {
+    home:   ['BreadcrumbList'],
+    suburb: ['FAQPage'],
+    service:['FAQPage'],
+    blog:   ['Article','BlogPosting'],
+    generic:[]
+  }[archetype] || [];
+  const hasSchema = needSchema.length === 0 || needSchema.some(t => metrics.jsonLdTypes.includes(t));
+  if (!hasSchema && level !== 'basic') level = 'basic';
+  return { level, needSchema, hasSchema, baseOk, wordsScore };
+}
+
+// robots.txt and sitemap.xml
+function loadRobots() {
+  const p = path.join(DIST_DIR, 'robots.txt');
+  if (!fs.existsSync(p)) return { present:false, sitemaps:[], disallows:[] };
+  const txt = fs.readFileSync(p, 'utf8');
+  const sitemaps = (txt.match(/(?:^|\n)Sitemap:\s*(.*)/gi) || []).map(l => l.split(':').slice(1).join(':').trim());
+  const disallows = (txt.match(/(?:^|\n)Disallow:\s*(.*)/gi) || []).map(l => l.split(':').slice(1).join(':').trim());
+  return { present:true, sitemaps, disallows };
+}
+function loadSitemap() {
+  const p = path.join(DIST_DIR, 'sitemap.xml');
+  if (!fs.existsSync(p)) return { present:false, urls:[] };
+  const xml = fs.readFileSync(p, 'utf8');
+  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+  return { present:true, urls };
+}
+
+function toRoute(u) {
+  try {
+    let url = u.replace(/#.*$/,'').replace(/\?.*$/,'');
+    const a = new URL(url, 'https://example.local'); // base ensures URL parsing
+    let r = a.pathname;
+    if (!r.endsWith('/')) r += '/';
+    return r;
+  } catch { return u; }
+}
+
+// 1) Load pages
+const files = walk(DIST_DIR);
+const pages = [];
+const routeIndex = new Map();
+for (const f of files) {
+  const html = fs.readFileSync(f, 'utf8');
+  const route = routeFromFile(f);
+  const archetype = pageTypeFromPath(route);
+  const m = analyzeHTML(html);
+  const { level, needSchema, hasSchema } = classifyLevel(m, archetype);
+  const page = { file: f, route, archetype, metrics: m, level, needSchema, hasSchema };
+  pages.push(page);
+  routeIndex.set(route, page);
+}
+
+// 2) Build link graph and BFS depths
+const edges = new Map();
+for (const p of pages) {
+  const outs = new Set();
+  for (let href of p.metrics.internalLinks) {
+    href = href.replace(/#.*$/,'').replace(/\?.*$/,'');
+    if (!href.startsWith('/')) {
+      href = path.posix.normalize(path.posix.join(p.route, href));
+    }
+    if (!href.endsWith('/')) href += '/';
+    outs.add(href);
+  }
+  edges.set(p.route, [...outs]);
+}
+const depth = new Map();
+const q = ['/'];
+if (routeIndex.has('/')) depth.set('/', 0);
+while (q.length) {
+  const cur = q.shift();
+  for (const nxt of (edges.get(cur) || [])) {
+    if (!depth.has(nxt) && routeIndex.has(nxt)) {
+      depth.set(nxt, (depth.get(cur) || 0) + 1);
+      q.push(nxt);
+    }
+  }
+}
+
+// 3) Robots & sitemap
+const robots = loadRobots();
+const sitemap = loadSitemap();
+const sitemapRoutes = new Set((sitemap.urls || []).map(toRoute));
+
+// 4) Issues + counts
+const LEVELS = { basic:1, enhanced:2, premium:3 };
+const target = Math.max(LEVELS[POLICY.targetLevel] || 2, 1);
+const issues = [];
+const counts = {
+  pages: pages.length,
+  noindex: 0, missingCanonical: 0,
+  weakTitle: 0, weakDescription: 0, missingAlt: 0, headingIssues: 0,
+  deepLinkDepth: 0, orphanPages: 0, belowTarget: 0, missingSchema: 0, notInSitemap: 0
+};
+
+for (const p of pages) {
+  const d = depth.has(p.route) ? depth.get(p.route) : Infinity;
+  const orphan = !isFinite(d);
+  const tooDeep = (isFinite(d) && d > POLICY.maxDepth);
+  const missingCanon = !p.metrics.canonical;
+
+  const titleLen = p.metrics.titleLen;
+  const descLen  = p.metrics.descLen;
+  const badTitle = (titleLen < 30 || titleLen > 65);
+  const badDesc  = (descLen < 120 || descLen > 165);
+
+  const belowTarget = (LEVELS[p.level] || 1) < target;
+  const schemaMissing = p.needSchema.length>0 && !p.hasSchema;
+
+  const inSitemap = sitemapRoutes.has(p.route);
+  const wantsIndex = !p.metrics.noindex && !POLICY.allow.noindex.includes(p.route);
+  const notInSitemap = (wantsIndex && !inSitemap);
+
+  const pageIssues = [];
+  if (p.metrics.noindex && !POLICY.allow.noindex.includes(p.route)) pageIssues.push('noindex');
+  if (missingCanon) pageIssues.push('missingCanonical');
+  if (badTitle) pageIssues.push('weakTitle');
+  if (badDesc) pageIssues.push('weakDescription');
+  if (p.metrics.imgMissingAlt > 0) pageIssues.push('missingAlt');
+  if (!p.metrics.headingOrderOk || p.metrics.h1Count < 1) pageIssues.push('headingIssues');
+  if (tooDeep) pageIssues.push('deepLinkDepth');
+  if (orphan && !POLICY.allow.orphans.includes(p.route)) pageIssues.push('orphanPage');
+  if (belowTarget) pageIssues.push(`belowTarget:${p.level}->${POLICY.targetLevel}`);
+  if (schemaMissing) pageIssues.push('missingSchema');
+  if (notInSitemap) pageIssues.push('notInSitemap');
+
+  // increment counts
+  for (const tag of pageIssues) {
+    if (tag.startsWith('belowTarget')) counts.belowTarget++;
+    else if (counts.hasOwnProperty(tag)) counts[tag]++;
+  }
+
+  if (pageIssues.length) issues.push({
+    route: p.route,
+    archetype: p.archetype,
+    depth: isFinite(d) ? d : null,
+    level: p.level,
+    problems: pageIssues
+  });
+}
+
+// 5) Link plan (de-orphan / shallow)
+function hubScore(page) {
+  // naive heuristic: home highest, then pages with lots of outlinks
+  if (page.route === '/') return Number.POSITIVE_INFINITY;
+  return (edges.get(page.route) || []).length;
+}
+const hubs = [...pages].sort((a,b) => hubScore(b) - hubScore(a)).slice(0, 20);
+const orphanRoutes = new Set(issues.filter(i => i.problems.includes('orphanPage')).map(i => i.route));
+const deepRoutes   = new Set(issues.filter(i => i.problems.includes('deepLinkDepth')).map(i => i.route));
+
+const linkPlan = [];
+for (const hub of hubs) {
+  for (const target of [...orphanRoutes, ...deepRoutes]) {
+    if (hub.route === target) continue;
+    // simple suggestion: link text by archetype
+    const text = routeIndex.get(target)?.archetype === 'suburb'
+      ? 'Nearby suburb guide'
+      : routeIndex.get(target)?.archetype === 'service'
+      ? 'Related service'
+      : 'Related content';
+    linkPlan.push({ from: hub.route, to: target, anchor: text });
+    if (linkPlan.length >= 50) break;
+  }
+  if (linkPlan.length >= 50) break;
+}
+
+// 6) Roll-up & write JSON
+const summary = {
+  schemaVersion: 1, subject: 'seo_crawl',
+  policy: { targetLevel: POLICY.targetLevel, maxDepth: POLICY.maxDepth, minWords: POLICY.minWords },
+  robots,
+  sitemapPresent: sitemap.present,
+  counts,
+  issues: issues.slice(0, 200),
+  linkPlan
+};
+fs.writeFileSync(JSON_OUT, JSON.stringify(summary, null, 2));
+
+// 7) SARIF (minimal)
+const rules = [
+  { id:'seo/noindex', short:'Page is noindex' },
+  { id:'seo/missingCanonical', short:'Missing canonical link' },
+  { id:'seo/weakTitle', short:'Weak/lengthy page title' },
+  { id:'seo/weakDescription', short:'Weak/lengthy meta description' },
+  { id:'seo/missingAlt', short:'Images missing alt' },
+  { id:'seo/headingIssues', short:'Heading structure issues' },
+  { id:'seo/deepLinkDepth', short:'Page too deep in site nav' },
+  { id:'seo/orphanPage', short:'Orphan page' },
+  { id:'seo/belowTarget', short:'Below target content level' },
+  { id:'seo/missingSchema', short:'Missing required schema for archetype' },
+  { id:'seo/notInSitemap', short:'Indexable page not present in sitemap.xml' }
+];
+const results = [];
+for (const i of summary.issues) {
+  for (const p of i.problems) {
+    const ruleId = p.startsWith('belowTarget') ? 'seo/belowTarget' : `seo/${p}`;
+    results.push({
+      ruleId,
+      message: { text: `${i.route} · ${p}` },
+      locations: [{ physicalLocation: { artifactLocation: { uri: i.route } } }]
+    });
+  }
+}
+const sarif = {
+  $schema: "https://json.schemastore.org/sarif-2.1.0.json",
+  version: "2.1.0",
+  runs: [{
+    tool: { driver: {
+      name: "Hunter SEO Crawlability v2",
+      rules: rules.map(r => ({ id:r.id, shortDescription:{ text: r.short } }))
+    }},
+    results
+  }]
+};
+fs.writeFileSync(SARIF_OUT, JSON.stringify(sarif, null, 2));
+
+// 8) Human summary
+let md = `# SEO Crawlability Summary\n\nTarget: **${POLICY.targetLevel}** · Max depth: **${POLICY.maxDepth}**\n\n`;
+md += Object.entries(summary.counts).map(([k,v])=>`- ${k}: ${v}`).join('\n') + '\n\n';
+md += `## Top offenders\n`;
+for (const i of summary.issues.slice(0, 20)) md += `- ${i.route} · level **${i.level}** · issues: ${i.problems.join(', ')}\n`;
+md += `\n## Suggested internal links (de-orphan/shallow)\n`;
+for (const s of linkPlan.slice(0,15)) md += `- Link **${s.from} → ${s.to}** (“${s.anchor}”)\n`;
+fs.writeFileSync(SUMMARY_MD, md);
+NODE
+
+# --- Print quick console breadcrumb ---
+if [[ -f "$REPORT_JSON" ]]; then
+  echo "=== SEO Crawlability — key counts ==="
+  node -e '
+    const j=require("./__reports/hunt/seo_crawl.json");
+    const c=j.counts||{};
+    for (const k of ["pages","noindex","missingCanonical","orphanPages","deepLinkDepth","belowTarget","notInSitemap","missingSchema"]) {
+      if (k in c) console.log(`${k}: ${c[k]}`);
+    }'
+  echo "Report: $REPORT_JSON"
+  echo "SARIF : $REPORT_SARIF"
+fi
+
+# --- Proof-invariant (exit policy for CI) ---
+if [[ "$STRICT" == "1" ]]; then
+  node -e '
+    const j=require("./__reports/hunt/seo_crawl.json");
+    const c=j.counts||{};
+    const red = (c.noindex>0) || (c.orphanPages>0) || (c.deepLinkDepth>0) || (c.missingCanonical>0) || (c.belowTarget>0) || (c.notInSitemap>0) || (c.missingSchema>0);
+    process.exit(red?1:0);
+  '
+fi

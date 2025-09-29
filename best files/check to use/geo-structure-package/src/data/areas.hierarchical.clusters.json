@@ -1,0 +1,10 @@
+[
+  {
+    "slug": "brisbane",
+    "level": 0,
+    "children": [
+      { "slug": "brisbane-cbd", "level": 1, "suburbs": ["brisbane-city", "spring-hill"] },
+      { "slug": "brisbane-west", "level": 1, "suburbs": ["st-lucia", "toowong"] }
+    ]
+  }
+]

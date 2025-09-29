@@ -1,0 +1,1 @@
+../../../scripts/daedalus/plugins/06-quality-gates.mjs

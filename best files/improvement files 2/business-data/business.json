@@ -1,0 +1,91 @@
+{
+  "name": "One N Done Bond Clean",
+  "legalName": "One N Done Bond Clean Pty Ltd",
+  "description": "Professional bond cleaning services across Brisbane, Logan, and Ipswich. Guaranteed results for end-of-lease cleaning with 100% bond return assurance.",
+  "url": "https://onendone.com.au",
+  "telephone": "+61-7-3000-0000",
+  "email": "quotes@onendone.com.au",
+  "address": {
+    "streetAddress": "123 Clean Street",
+    "addressLocality": "Brisbane",
+    "addressRegion": "QLD",
+    "postalCode": "4000",
+    "addressCountry": "AU"
+  },
+  "geo": {
+    "latitude": -27.4698,
+    "longitude": 153.0251
+  },
+  "openingHours": [
+    "Mo-Fr 07:00-19:00",
+    "Sa 08:00-17:00",
+    "Su 09:00-16:00"
+  ],
+  "serviceArea": [
+    {
+      "name": "Brisbane",
+      "type": "City",
+      "containedIn": "Queensland, Australia"
+    },
+    {
+      "name": "Logan",
+      "type": "City", 
+      "containedIn": "Queensland, Australia"
+    },
+    {
+      "name": "Ipswich",
+      "type": "City",
+      "containedIn": "Queensland, Australia"
+    }
+  ],
+  "services": [
+    {
+      "name": "Bond Cleaning",
+      "description": "Complete end-of-lease cleaning service with bond return guarantee",
+      "serviceType": "Bond Cleaning"
+    },
+    {
+      "name": "Carpet Cleaning", 
+      "description": "Professional steam cleaning for carpets and upholstery",
+      "serviceType": "Carpet Cleaning"
+    },
+    {
+      "name": "Oven Cleaning",
+      "description": "Deep oven cleaning to real estate standards", 
+      "serviceType": "Oven Cleaning"
+    }
+  ],
+  "priceRange": "$280-$950",
+  "paymentAccepted": ["Cash", "Credit Card", "Bank Transfer"],
+  "sameAs": [
+    "https://www.facebook.com/onendone",
+    "https://www.instagram.com/onendone", 
+    "https://business.google.com/onendone"
+  ],
+  "founder": {
+    "name": "One N Done Team",
+    "description": "Local cleaning professionals with 10+ years experience"
+  },
+  "areaServed": "Brisbane, Logan, Ipswich, Queensland, Australia",
+  "hasOfferCatalog": {
+    "name": "Bond Cleaning Services",
+    "itemListElement": [
+      {
+        "name": "1-Bedroom Bond Clean",
+        "price": "$280-420"
+      },
+      {
+        "name": "2-Bedroom Bond Clean", 
+        "price": "$380-580"
+      },
+      {
+        "name": "3-Bedroom Bond Clean",
+        "price": "$480-720"
+      },
+      {
+        "name": "4+ Bedroom Bond Clean",
+        "price": "$650-950"
+      }
+    ]
+  }
+}
